@@ -99,7 +99,7 @@ namespace Application.Services
         }
 
         //обновление юзера
-        public bool UpdateUser(DtoRequestIdUser _user, int id)
+        public bool UpdateUser(DtoRequestUser _user, int id)
         {
             if (_user == null)
             {
