@@ -84,7 +84,7 @@ public class UserService : IUserService
         user.AvatarUrl = "/uploads/avatars/defaultAvatar"; //маршрут де лежит дефолтная ава
 
         var passwordHasher = new PasswordHasher<object>();
-        user.Password = passwordHasher.HashPassword(null, user.Password);
+        user.PasswordHash = passwordHasher.HashPassword(null, user.PasswordHash);
 
         await _applicationDbContext.Users.AddAsync(user);
         await _applicationDbContext.SaveChangesAsync();

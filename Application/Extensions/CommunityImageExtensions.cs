@@ -17,10 +17,10 @@ public static class CommunityImageExtensions
                 NumberOfPosts = community.NumberOfPosts,
                 AvatarUrl = community.AvatarUrl,
                 Owner = community.Owner,
-                Moderators = community.Moderators,
+                Users = community.Users,
                 Categories = community.Categories,
                 CreateAt = community.CreateAt,
-                Banners = community.Banners
+                Images = community.Images
                     .Where(img => img.EntityTarget == "EntityCommunity" && img.EntityId == community.Id)
                     .ToList()
             });

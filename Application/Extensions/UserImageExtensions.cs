@@ -12,14 +12,14 @@ public static class UserImageExtensions
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Password = user.Password,
+                PasswordHash = user.PasswordHash,
                 Description = user.Description,
                 AvatarUrl = user.AvatarUrl,
                 Posts = user.Posts,
                 NumberOfPosts = user.NumberOfPosts,
                 NumberOfComments = user.NumberOfComments,
                 CreateAt = user.CreateAt,
-                Banners = user.Banners
+                Images = user.Images
                     .Where(img => img.EntityTarget == "EntityUser" && img.EntityId == user.Id)
                     .ToList()
             });

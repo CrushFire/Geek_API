@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataAccess.Entities
+namespace DataAccess.Entities;
+
+public class EntityUserCommunity
 {
-    public class EntityUserCommunity
-    {
-        public int Id { get; set; }
-        [Required]
-        public int UserId { get; set; }
-        [Required]
-        [ForeignKey(nameof(UserId))]
-        public EntityUser User { get; set; }
-        [Required]
-        public int CommunityId { get; set; }
-        [Required]
-        [ForeignKey(nameof(CommunityId))]
-        public EntityCommunity Community { get; set; }
-    }
+    [Key] public long Id { get; set; }
+
+    [Required] public long UserId { get; set; }
+
+    [ForeignKey(nameof(UserId))] public EntityUser? User { get; set; } = null!;
+
+    [Required] public long CommunityId { get; set; }
+
+    [ForeignKey(nameof(CommunityId))] public EntityCommunity? Community { get; set; } = null!;
+
+    [Required] public string UserRole { get; set; } //owner, moderator, subscriber
 }

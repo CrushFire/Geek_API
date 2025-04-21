@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataAccess.Entities
+namespace DataAccess.Entities;
+
+public class EntityComment
 {
-    public class EntityComment
-    {
-        public int Id { get; set; }
-        [Required]
-        public string Content { get; set; } = string.Empty;
-        [Required]
-        public int AuthorId { get; set; }
-        [Required]
-        [ForeignKey(nameof(AuthorId))]
-        public EntityUser Author { get; set; }
-        [Required]
-        public int PostId { get; set; }
-        [Required]
-        public DateTime CreateAt { get; set; } = DateTime.Now;
-    }
+    [Key] public long Id { get; set; }
+
+    [Required] public string Content { get; set; };
+
+    [Required] public long AuthorId { get; set; }
+
+    [ForeignKey(nameof(AuthorId))] public EntityUser? Author { get; set; } = null;
+
+    [Required] public long PostId { get; set; }
+
+    [ForeignKey(nameof(PostId))] public EntityPost? Post { get; set; } = null;
+
+    public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

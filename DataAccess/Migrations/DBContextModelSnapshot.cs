@@ -246,7 +246,7 @@ namespace DataAccess.Migrations
                     b.Property<int>("NumberOfPosts")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -320,7 +320,7 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("DataAccess.Entities.EntityImage", b =>
                 {
                     b.HasOne("DataAccess.Entities.EntityUser", null)
-                        .WithMany("Banners")
+                        .WithMany("Images")
                         .HasForeignKey("EntityUserId");
                 });
 
@@ -365,7 +365,7 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("DataAccess.Entities.EntityUser", b =>
                 {
                     b.HasOne("DataAccess.Entities.EntityCommunity", null)
-                        .WithMany("Moderators")
+                        .WithMany("Users")
                         .HasForeignKey("EntityCommunityId");
                 });
 
@@ -397,7 +397,7 @@ namespace DataAccess.Migrations
                 {
                     b.Navigation("Categories");
 
-                    b.Navigation("Moderators");
+                    b.Navigation("Users");
 
                     b.Navigation("Posts");
 
@@ -413,7 +413,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("DataAccess.Entities.EntityUser", b =>
                 {
-                    b.Navigation("Banners");
+                    b.Navigation("Images");
 
                     b.Navigation("Comments");
 

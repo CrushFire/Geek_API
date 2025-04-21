@@ -3,12 +3,56 @@
   "WorkspaceRootPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\geek_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\entities\\entitycategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitycategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\entities\\entitypostcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitypostcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\entities\\entitycommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitycommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\entities\\entitypost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitypost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\entities\\entityimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entityimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\entities\\entitycomment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitycomment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\entities\\entityusercommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entityusercommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\entities\\entityuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entityuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\application\\extensions\\communityimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\extensions\\communityimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\dataaccess\\migrations\\dbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\migrations\\dbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\application\\extensions\\userimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\extensions\\userimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\geek_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -47,27 +91,170 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\appsettings.json",
-              "RelativeDocumentMoniker": "Geek_API\\appsettings.json",
-              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\appsettings.json",
-              "RelativeToolTip": "Geek_API\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-21T20:01:12.713Z",
+              "Title": "EntityCategory.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityCategory.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityCategory.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityCategory.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityCategory.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:38:16.073Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CommunityImageExtensions.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Extensions\\CommunityImageExtensions.cs",
+              "RelativeDocumentMoniker": "Application\\Extensions\\CommunityImageExtensions.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Extensions\\CommunityImageExtensions.cs",
+              "RelativeToolTip": "Application\\Extensions\\CommunityImageExtensions.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:33:02.639Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EntityPost.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityPost.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityPost.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityPost.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityPost.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:31:23.959Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "EntityPostCategory.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityPostCategory.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityPostCategory.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityPostCategory.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityPostCategory.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:30:25.338Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "Application\\Services\\UserService.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Services\\UserService.cs",
+              "RelativeToolTip": "Application\\Services\\UserService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:28:34.45Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DBContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Migrations\\DBContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Migrations\\DBContextModelSnapshot.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Migrations\\DBContextModelSnapshot.cs",
+              "RelativeToolTip": "DataAccess\\Migrations\\DBContextModelSnapshot.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:28:18.307Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "UserImageExtensions.cs",
               "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Extensions\\UserImageExtensions.cs",
               "RelativeDocumentMoniker": "Application\\Extensions\\UserImageExtensions.cs",
               "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Extensions\\UserImageExtensions.cs",
               "RelativeToolTip": "Application\\Extensions\\UserImageExtensions.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAkAAAAUAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T20:00:46.734Z",
+              "WhenOpened": "2025-04-21T20:28:18.211Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "EntityUser.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityUser.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityUser.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityUser.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityUser.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:27:16.822Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EntityImage.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityImage.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityImage.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityImage.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityImage.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABAAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:20:24.061Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EntityUserCommunity.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityUserCommunity.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityUserCommunity.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityUserCommunity.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityUserCommunity.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAAAA0AAAA0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:18:56.177Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EntityCommunity.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityCommunity.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityCommunity.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityCommunity.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityCommunity.cs",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAAABQAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:16:16.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "EntityComment.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityComment.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityComment.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\Entities\\EntityComment.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityComment.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAAAAoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:15:40.079Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\appsettings.json",
+              "RelativeDocumentMoniker": "Geek_API\\appsettings.json",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\appsettings.json",
+              "RelativeToolTip": "Geek_API\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-21T20:01:12.713Z",
               "EditorCaption": ""
             }
           ]

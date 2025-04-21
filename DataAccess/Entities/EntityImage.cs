@@ -1,42 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataAccess.Entities
+namespace DataAccess.Entities;
+
+public class EntityImage
 {
-    public class EntityImage
-    {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public string Title { get; set; } = string.Empty;
-        [Required]
-        public string Alt { get; set; } = string.Empty;
-        public string? Description { get; set; } = string.Empty;
-        [Required]
-        public string ImageUrl {  get; set; } = string.Empty;
-        [Required]
-        public DateTime CreateAt { get; } = DateTime.UtcNow;
+    [Key] public long Id { get; set; }
 
-        //public int? PostId { get; set; }
-        //[ForeignKey(nameof(PostId))]
-        //public EntityPost? Post { get; set; }
+    [Required] public string ImageUrl { get; set; } = string.Empty;
 
-        //public int? UserId { get; set; }
-        //[ForeignKey(nameof(UserId))]
-        //public EntityUser? User { get; set; }
+    [Required] public string ImageType { get; set; } //аватарка, баннер и т.д. и т.п.
+    [Required] public DateTime CreateAt { get; } = DateTime.UtcNow;
 
-        //public int? CommunityId { get; set; }
-        //[ForeignKey(nameof(CommunityId))]
-        //public EntityCommunity? Community { get; set; }
+    [Required] public string EntityTarget { get; set; }
 
-        [Required]
-        public string EntityTarget { get; set; }//Либо Enum
-        [Required]
-        public int EntityId { get; set; }
-    }
+    [Required] public long EntityId { get; set; }
 }
