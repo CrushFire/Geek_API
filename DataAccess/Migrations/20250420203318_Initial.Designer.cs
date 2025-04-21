@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DataAccess.Migrations
 {
-    [DbContext(typeof(DBContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250420203318_Initial")]
     partial class Initial
     {

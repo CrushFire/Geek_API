@@ -1,0 +1,27 @@
+﻿using DataAccess.Entities;
+
+namespace Application.Extensions;
+
+public static class UserImageExtensions
+{
+    // Метод для добавления изображений для пользователя
+    public static IQueryable<EntityUser> IncludeUserImages(this IQueryable<EntityUser> query)
+    {
+        return query
+            .Select(user => new EntityUser
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Password = user.Password,
+                Description = user.Description,
+                AvatarUrl = user.AvatarUrl,
+                Posts = user.Posts,
+                NumberOfPosts = user.NumberOfPosts,
+                NumberOfComments = user.NumberOfComments,
+                CreateAt = user.CreateAt,
+                Banners = user.Banners
+                    .Where(img => img.EntityTarget == "EntityUser" && img.EntityId == user.Id)
+                    .ToList()
+            });
+    }
+}

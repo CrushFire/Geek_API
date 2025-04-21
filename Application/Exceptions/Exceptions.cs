@@ -1,40 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Application.Exceptions;
 
-namespace Application.Exceptions
+public class DataNullException : Exception
 {
-    public class DataNullException : Exception
+    public DataNullException()
     {
-        public DataNullException() : base() { }
-
-        public DataNullException(string message) : base(message) { }
     }
 
-    public class NotFoundException : Exception
+    public DataNullException(string message) : base(message)
     {
-        public NotFoundException() : base() { }
+    }
+}
 
-        public NotFoundException(string message) : base(message) { }
+public class NotFoundException : Exception
+{
+    public NotFoundException()
+    {
     }
 
-    public class DataDuplicateException : Exception
+    public NotFoundException(string message) : base(message)
     {
-        public DataDuplicateException() : base() { }
-        public DataDuplicateException(string message) : base(message) { }
+    }
+}
+
+public class DataDuplicateException : Exception
+{
+    public DataDuplicateException()
+    {
     }
 
-    public class ErrorOpenFileException : Exception
+    public DataDuplicateException(string message) : base(message)
     {
-        public ErrorOpenFileException() : base() { }
-        public ErrorOpenFileException(string message) : base(message) { }
+    }
+}
+
+public class ErrorOpenFileException : Exception
+{
+    public ErrorOpenFileException()
+    {
     }
 
-    public class DataInValidValues : Exception
+    public ErrorOpenFileException(string message) : base(message)
     {
-        public DataInValidValues() : base() { }
-        public DataInValidValues(string message) : base(message) { }
+    }
+}
+
+public class DataInValidValues : Exception
+{
+    public DataInValidValues()
+    {
+    }
+
+    public DataInValidValues(string message) : base(message)
+    {
     }
 }
