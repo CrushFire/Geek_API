@@ -35,7 +35,7 @@ public class UserController : CustomControllerBase
     [HttpGet("byCommunity")]
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     [HttpPost]
-    public async Task<IActionResult> AddUserAsync([FromBody] UserRequest user)
+    public async Task<IActionResult> AddUserAsync([FromBody] UserUpdateRequest user)
     {
         var result = await _userService.AddUserAsync(user);
         return result.IsSuccess
@@ -53,7 +53,7 @@ public class UserController : CustomControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser([FromBody] UserRequest user, int id)
+    public async Task<IActionResult> UpdateUser([FromBody] UserUpdateRequest user, int id)
     {
         var result = await _userService.UpdateUserAsync(user, id);
         return result.IsSuccess

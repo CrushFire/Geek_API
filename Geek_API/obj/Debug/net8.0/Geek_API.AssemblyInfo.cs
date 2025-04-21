@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Geek_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f73746da2248436f3fea72954a386f46a90356ee")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d72b9671474da37d137204e1012e7c76ab327cf7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Geek_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Geek_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

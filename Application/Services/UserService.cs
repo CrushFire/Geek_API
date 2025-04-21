@@ -34,7 +34,7 @@ public class UserService : IUserService
             .Where(img => img.EntityTarget == "EntityUser" && img.EntityId == id)
             .ToListAsync());
 
-        user.Banners = banners;
+        //user.Banners = banners;
         return ServiceResult<UserResponse>.Success(user);
     }
 
@@ -75,12 +75,12 @@ public class UserService : IUserService
         return ServiceResult<bool>.Success();
     }
 
-    public async Task<ServiceResult<long>> AddUserAsync(UserRequest userDto)
+    public async Task<ServiceResult<long>> AddUserAsync(UserUpdateRequest userDto)
     {
         if (userDto == null)
             return ServiceResult<long>.Failure("Данные о пользователе отсутствуют");
 
-        var user = _mapper.Map<EntityUser>(userDto);
+        var user = _mapper.Map<UserEntity>(userDto);
 
         var passwordHasher = new PasswordHasher<object>();
         user.PasswordHash = passwordHasher.HashPassword(null, user.PasswordHash);
@@ -118,12 +118,12 @@ public class UserService : IUserService
     //}
 
     //обновление юзера
-    public async Task<ServiceResult<bool>> UpdateUserAsync(UserRequest userDto, int id)
+    public async Task<ServiceResult<bool>> UpdateUserAsync(UserUpdateRequest userDto, int id)
     {
         if (userDto == null)
             return ServiceResult<bool>.Failure("Данные о пользователе отсутствуют");
 
-        var user = _mapper.Map<EntityUser>(userDto);
+        var user = _mapper.Map<UserEntity>(userDto);
         user.Id = id;
         _applicationDbContext.Users.Update(user);
         await _applicationDbContext.SaveChangesAsync();

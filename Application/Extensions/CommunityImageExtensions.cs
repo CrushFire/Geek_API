@@ -5,10 +5,10 @@ namespace Application.Extensions;
 public static class CommunityImageExtensions
 {
     // Метод для добавления изображений для сообщества
-    public static IQueryable<EntityCommunity> IncludeCommunityImages(this IQueryable<EntityCommunity> query)
+    public static IQueryable<CommunityEntity> IncludeCommunityImages(this IQueryable<CommunityEntity> query)
     {
         return query
-            .Select(community => new EntityCommunity
+            .Select(community => new CommunityEntity
             {
                 Id = community.Id,
                 Name = community.Name,

@@ -2,7 +2,7 @@
 
 namespace DataAccess.Entities;
 
-public class EntityCommunity
+public class CommunityEntity
 {
     [Required] public long Id { get; set; }
 
@@ -10,12 +10,12 @@ public class EntityCommunity
 
     public string? Description { get; set; }
 
-    public List<EntityImage> Images { get; set; } = new();
+    public List<ImageEntity> Images { get; set; } = new();
 
-    public List<EntityCategory> Categories { get; set; } = new();
+    public List<CategoryEntity> Categories { get; set; } = new();
 
-    public List<EntityUserCommunity> UserCommunities { get; set; } = new();
-    public List<EntityPost> Posts { get; set; } = new();
+    public List<UserCommunityEntity> UserCommunities { get; set; } = new();
+    public List<PostEntity> Posts { get; set; } = new();
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

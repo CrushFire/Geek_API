@@ -5,10 +5,10 @@ namespace Application.Extensions;
 public static class PostImageExtensions
 {
     // Метод для добавления изображений для поста
-    public static IQueryable<EntityPost> IncludePostImages(this IQueryable<EntityPost> query)
+    public static IQueryable<PostEntity> IncludePostImages(this IQueryable<PostEntity> query)
     {
         return query
-            .Select(post => new EntityPost
+            .Select(post => new PostEntity
             {
                 Id = post.Id,
                 Title = post.Title,

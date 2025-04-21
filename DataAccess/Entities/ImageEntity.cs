@@ -2,7 +2,7 @@
 
 namespace DataAccess.Entities;
 
-public class EntityImage
+public class ImageEntity
 {
     [Key] public long Id { get; set; }
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Entities;
 
-public class EntityPost
+public class PostEntity
 {
     [Key] public long Id { get; set; }
 
@@ -13,13 +13,13 @@ public class EntityPost
 
     [Required] public long AuthorId { get; set; }
 
-    [ForeignKey(nameof(AuthorId))] public EntityUser? Author { get; set; } = null;
+    [ForeignKey(nameof(AuthorId))] public UserEntity? Author { get; set; } = null;
 
     [Required] public long CommunityId { get; set; }
 
-    [ForeignKey(nameof(CommunityId))] public EntityCommunity? Community { get; set; } = null;
+    [ForeignKey(nameof(CommunityId))] public CommunityEntity? Community { get; set; } = null;
 
-    public List<EntityImage> Images { get; set; } = new();
+    public List<ImageEntity> Images { get; set; } = new();
 
     public int Views { get; set; } = 0;
 
@@ -27,7 +27,7 @@ public class EntityPost
 
     public int Dislikes { get; set; } = 0;
 
-    public List<EntityPostCategory> PostCategories { get; set; } = new();
+    public List<PostCategoryEntity> PostCategories { get; set; } = new();
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

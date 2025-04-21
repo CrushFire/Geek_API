@@ -30,7 +30,7 @@
     "Parameters": [
       {
         "Name": "user",
-        "Type": "Core.Models.UserRequest",
+        "Type": "Core.Models.UserUpdateRequest",
         "IsRequired": true
       }
     ],
@@ -78,7 +78,7 @@
     "Parameters": [
       {
         "Name": "user",
-        "Type": "Core.Models.UserRequest",
+        "Type": "Core.Models.UserUpdateRequest",
         "IsRequired": true
       },
       {
@@ -99,7 +99,7 @@
     "Parameters": [
       {
         "Name": "user",
-        "Type": "Core.Models.UserRequest",
+        "Type": "Core.Models.UserUpdateRequest",
         "IsRequired": true
       }
     ],

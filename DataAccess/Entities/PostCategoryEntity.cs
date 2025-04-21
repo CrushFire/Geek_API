@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Entities;
 
-public class EntityPostCategory
+public class PostCategoryEntity
 {
     [Key] public long Id { get; set; }
 
     [Required] public long PostId { get; set; }
 
-    [ForeignKey(nameof(PostId))] public EntityPost? Post { get; set; } = null!;
+    [ForeignKey(nameof(PostId))] public PostEntity? Post { get; set; } = null!;
 
     [Required] public int CategoryId { get; set; }
 
-    [ForeignKey(nameof(CategoryId))] public EntityCategory Category { get; set; } = null!;
+    [ForeignKey(nameof(CategoryId))] public CategoryEntity Category { get; set; } = null!;
 }

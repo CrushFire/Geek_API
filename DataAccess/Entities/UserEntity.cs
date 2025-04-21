@@ -2,7 +2,7 @@
 
 namespace DataAccess.Entities;
 
-public class EntityUser
+public class UserEntity
 {
     [Key] public long Id { get; set; }
 
@@ -12,11 +12,12 @@ public class EntityUser
 
     public string? Description { get; set; } = string.Empty;
 
-    public List<EntityImage> Images { get; set; } = new();
+    public List<ImageEntity> Images { get; set; } = new();
 
-    public List<EntityPost> Posts { get; set; } = new();
-    public List<EntityUserCommunity> UserCommunities { get; set; } = new();
-    public List<EntityComment> Comments { get; set; } = new();
+    public List<PostEntity> Posts { get; set; } = new();
+    public List<UserCommunityEntity> UserCommunities { get; set; } = new();
+    public List<CommentEntity> Comments { get; set; } = new();
+    [Required] public string Role { get; set; }
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

@@ -5,16 +5,15 @@ namespace Core.Models;
 
 public class UserResponse
 {
-    [Required] public int Id { get; set; }
+   public long Id { get; set; }
 
-    [Required] public string UserName { get; set; }
+    public string UserName { get; set; }
 
-    public string? Description { get; set; } = string.Empty;
-    public string? AvatarUrl { get; set; } = null;
+    public string Description { get; set; } = string.Empty;
 
-    [NotMapped] public List<ImageResponse>? Banners { get; set; } = null;
+    public List<ImageResponse> Images { get; set; } = new();
 
-    [Required] public int NumberOfPosts { get; set; } = 0;
+    public int NumberOfPosts { get; set; } = 0;
 
-    [Required] public int NumberOfComments { get; set; } = 0;
+    public int NumberOfComments { get; set; } = 0;
 }
