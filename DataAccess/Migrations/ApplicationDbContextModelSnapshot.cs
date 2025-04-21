@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -30,11 +30,8 @@ namespace DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("EntityCommunityId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("EntityPostId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("EntityCommunityId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -44,21 +41,19 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("EntityCommunityId");
 
-                    b.HasIndex("EntityPostId");
-
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.EntityComment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
+                    b.Property<long>("AuthorId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -67,89 +62,78 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("PostId")
-                        .HasColumnType("integer");
+                    b.Property<long>("PostId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.EntityCommunity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AvatarUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("NumberOfMembers")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NumberOfPosts")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Communities");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.EntityImage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Alt")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long?>("EntityCommunityId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
+                    b.Property<long>("EntityId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("EntityId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("EntityPostId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("EntityTarget")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("EntityUserId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("EntityUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImageType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("EntityCommunityId");
+
+                    b.HasIndex("EntityPostId");
 
                     b.HasIndex("EntityUserId");
 
@@ -158,19 +142,20 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("DataAccess.Entities.EntityPost", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
+                    b.Property<long>("AuthorId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("integer");
+                    b.Property<long>("CommunityId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreateAt")
@@ -183,6 +168,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Views")
@@ -199,17 +185,17 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("DataAccess.Entities.EntityPostCategory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PostId")
-                        .HasColumnType("integer");
+                    b.Property<long>("PostId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -222,29 +208,17 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("DataAccess.Entities.EntityUser", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AvatarUrl")
-                        .HasColumnType("text");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
-
-                    b.Property<int?>("EntityCommunityId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NumberOfComments")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NumberOfPosts")
-                        .HasColumnType("integer");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -256,24 +230,26 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityCommunityId");
-
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.EntityUserCommunity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("CommunityId")
-                        .HasColumnType("integer");
+                    b.Property<long>("CommunityId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -289,10 +265,6 @@ namespace DataAccess.Migrations
                     b.HasOne("DataAccess.Entities.EntityCommunity", null)
                         .WithMany("Categories")
                         .HasForeignKey("EntityCommunityId");
-
-                    b.HasOne("DataAccess.Entities.EntityPost", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("EntityPostId");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.EntityComment", b =>
@@ -303,22 +275,27 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("DataAccess.Entities.EntityCommunity", b =>
-                {
-                    b.HasOne("DataAccess.Entities.EntityUser", "Owner")
+                    b.HasOne("DataAccess.Entities.EntityPost", "Post")
                         .WithMany()
-                        .HasForeignKey("OwnerId")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.Navigation("Author");
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.EntityImage", b =>
                 {
+                    b.HasOne("DataAccess.Entities.EntityCommunity", null)
+                        .WithMany("Images")
+                        .HasForeignKey("EntityCommunityId");
+
+                    b.HasOne("DataAccess.Entities.EntityPost", null)
+                        .WithMany("Images")
+                        .HasForeignKey("EntityPostId");
+
                     b.HasOne("DataAccess.Entities.EntityUser", null)
                         .WithMany("Images")
                         .HasForeignKey("EntityUserId");
@@ -362,13 +339,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("DataAccess.Entities.EntityUser", b =>
-                {
-                    b.HasOne("DataAccess.Entities.EntityCommunity", null)
-                        .WithMany("Users")
-                        .HasForeignKey("EntityCommunityId");
-                });
-
             modelBuilder.Entity("DataAccess.Entities.EntityUserCommunity", b =>
                 {
                     b.HasOne("DataAccess.Entities.EntityCommunity", "Community")
@@ -397,7 +367,7 @@ namespace DataAccess.Migrations
                 {
                     b.Navigation("Categories");
 
-                    b.Navigation("Users");
+                    b.Navigation("Images");
 
                     b.Navigation("Posts");
 
@@ -406,16 +376,16 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("DataAccess.Entities.EntityPost", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("Images");
 
                     b.Navigation("PostCategories");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.EntityUser", b =>
                 {
-                    b.Navigation("Images");
-
                     b.Navigation("Comments");
+
+                    b.Navigation("Images");
 
                     b.Navigation("Posts");
 

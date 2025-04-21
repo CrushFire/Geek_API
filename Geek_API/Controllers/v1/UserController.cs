@@ -61,12 +61,12 @@ public class UserController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpPut("{id}/avatar")]
-    public async Task<IActionResult> UploadAvatarUserAsync([FromBody] IFormFile file, [FromRoute] int id)
-    {
-        var result = await _userService.UploadAvatar(file, id);
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
-    }
+    //[HttpPut("{id}/avatar")]
+    //public async Task<IActionResult> UploadAvatarUserAsync([FromBody] IFormFile file, [FromRoute] int id)
+    //{
+    //    var result = await _userService.UploadAvatar(file, id);
+    //    return result.IsSuccess
+    //        ? Ok(ApiResponse.CreateSuccess(result.Data))
+    //        : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    //}
 }

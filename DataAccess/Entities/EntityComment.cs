@@ -7,7 +7,7 @@ public class EntityComment
 {
     [Key] public long Id { get; set; }
 
-    [Required] public string Content { get; set; };
+    [Required] public string Content { get; set; }
 
     [Required] public long AuthorId { get; set; }
 

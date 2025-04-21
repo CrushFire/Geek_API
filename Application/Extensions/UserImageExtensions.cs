@@ -14,10 +14,8 @@ public static class UserImageExtensions
                 UserName = user.UserName,
                 PasswordHash = user.PasswordHash,
                 Description = user.Description,
-                AvatarUrl = user.AvatarUrl,
                 Posts = user.Posts,
-                NumberOfPosts = user.NumberOfPosts,
-                NumberOfComments = user.NumberOfComments,
+                UserCommunities = user.UserCommunities,
                 CreateAt = user.CreateAt,
                 Images = user.Images
                     .Where(img => img.EntityTarget == "EntityUser" && img.EntityId == user.Id)

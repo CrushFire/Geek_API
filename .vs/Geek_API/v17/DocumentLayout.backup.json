@@ -3,128 +3,88 @@
   "WorkspaceRootPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\controllers\\controlleruser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\controllers\\controlleruser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\interfaces\\iserviceuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\interfaces\\iserviceuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\services\\serviceuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\services\\serviceuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\controllers\\apiresposes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\controllers\\apiresposes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\services\\userimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\services\\userimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\services\\postimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\services\\postimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\.gitattributes||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\.gitattributes||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\dtoresponseimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\dtoresponseimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\dtoresponseuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\dtoresponseuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\dtorequestuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\dtorequestuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entityuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entityuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\migrations\\dbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\migrations\\dbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250421211214_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250421211214_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entityimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entityimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\dtorequestiduser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\dtorequestiduser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\controllers\\v1\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\controllers\\v1\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202639_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250420202639_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202608_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250420202608_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202216_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250420202216_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202009_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250420202009_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entitypost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitypost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201422_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250420201422_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201317_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250420201317_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201152_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250420201152_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201037_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250420201037_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entitycomment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitycomment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\mappers\\automapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\mappers\\automapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\user\\userresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\user\\userresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\dataaccess.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\dataaccess.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\application.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\application.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\interfaces\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\geek_api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\geek_api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\extensions\\userimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\extensions\\userimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\extensions\\postimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\extensions\\postimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entitypost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitypost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\extensions\\communityimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\extensions\\communityimageextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\exceptions\\exceptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\exceptions\\exceptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\migrations\\20250420203318_initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\migrations\\20250420203318_initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entitycommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitycommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entitycategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitycategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entitypostcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entitypostcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entityimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entityimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\entityusercommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\entityusercommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -134,386 +94,304 @@
       "DocumentGroups": [
         {
           "DockedWidth": 292,
-          "SelectedChildIndex": 18,
+          "SelectedChildIndex": 14,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": ".gitattributes",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\.gitattributes",
-              "RelativeDocumentMoniker": "Geek_API\\.gitattributes",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\.gitattributes",
-              "RelativeToolTip": "Geek_API\\.gitattributes",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG/SURBVDhPrZRNTgIxFMerDIaEhHgU97JxwUKGGaNeQJdyCY0XUBDWGhg4AB\u002BuvQk7OQCRFTP1fXWmMxUMCT94ee177eu/LVQdFK31kTSJ0WgEIa0SMJ2A6QTHcF9iicQqlYpa/6zv2\u002B2HD5nuEkWR/l4udRzHZBtjGzFor1YrPR6P9WKx0MNhpN96vTuZThyLJ1AJLK/iJFFxjBanBsXIozqkWq2qev1c1Wq19063e0ZBwBNP4JaQ6WRC/i8ajQb5wWBAvnxyghpOqQPkC8L5IEEQKjgxaqOTFsCd65tb6nmlkur1\u002BxwXCgX58KfT7QptwvCK52wrSLcJvtUKOABkQ6HFXwbGsmMRBkchzpjNphLZDSrEn5G1qnsp\u002BPEtheloXouRnXDTTjhb5tXmeyg0IgzuliHp\u002By0OANbiOCDXp1IYo3mMUxBT8/mMA/8QhGH6ZzC4Zwi5ZqoQB9M3h62I/\u002B/SAQpniBmtPvdQyGeYUdgyX8pl05eIBSxmTzQYEYbc42AuJQWLGJNQEcrJG4A4BTHneSW2sqfKOyybkxXMPbAvrx3IsyLzkPJFmUcWYtDntjG6lIvnp8cvKXNIlPoFvstpJRlQPIAAAAAASUVORK5CYII=",
-              "WhenOpened": "2025-04-21T17:35:56.93Z",
+              "DocumentIndex": 3,
+              "Title": "20250421211214_Initial.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250421211214_Initial.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250421211214_Initial.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250421211214_Initial.cs",
+              "RelativeToolTip": "DataAccess\\Migrations\\20250421211214_Initial.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T21:12:14.528Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "PostImageExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\PostImageExtensions.cs",
-              "RelativeDocumentMoniker": "Application\\Services\\PostImageExtensions.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\PostImageExtensions.cs",
-              "RelativeToolTip": "Application\\Services\\PostImageExtensions.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAAAAgAAAArAAAAAAAAAA==",
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Controllers\\v1\\UserController.cs",
+              "RelativeDocumentMoniker": "Geek_API\\Controllers\\v1\\UserController.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Controllers\\v1\\UserController.cs",
+              "RelativeToolTip": "Geek_API\\Controllers\\v1\\UserController.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAAlwEYAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:47:09.977Z",
+              "WhenOpened": "2025-04-21T21:10:12.862Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "DBContextModelSnapshot.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\DBContextModelSnapshot.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\DBContextModelSnapshot.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\DBContextModelSnapshot.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\DBContextModelSnapshot.cs",
-              "ViewState": "AgIAAH0AAAAAAAAAAAAgwIUAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:33:27.337Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "20250420203318_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420203318_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420203318_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420203318_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420203318_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:33:18.359Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "20250420202639_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202639_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420202639_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202639_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420202639_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:26:39.418Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "20250420202608_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202608_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420202608_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202608_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420202608_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:26:08.997Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "20250420202216_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202216_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420202216_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202216_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420202216_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:22:16.653Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "20250420202009_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202009_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420202009_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420202009_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420202009_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:20:09.412Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "DBContext.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\DBContext.cs",
-              "RelativeDocumentMoniker": "DataAccess\\DBContext.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\DBContext.cs",
-              "RelativeToolTip": "DataAccess\\DBContext.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:15:30.676Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "20250420201422_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201422_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420201422_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201422_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420201422_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:14:22.407Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "20250420201317_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201317_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420201317_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201317_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420201317_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:13:17.683Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "20250420201152_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201152_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420201152_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201152_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420201152_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:11:52.967Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "20250420201037_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201037_Initial.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250420201037_Initial.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Migrations\\20250420201037_Initial.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250420201037_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T20:10:37.682Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "DtoRequestIdUser.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\DtoRequestIdUser.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\DtoRequestIdUser.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\DtoRequestIdUser.cs",
-              "RelativeToolTip": "Core\\Models\\DtoRequestIdUser.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T19:35:21.452Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "DtoResponseImage.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\DtoResponseImage.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\DtoResponseImage.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\DtoResponseImage.cs",
-              "RelativeToolTip": "Core\\Models\\DtoResponseImage.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAmwBcAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T17:50:28.008Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "DtoRequestUser.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\DtoRequestUser.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\DtoRequestUser.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\DtoRequestUser.cs",
-              "RelativeToolTip": "Core\\Models\\DtoRequestUser.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAuwBAAAABAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T17:46:39.45Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IServiceUser.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Interfaces\\IServiceUser.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Interfaces\\IServiceUser.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Interfaces\\IServiceUser.cs",
-              "RelativeToolTip": "DataAccess\\Interfaces\\IServiceUser.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAAwAsAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T17:31:45.591Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ApiResposes.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Controllers\\ApiResposes.cs",
-              "RelativeDocumentMoniker": "Geek_API\\Controllers\\ApiResposes.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Controllers\\ApiResposes.cs",
-              "RelativeToolTip": "Geek_API\\Controllers\\ApiResposes.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T16:41:32.148Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ControllerUser.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Controllers\\ControllerUser.cs",
-              "RelativeDocumentMoniker": "Geek_API\\Controllers\\ControllerUser.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Controllers\\ControllerUser.cs",
-              "RelativeToolTip": "Geek_API\\Controllers\\ControllerUser.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAAQwFkAAAA+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T16:34:32.195Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "DataAccess.csproj",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\DataAccess.csproj",
-              "RelativeDocumentMoniker": "DataAccess\\DataAccess.csproj",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\DataAccess.csproj",
-              "RelativeToolTip": "DataAccess\\DataAccess.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-20T16:21:22.881Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "Application.csproj",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Application.csproj",
-              "RelativeDocumentMoniker": "Application\\Application.csproj",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Application.csproj",
-              "RelativeToolTip": "Application\\Application.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-20T16:21:22.684Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "Geek_API.csproj",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Geek_API.csproj",
-              "RelativeDocumentMoniker": "Geek_API\\Geek_API.csproj",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Geek_API.csproj",
-              "RelativeToolTip": "Geek_API\\Geek_API.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-20T16:21:22.179Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "EntityImage.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityImage.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityImage.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityImage.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\EntityImage.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAswCcAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T12:24:42.315Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "EntityPost.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityPost.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityPost.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityPost.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\EntityPost.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAA/wAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T12:24:41.414Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "UserImageExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\UserImageExtensions.cs",
-              "RelativeDocumentMoniker": "Application\\Services\\UserImageExtensions.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\UserImageExtensions.cs",
-              "RelativeToolTip": "Application\\Services\\UserImageExtensions.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB0AAAAJAAAAAAAAAA==",
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "DataAccess\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\ApplicationDbContext.cs",
+              "RelativeToolTip": "DataAccess\\ApplicationDbContext.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAlwDMAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T12:07:40.676Z",
+              "WhenOpened": "2025-04-21T21:09:47.504Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 10,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Interfaces\\IUserService.cs",
+              "RelativeDocumentMoniker": "Core\\Interfaces\\IUserService.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Interfaces\\IUserService.cs",
+              "RelativeToolTip": "Core\\Interfaces\\IUserService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAuwA0AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T21:07:18.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:4:0:{b9f91511-5ca5-40ec-9726-f3e3a7e534e2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:5:0:{b9f91511-5ca5-40ec-9726-f3e3a7e534e2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d84ee353-0bef-5a41-a649-8f89aca5d84d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "PostImageExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Extensions\\PostImageExtensions.cs",
+              "RelativeDocumentMoniker": "Application\\Extensions\\PostImageExtensions.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Extensions\\PostImageExtensions.cs",
+              "RelativeToolTip": "Application\\Extensions\\PostImageExtensions.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwBMAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T21:02:45.477Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "Exceptions.cs",
               "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Exceptions\\Exceptions.cs",
               "RelativeDocumentMoniker": "Application\\Exceptions\\Exceptions.cs",
               "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Exceptions\\Exceptions.cs",
               "RelativeToolTip": "Application\\Exceptions\\Exceptions.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAEwCYAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T21:38:51.035Z"
+              "WhenOpened": "2025-04-21T21:02:25.467Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "EntityUser.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityUser.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityUser.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityUser.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\EntityUser.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAIwBUAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T21:26:57.408Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "DtoResponseUser.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\DtoResponseUser.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\DtoResponseUser.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\DtoResponseUser.cs",
-              "RelativeToolTip": "Core\\Models\\DtoResponseUser.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBIAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T21:26:45.888Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 7,
               "Title": "AutoMapper.cs",
               "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Mappers\\AutoMapper.cs",
               "RelativeDocumentMoniker": "Geek_API\\Mappers\\AutoMapper.cs",
               "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Mappers\\AutoMapper.cs",
               "RelativeToolTip": "Geek_API\\Mappers\\AutoMapper.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA3AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T20:46:04.15Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ServiceUser.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\ServiceUser.cs",
-              "RelativeDocumentMoniker": "Application\\Services\\ServiceUser.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\ServiceUser.cs",
-              "RelativeToolTip": "Application\\Services\\ServiceUser.cs",
-              "ViewState": "AgIAAGgAAAAAAAAAAAAIwGcAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T20:33:42.826Z",
+              "WhenOpened": "2025-04-21T21:01:42.422Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 8,
+              "Title": "UserResponse.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\User\\UserResponse.cs",
+              "RelativeDocumentMoniker": "Core\\Models\\User\\UserResponse.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\User\\UserResponse.cs",
+              "RelativeToolTip": "Core\\Models\\User\\UserResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T21:00:57.131Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Program.cs",
               "RelativeDocumentMoniker": "Geek_API\\Program.cs",
               "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Program.cs",
               "RelativeToolTip": "Geek_API\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAuwCgAAABUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T20:33:17.073Z"
+              "WhenOpened": "2025-04-21T20:59:18.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "EntityCategory.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityCategory.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityCategory.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityCategory.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:38:16.073Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CommunityImageExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Extensions\\CommunityImageExtensions.cs",
+              "RelativeDocumentMoniker": "Application\\Extensions\\CommunityImageExtensions.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Extensions\\CommunityImageExtensions.cs",
+              "RelativeToolTip": "Application\\Extensions\\CommunityImageExtensions.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAuwAsAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:33:02.639Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "EntityPost.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityPost.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityPost.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityPost.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityPost.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAIwAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:31:23.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "EntityPostCategory.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityPostCategory.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityPostCategory.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityPostCategory.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityPostCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:30:25.338Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "Application\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\UserService.cs",
+              "RelativeToolTip": "Application\\Services\\UserService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAtwA4AAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:28:34.45Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserImageExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Extensions\\UserImageExtensions.cs",
+              "RelativeDocumentMoniker": "Application\\Extensions\\UserImageExtensions.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Extensions\\UserImageExtensions.cs",
+              "RelativeToolTip": "Application\\Extensions\\UserImageExtensions.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAABEAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:28:18.211Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EntityUser.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityUser.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityUser.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityUser.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityUser.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAA4wBIAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:27:16.822Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "EntityImage.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityImage.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityImage.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityImage.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityImage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwBAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:20:24.061Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "EntityUserCommunity.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityUserCommunity.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityUserCommunity.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityUserCommunity.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityUserCommunity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAxwA0AAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:18:56.177Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "EntityCommunity.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityCommunity.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityCommunity.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityCommunity.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityCommunity.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBMAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:16:16.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EntityComment.cs",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityComment.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Entities\\EntityComment.cs",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\EntityComment.cs",
+              "RelativeToolTip": "DataAccess\\Entities\\EntityComment.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAApwAkAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T20:15:40.079Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\appsettings.json",
+              "RelativeDocumentMoniker": "Geek_API\\appsettings.json",
+              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\appsettings.json",
+              "RelativeToolTip": "Geek_API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-21T20:01:12.713Z",
+              "EditorCaption": ""
             }
           ]
         }

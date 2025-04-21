@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Core.Models;
-using Core.Models.Image;
 using DataAccess.Entities;
-
-DataAccess.Entities;
 
 namespace Geek_API.Mappers;
 
@@ -17,7 +14,6 @@ public class AutoMapper : Profile
                 opt => opt.Ignore()); //тут ничего не подтягиваем поэтому для создания и обновления одинаковый маппер
 
         CreateMap<EntityImage, ImageResponse>();
-        CreateMap<ImageRespons
- EntityImage>();
+        CreateMap<ImageResponse, EntityImage>();
     }
 }

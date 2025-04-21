@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "Geek_API.Controllers.ControllerUser",
+    "ContainingType": "Geek_API.Controllers.v1.UserController",
     "Method": "GetUsersAsync",
-    "RelativePath": "api/v1/user",
+    "RelativePath": "api/v1/User",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -21,25 +21,25 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Geek_API.Controllers.ControllerUser",
+    "ContainingType": "Geek_API.Controllers.v1.UserController",
     "Method": "AddUserAsync",
-    "RelativePath": "api/v1/user",
+    "RelativePath": "api/v1/User",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "_user",
-        "Type": "Core.Models.DtoRequestUser",
+        "Name": "user",
+        "Type": "Core.Models.UserRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Geek_API.Controllers.ControllerUser",
+    "ContainingType": "Geek_API.Controllers.v1.UserController",
     "Method": "GetUserAsync",
-    "RelativePath": "api/v1/user/{id}",
+    "RelativePath": "api/v1/User/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -53,9 +53,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Geek_API.Controllers.ControllerUser",
+    "ContainingType": "Geek_API.Controllers.v1.UserController",
     "Method": "DeleteUserAsync",
-    "RelativePath": "api/v1/user/{id}",
+    "RelativePath": "api/v1/User/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -69,16 +69,16 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Geek_API.Controllers.ControllerUser",
+    "ContainingType": "Geek_API.Controllers.v1.UserController",
     "Method": "UpdateUser",
-    "RelativePath": "api/v1/user/{id}",
+    "RelativePath": "api/v1/User/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "_user",
-        "Type": "Core.Models.DtoRequestUser",
+        "Name": "user",
+        "Type": "Core.Models.UserRequest",
         "IsRequired": true
       },
       {
@@ -90,21 +90,16 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Geek_API.Controllers.ControllerUser",
-    "Method": "UploadAvatarUserAsync",
-    "RelativePath": "api/v1/user/avatar/{id}",
-    "HttpMethod": "PUT",
+    "ContainingType": "Geek_API.Controllers.v1.UserController",
+    "Method": "AddUserAsync",
+    "RelativePath": "api/v1/User/byCommunity",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "_file",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": true
-      },
-      {
-        "Name": "id",
-        "Type": "System.Int32",
+        "Name": "user",
+        "Type": "Core.Models.UserRequest",
         "IsRequired": true
       }
     ],

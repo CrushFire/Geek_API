@@ -31,8 +31,6 @@ C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.Asse
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.AssemblyInfo.cs
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.csproj.CoreCompileInputs.cache
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.RazorAssemblyInfo.cache
-C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.RazorAssemblyInfo.cs
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\staticwebassets\msbuild.Geek_API.Microsoft.AspNetCore.StaticWebAssets.props
@@ -40,9 +38,7 @@ C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\staticwebasse
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Geek_API.props
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Geek_API.props
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\scopedcss\bundle\Geek_API.styles.css
-C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\scopedcss\projectbundle\Geek_API.bundle.scp.css
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.csproj.Up2Date
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.dll
 C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\refint\Geek_API.dll
@@ -344,3 +340,17 @@ C:\studies\University\FifthSemestr\Maks\Geek_API\Geek_API\bin\Debug\net8.0\Micro
 C:\studies\University\FifthSemestr\Maks\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\studies\University\FifthSemestr\Maks\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\studies\University\FifthSemestr\Maks\Geek_API\Geek_API\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\obj\Debug\net8.0\Geek_API.sourcelink.json
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.Versioning.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\CrushFire\source\repos\Geek_API\Geek_API\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

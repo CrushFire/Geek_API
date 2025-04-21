@@ -75,13 +75,12 @@ public class UserService : IUserService
         return ServiceResult<bool>.Success();
     }
 
-    public async Task<ServiceResult<int>> AddUserAsync(UserRequest userDto)
+    public async Task<ServiceResult<long>> AddUserAsync(UserRequest userDto)
     {
         if (userDto == null)
-            return ServiceResult<int>.Failure("Данные о пользователе отсутствуют");
+            return ServiceResult<long>.Failure("Данные о пользователе отсутствуют");
 
         var user = _mapper.Map<EntityUser>(userDto);
-        user.AvatarUrl = "/uploads/avatars/defaultAvatar"; //маршрут де лежит дефолтная ава
 
         var passwordHasher = new PasswordHasher<object>();
         user.PasswordHash = passwordHasher.HashPassword(null, user.PasswordHash);
@@ -89,34 +88,34 @@ public class UserService : IUserService
         await _applicationDbContext.Users.AddAsync(user);
         await _applicationDbContext.SaveChangesAsync();
 
-        return ServiceResult<int>.Success(user.Id);
+        return ServiceResult<long>.Success(user.Id);
     }
 
     //обновление аватарки(или загрузка)
-    public async Task<ServiceResult<string>> UploadAvatar(IFormFile avatar, int userId)
-    {
-        if (avatar == null || avatar.Length == 0) //Проверить на png,jpg... макс размер файла
-            return ServiceResult<string>.Failure("Неверный формат ошибка");
+    //public async Task<ServiceResult<string>> UploadAvatar(IFormFile avatar, int userId)
+    //{
+    //    if (avatar == null || avatar.Length == 0) //Проверить на png,jpg... макс размер файла
+    //        return ServiceResult<string>.Failure("Неверный формат ошибка");
 
-        var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "avatars");
+    //    var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "avatars");
 
-        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(avatar.FileName)}";
-        var filePath = Path.Combine(uploadsPath, fileName);
+    //    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(avatar.FileName)}";
+    //    var filePath = Path.Combine(uploadsPath, fileName);
 
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await avatar.CopyToAsync(stream);
-        }
+    //    using (var stream = new FileStream(filePath, FileMode.Create))
+    //    {
+    //        await avatar.CopyToAsync(stream);
+    //    }
 
-        var user = await _applicationDbContext.Users.FindAsync(userId);
-        if (user == null)
-            throw new NotFoundException("Пользователь не найден");
+    //    var user = await _applicationDbContext.Users.FindAsync(userId);
+    //    if (user == null)
+    //        throw new NotFoundException("Пользователь не найден");
 
-        user.AvatarUrl = $"/uploads/avatars/{fileName}";
-        await _applicationDbContext.SaveChangesAsync();
+    //    user.AvatarUrl = $"/uploads/avatars/{fileName}";
+    //    await _applicationDbContext.SaveChangesAsync();
 
-        return ServiceResult<string>.Success(user.AvatarUrl);
-    }
+    //    return ServiceResult<string>.Success(user.AvatarUrl);
+    //}
 
     //обновление юзера
     public async Task<ServiceResult<bool>> UpdateUserAsync(UserRequest userDto, int id)

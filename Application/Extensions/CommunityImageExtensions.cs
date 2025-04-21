@@ -13,11 +13,6 @@ public static class CommunityImageExtensions
                 Id = community.Id,
                 Name = community.Name,
                 Description = community.Description,
-                NumberOfMembers = community.NumberOfMembers,
-                NumberOfPosts = community.NumberOfPosts,
-                AvatarUrl = community.AvatarUrl,
-                Owner = community.Owner,
-                Users = community.Users,
                 Categories = community.Categories,
                 CreateAt = community.CreateAt,
                 Images = community.Images

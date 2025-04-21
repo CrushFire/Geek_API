@@ -16,6 +16,7 @@ public class EntityUser
 
     public List<EntityPost> Posts { get; set; } = new();
     public List<EntityUserCommunity> UserCommunities { get; set; } = new();
+    public List<EntityComment> Comments { get; set; } = new();
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }
