@@ -38,10 +38,10 @@ public class AutoMapper : Profile
 
 
         CreateMap<Community, CommunityResponse>();
-        //CreateMap<CommunityAddRequest, Community>() Этот мап не нужен, если понадобился, то ты даун
+        CreateMap<CommunityAddRequest, Community>();
 
         CreateMap<Comment, CommentResponse>();
-        //CreateMap<CommentAddRequest, Comment>(); Этот мап не нужен, если понадобился, то ты даун
+        CreateMap<CommentAddRequest, Comment>();
 
         CreateMap<Category, CategoryResponse>();
     }

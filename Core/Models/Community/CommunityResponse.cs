@@ -12,7 +12,7 @@ public class CommunityResponse
 
     public List<ImageResponse> Images { get; set; } = new();
 
-    public List<CategoryResponse> Categories { get; set; } = new();
+    //ublic List<CategoryResponse> Categories { get; set; } = new();
 
     //TODO
     //Кол-во постов? Опять таки лишний join

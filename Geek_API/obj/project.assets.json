@@ -10026,23 +10026,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\artem\\.nuget\\packages\\": {},
+    "C:\\Users\\CrushFire\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\Geek_API.csproj",
+      "projectUniqueName": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Geek_API.csproj",
       "projectName": "Geek_API",
-      "projectPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\Geek_API.csproj",
-      "packagesPath": "C:\\Users\\artem\\.nuget\\packages\\",
-      "outputPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\obj\\",
+      "projectPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Geek_API.csproj",
+      "packagesPath": "C:\\Users\\CrushFire\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\artem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\CrushFire\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -10058,14 +10058,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Application.csproj": {
-              "projectPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Application.csproj"
+            "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Application.csproj"
             },
-            "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Core.csproj": {
-              "projectPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Core.csproj"
+            "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Core.csproj": {
+              "projectPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Core.csproj"
             },
-            "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\DataAccess\\DataAccess.csproj"
+            "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\DataAccess.csproj"
             }
           }
         }
@@ -10173,7 +10173,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

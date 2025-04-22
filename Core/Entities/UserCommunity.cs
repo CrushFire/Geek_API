@@ -15,5 +15,5 @@ public class UserCommunity
 
     [ForeignKey(nameof(CommunityId))] public Community? Community { get; set; } = null!;
 
-    [Required] public string UserRole { get; set; } //owner, moderator, subscriber
+    [Required] public string UserRole { get; set; } //owner, subscriber
 }

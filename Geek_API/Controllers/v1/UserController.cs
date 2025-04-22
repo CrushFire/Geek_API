@@ -42,12 +42,12 @@ public class UserController : CustomControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateUserInfoAsync([FromBody] UserUpdateRequest user)
+    public async Task<IActionResult> UpdateUserInfoAsync([FromBody] UserUpdateRequest user, long id)
     {
         if (UserId == null)
             StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
+        var result = await _userService.UpdateUserInfoAsync(user, id);//??????
 
-        var result = await _userService.UpdateUserInfoAsync(user, UserId.Value);
         return result.IsSuccess
             ? Ok(ApiResponse.CreateSuccess(result.Data))
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));

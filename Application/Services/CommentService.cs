@@ -54,7 +54,7 @@ public class CommentService : ICommentService
 
         var comment = _mapper.Map<Comment>(request);
 
-        _context.Comments.Add(comment);
+        await _context.Comments.AddAsync(comment);
         await _context.SaveChangesAsync();
 
         var commentResponse = _mapper.Map<CommentResponse>(comment);
