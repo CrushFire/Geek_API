@@ -48,11 +48,20 @@ public class CommentService : ICommentService
 
     public async Task<ServiceResult<CommentResponse>> AddAsync(CommentAddRequest request, long userId)
     {
-        var postExist = _context.Posts.Any(p => p.Id == request.PostId);
+        var postExist = await _context.Posts.AnyAsync(p => p.Id == request.PostId);
         if (!postExist)
             ServiceResult<CommentResponse>.Failure("Пост не найден");
 
-        var comment = _mapper.Map<Comment>(request);
+        var userExist = await _context.Users.AnyAsync(p => p.Id == userId);
+        if (!userExist)
+            ServiceResult<CommentResponse>.Failure("Пользователь не найден");
+
+        var comment = new Comment
+        {
+            AuthorId = userId,
+            PostId = request.PostId,
+            Content = request.Content
+        };
 
         await _context.Comments.AddAsync(comment);
         await _context.SaveChangesAsync();

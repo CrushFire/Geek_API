@@ -134,7 +134,7 @@ public class UserService : IUserService
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
 
-        return ServiceResult<bool>.Success();
+        return ServiceResult<bool>.Success(true);
     }
 
     public async Task<ServiceResult<Image>> UploadAvatarAsync(IFormFile image, long userId)
