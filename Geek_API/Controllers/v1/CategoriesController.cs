@@ -15,7 +15,7 @@ public class CategoriesController : CustomControllerBase
 
     [HttpGet]
 
-    public async Task<IActionResult> GetByIdAsync(int id)
+    public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
     {
         var result = await _categoryService.GetByIdAsync(id);
         return result.IsSuccess
@@ -25,9 +25,9 @@ public class CategoriesController : CustomControllerBase
 
     [HttpGet("{id}")]
 
-    public async Task<IActionResult> GetCategoryAsync()
+    public async Task<IActionResult> GetCategoryAsync([FromQuery] int page = 1, int pageSize = 10)
     {
-        var result = await _categoryService.GetCategoryAsync();
+        var result = await _categoryService.GetCategoryAsync(1, 10);
         return result.IsSuccess
         ? Ok(ApiResponse.CreateSuccess(result.Data))
         : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
@@ -35,7 +35,7 @@ public class CategoriesController : CustomControllerBase
 
     [HttpPost]
 
-    public async Task<IActionResult> AddCategoryAsync(string title)
+    public async Task<IActionResult> AddCategoryAsync([FromBody] string title)
     {
         var result = await _categoryService.AddCategoryAsync(title);
         return result.IsSuccess
@@ -45,7 +45,7 @@ public class CategoriesController : CustomControllerBase
 
     [HttpPut]
 
-    public async Task<IActionResult> UpdateCategoryAsync(string title, int id)
+    public async Task<IActionResult> UpdateCategoryAsync([FromBody] string title, [FromRoute] int id)
     {
         var result = await _categoryService.UpdateCategoryAsync(title, id);
         return result.IsSuccess

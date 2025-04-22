@@ -17,7 +17,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpGet]
 
-    public async Task<IActionResult> GetCommunityAsync(int page = 1, int pageSize = 10)
+    public async Task<IActionResult> GetCommunityAsync([FromQuery] int page = 1, int pageSize = 10)
     {
         var result = await _communityService.GetCommunityAsync(page, pageSize);
 
@@ -28,7 +28,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpGet("{id}")]
 
-    public async Task<IActionResult> GetByIdAsync(long id)
+    public async Task<IActionResult> GetByIdAsync([FromRoute] long id)
     {
         var result = await _communityService.GetByIdAsync(id);
 
@@ -39,7 +39,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpGet("byUser")]
 
-    public async Task<IActionResult> GetByUserIdAsync(long userId)
+    public async Task<IActionResult> GetByUserIdAsync([FromQuery] long userId)
     {
         var result = await _communityService.GetByUserIdAsync(userId);
 
@@ -50,7 +50,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpPost]
 
-    public async Task<IActionResult> AddCommunityAsync(CommunityAddRequest communityAddRequest)
+    public async Task<IActionResult> AddCommunityAsync([FromBody] CommunityAddRequest communityAddRequest)
     {
         var result = await _communityService.AddCommunityAsync(communityAddRequest);
 
@@ -61,7 +61,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpPost("sub")]
 
-    public async Task<IActionResult> SubscribeAsync(long userId, long communityId)
+    public async Task<IActionResult> SubscribeAsync([FromBody] long userId, long communityId)
     {
         var result = await _communityService.SubsribeAsync(userId, communityId);
 
@@ -72,7 +72,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpDelete("unsub")]
 
-    public async Task<IActionResult> UnSubscribeAsync(long userId, long communityId)
+    public async Task<IActionResult> UnSubscribeAsync([FromBody] long userId, long communityId)
     {
         var result = await _communityService.UnSubscribeAsync(userId, communityId);
 
@@ -83,7 +83,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpPut]
 
-    public async Task<IActionResult> UpdateCommunityAsync(CommunityAddRequest communityAddRequest, long id)
+    public async Task<IActionResult> UpdateCommunityAsync([FromBody] CommunityAddRequest communityAddRequest, [FromRoute] long id)
     {
         var result = await _communityService.UpdateCommunityAsync(communityAddRequest, id);
 
@@ -94,7 +94,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpDelete]
 
-    public async Task<IActionResult> DeleteCommunityAsync(long id)
+    public async Task<IActionResult> DeleteCommunityAsync([FromRoute] long id)
     {
         var result = await _communityService.DeleteCommunityAsync(id);
 
