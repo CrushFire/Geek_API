@@ -16,9 +16,13 @@ public class AuthService : IAuthService
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
 
-    public AuthService(ApplicationDbContext context)
+    public AuthService(ApplicationDbContext context, JwtTokenGenerator jwtGenerator, IMapper mapper,
+        IPasswordHasher passwordHasher)
     {
         _context = context;
+        _jwtGenerator = jwtGenerator;
+        _mapper = mapper;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<ServiceResult<string>> RegisterAsync(RegisterRequest userRequest)
@@ -27,7 +31,7 @@ public class AuthService : IAuthService
         if (userExist)
             return ServiceResult<string>.Failure("Пользователь не найден", 409);
 
-        var newUser = _mapper.Map<User>(userRequest);
+        var newUser = new User { UserName = userRequest.UserName, Role = "User" };
         newUser.PasswordHash = _passwordHasher.HashPassword(userRequest.Password);
 
         await _context.AddAsync(newUser);

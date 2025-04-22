@@ -98,41 +98,18 @@ public class UserService : IUserService
         return ServiceResult<bool>.Success();
     }
 
-    public async Task<ServiceResult<Image>> UploadAvatarAsync(string avatarPath, long userId)
-    {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-        if (user == null)
-            return ServiceResult<Image>.Failure("Пользователь не найден");
-
-        var oldAvatar = await _context.Images
-            .FirstOrDefaultAsync(i =>
-                i.EntityTarget == nameof(User) && i.EntityId == userId && i.ImageType == "avatar");
-
-        if (oldAvatar != null) await _imageService.RemoveImages(new List<long> { oldAvatar.Id });
-
-        await _imageService.AddImageUrlsAsync(nameof(User), user.Id, "avatar", new List<string> { avatarPath });
-
-        return ServiceResult<Image>.Success();
-    }
-
     public async Task<ServiceResult<Image>> UploadBannerAsync(List<IFormFile> images, long userId)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null)
             return ServiceResult<Image>.Failure("Пользователь не найден");
 
-        //Удаляем старые?
+        //var oldBanner = await _context.Images
+        //    .Where(i => i.EntityTarget == nameof(User) && i.EntityId == userId && i.ImageType == "banner")
+        //    .Select(i => i.Id)
+        //    .ToListAsync();
 
-        /*
-        var oldBanner = await _context.Images
-            .Where(i => i.EntityTarget == nameof(User) && i.EntityId == userId && i.ImageType == "banner")
-            .Select(i => i.Id)
-            .ToListAsync();
-
-        if (oldBanner.Count > 0)
-        {
-            await _imageService.RemoveImages(oldBanner);
-        }*/
+        //if (oldBanner.Count > 0) await _imageService.RemoveImages(oldBanner);
 
         await _imageService.AddUploadedImagesAsync(nameof(User), user.Id, "banner", images);
 
@@ -158,5 +135,22 @@ public class UserService : IUserService
         await _context.SaveChangesAsync();
 
         return ServiceResult<bool>.Success();
+    }
+
+    public async Task<ServiceResult<Image>> UploadAvatarAsync(IFormFile image, long userId)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+            return ServiceResult<Image>.Failure("Пользователь не найден");
+
+        var oldAvatar = await _context.Images
+            .FirstOrDefaultAsync(i =>
+                i.EntityTarget == nameof(User) && i.EntityId == userId && i.ImageType == "avatar");
+
+        if (oldAvatar != null) await _imageService.RemoveImages(new List<long> { oldAvatar.Id });
+
+        await _imageService.AddUploadedImagesAsync(nameof(User), user.Id, "avatar", new List<IFormFile> { image });
+
+        return ServiceResult<Image>.Success();
     }
 }

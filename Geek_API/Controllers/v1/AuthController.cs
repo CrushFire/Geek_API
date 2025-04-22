@@ -32,7 +32,7 @@ public class AuthController : CustomControllerBase
         var result = await _authService.RegisterAsync(registerRequest);
 
         return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
+            ? Ok(ApiResponse.CreateSuccess(new { Token = result.Data }))
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 

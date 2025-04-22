@@ -62,31 +62,31 @@ public class ImageService : IImageService
         return resultImages;
     }
 
-    public async Task<List<Image>> AddImageUrlsAsync(
-        string entityType,
-        long entityId,
-        string imageType,
-        List<string> imageUrls)
-    {
-        if (imageUrls == null || !imageUrls.Any())
-            throw new ArgumentException("Список URL изображений пуст.");
+    //public async Task<List<Image>> AddImageUrlsAsync(
+    //    string entityType,
+    //    long entityId,
+    //    string imageType,
+    //    List<string> imageUrls)
+    //{
+    //    if (imageUrls == null || !imageUrls.Any())
+    //        throw new ArgumentException("Список URL изображений пуст.");
 
-        var resultImages = imageUrls
-            .Where(url => !string.IsNullOrWhiteSpace(url))
-            .Select(url => new Image
-            {
-                ImageUrl = url,
-                EntityId = entityId,
-                EntityTarget = entityType,
-                ImageType = imageType
-            })
-            .ToList();
+    //    var resultImages = imageUrls
+    //        .Where(url => !string.IsNullOrWhiteSpace(url))
+    //        .Select(url => new Image
+    //        {
+    //            ImageUrl = url,
+    //            EntityId = entityId,
+    //            EntityTarget = entityType,
+    //            ImageType = imageType
+    //        })
+    //        .ToList();
 
-        await _context.Images.AddRangeAsync(resultImages);
-        await _context.SaveChangesAsync();
+    //    await _context.Images.AddRangeAsync(resultImages);
+    //    await _context.SaveChangesAsync();
 
-        return resultImages;
-    }
+    //    return resultImages;
+    //}
 
 
     public async Task RemoveImages(List<long> imageIds)
