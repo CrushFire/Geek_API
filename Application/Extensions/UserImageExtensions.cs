@@ -16,9 +16,10 @@ public static class UserImageExtensions
                 Description = user.Description,
                 Posts = user.Posts,
                 UserCommunities = user.UserCommunities,
+                Comments = user.Comments,
                 CreateAt = user.CreateAt,
                 Images = user.Images
-                    .Where(img => img.EntityTarget == "EntityUser" && img.EntityId == user.Id)
+                    .Where(img => img.EntityTarget == nameof(User) && img.EntityId == user.Id)
                     .ToList()
             });
     }

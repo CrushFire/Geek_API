@@ -13,10 +13,9 @@ public static class CommunityImageExtensions
                 Id = community.Id,
                 Name = community.Name,
                 Description = community.Description,
-                Categories = community.Categories,
                 CreateAt = community.CreateAt,
                 Images = community.Images
-                    .Where(img => img.EntityTarget == "EntityCommunity" && img.EntityId == community.Id)
+                    .Where(img => img.EntityTarget == nameof(Community) && img.EntityId == community.Id)
                     .ToList()
             });
     }

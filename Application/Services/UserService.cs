@@ -28,11 +28,15 @@ public class UserService : IUserService
     {
         var user = await _context.Users
             .Where(x => x.Id == id)
+            .Include(u => u.Comments)
+            .Include(u => u.Posts)
             .IncludeUserImages()
             .FirstOrDefaultAsync();
 
         if (user == null)
             return ServiceResult<UserResponse>.Failure("Пользователя с таким id не существует");
+
+        Console.WriteLine(user);
 
         var userResponse = _mapper.Map<UserResponse>(user);
 
@@ -46,6 +50,8 @@ public class UserService : IUserService
         var user = await _context.Users
             .Include(u => u.UserCommunities)
             .Where(u => u.UserCommunities.Any(uc => uc.CommunityId == communityId))
+            .Include(u => u.Posts)
+            .Include(u => u.Comments)
             .IncludeUserImages()
             .OrderBy(u => u.UserName)
             .Skip((page - 1) * pageSize)
@@ -63,6 +69,8 @@ public class UserService : IUserService
             .OrderBy(u => u.UserName)
             .Skip((page - 1) * limit)
             .Take(limit)
+            .Include(u => u.Posts)
+            .Include(u => u.Comments)
             .IncludeUserImages()
             .ToListAsync();
 
@@ -97,7 +105,8 @@ public class UserService : IUserService
             return ServiceResult<Image>.Failure("Пользователь не найден");
 
         var oldAvatar = await _context.Images
-            .FirstOrDefaultAsync(i => i.EntityTarget == nameof(User) && i.EntityId == userId);
+            .FirstOrDefaultAsync(i =>
+                i.EntityTarget == nameof(User) && i.EntityId == userId && i.ImageType == "avatar");
 
         if (oldAvatar != null) await _imageService.RemoveImages(new List<long> { oldAvatar.Id });
 
@@ -113,9 +122,10 @@ public class UserService : IUserService
             return ServiceResult<Image>.Failure("Пользователь не найден");
 
         //Удаляем старые?
+
         /*
         var oldBanner = await _context.Images
-            .Where(i => i.EntityTarget == nameof(User) && i.EntityId == userId)
+            .Where(i => i.EntityTarget == nameof(User) && i.EntityId == userId && i.ImageType == "banner")
             .Select(i => i.Id)
             .ToListAsync();
 

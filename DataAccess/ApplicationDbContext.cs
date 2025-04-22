@@ -22,67 +22,134 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<User>()
-            .HasMany(x => x.Posts)
-            .WithOne(x => x.Author)
-            .OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<Post>()
-            .HasOne(x => x.Author)
-            .WithMany(x => x.Posts)
-            .OnDelete(DeleteBehavior.NoAction);
 
-        modelBuilder.Entity<User>()
-            .HasMany(x => x.UserCommunities)
-            .WithOne(x => x.User)
-            .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<UserCommunity>()
-            .HasOne(x => x.User)
-            .WithMany(x => x.UserCommunities)
-            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Image>(entity =>
+        {
+            // Связь с User, если EntityTarget = "User"
+            entity.HasOne<User>()
+                .WithMany(u => u.Images) // Навигационное свойство для User
+                .HasForeignKey(i => i.EntityId) // Связь через EntityId
+                .HasConstraintName("FK_Images_User")
+                .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Community>()
-            .HasMany(x => x.UserCommunities)
-            .WithOne(x => x.Community)
-            .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<UserCommunity>()
-            .HasOne(x => x.Community)
-            .WithMany(x => x.UserCommunities)
-            .OnDelete(DeleteBehavior.NoAction);
+            // Связь с Community, если EntityTarget = "Community"
+            entity.HasOne<Community>()
+                .WithMany(c => c.Images) // Навигационное свойство для Community
+                .HasForeignKey(i => i.EntityId) // Связь через EntityId
+                .HasConstraintName("FK_Images_Community")
+                .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<User>()
-            .HasMany(x => x.Comments)
-            .WithOne(x => x.Author)
-            .OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<Comment>()
-            .HasOne(x => x.Author)
-            .WithMany(x => x.Comments)
-            .OnDelete(DeleteBehavior.NoAction);
+            // Связь с Post, если EntityTarget = "Post"
+            entity.HasOne<Post>()
+                .WithMany(p => p.Images) // Навигационное свойство для Post
+                .HasForeignKey(i => i.EntityId) // Связь через EntityId
+                .HasConstraintName("FK_Images_Post")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
 
-        modelBuilder.Entity<Community>()
-            .HasMany(x => x.Posts)
-            .WithOne(x => x.Community)
-            .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<Post>()
-            .HasOne(x => x.Community)
-            .WithMany(x => x.Posts)
-            .OnDelete(DeleteBehavior.NoAction);
+        // Настройка сущности User
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasMany(u => u.Images)
+                .WithOne() // Навигационное свойство для Image
+                .HasForeignKey(i => i.EntityId)
+                .HasConstraintName("FK_User_Images");
 
-        modelBuilder.Entity<Post>()
-            .HasMany(x => x.PostCategories)
-            .WithOne(x => x.Post)
-            .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<PostCategory>()
-            .HasOne(x => x.Post)
-            .WithMany(x => x.PostCategories)
-            .OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(u => u.Posts)
+                .WithOne(p => p.Author) // Навигационное свойство для Post
+                .HasForeignKey(p => p.AuthorId)
+                .HasConstraintName("FK_User_Posts");
+        });
 
-        modelBuilder.Entity<Category>()
-            .HasMany(x => x.PostCategories)
-            .WithOne(x => x.Category)
-            .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<PostCategory>()
-            .HasOne(x => x.Category)
-            .WithMany(x => x.PostCategories)
-            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Community>(entity =>
+        {
+            entity.HasMany(c => c.Images)
+                .WithOne() // Навигационное свойство для Image
+                .HasForeignKey(i => i.EntityId)
+                .HasConstraintName("FK_Community_Images");
+
+            entity.HasMany(c => c.UserCommunities)
+                .WithOne(uc => uc.Community) // Навигационное свойство для UserCommunity
+                .HasForeignKey(uc => uc.CommunityId)
+                .HasConstraintName("FK_Community_UserCommunities");
+
+            entity.HasMany(c => c.Posts)
+                .WithOne(p => p.Community) // Навигационное свойство для Post
+                .HasForeignKey(p => p.CommunityId)
+                .HasConstraintName("FK_Community_Posts");
+        });
+
+        modelBuilder.Entity<Post>(entity =>
+        {
+            entity.HasMany(p => p.Images)
+                .WithOne() // Навигационное свойство для Image
+                .HasForeignKey(i => i.EntityId)
+                .HasConstraintName("FK_Post_Images");
+
+            entity.HasMany(p => p.PostCategories)
+                .WithOne(pc => pc.Post) // Навигационное свойство для PostCategory
+                .HasForeignKey(pc => pc.PostId)
+                .HasConstraintName("FK_Post_PostCategories");
+        });
+
+        modelBuilder.Entity<Like>(entity =>
+        {
+            entity.HasOne(l => l.User)
+                .WithMany() // Навигационное свойство для User
+                .HasForeignKey(l => l.UserId)
+                .HasConstraintName("FK_Like_User")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(l => l.Post)
+                .WithMany() // Навигационное свойство для Post
+                .HasForeignKey(l => l.PostId)
+                .HasConstraintName("FK_Like_Post")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Comment>(entity =>
+        {
+            entity.HasOne(c => c.Author)
+                .WithMany(u => u.Comments) // Навигационное свойство для User
+                .HasForeignKey(c => c.AuthorId)
+                .HasConstraintName("FK_Comment_Author")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(c => c.Post)
+                .WithMany(c => c.Comments) // Навигационное свойство для Post
+                .HasForeignKey(c => c.PostId)
+                .HasConstraintName("FK_Comment_Post")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<UserCommunity>(entity =>
+        {
+            entity.HasOne(uc => uc.User)
+                .WithMany(u => u.UserCommunities) // Навигационное свойство для User
+                .HasForeignKey(uc => uc.UserId)
+                .HasConstraintName("FK_UserCommunity_User")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(uc => uc.Community)
+                .WithMany(c => c.UserCommunities) // Навигационное свойство для Community
+                .HasForeignKey(uc => uc.CommunityId)
+                .HasConstraintName("FK_UserCommunity_Community")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<PostCategory>(entity =>
+        {
+            entity.HasOne(pc => pc.Post)
+                .WithMany(p => p.PostCategories) // Навигационное свойство для Post
+                .HasForeignKey(pc => pc.PostId)
+                .HasConstraintName("FK_PostCategory_Post")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(pc => pc.Category)
+                .WithMany(c => c.PostCategories) // Навигационное свойство для Category
+                .HasForeignKey(pc => pc.CategoryId)
+                .HasConstraintName("FK_PostCategory_Category")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }

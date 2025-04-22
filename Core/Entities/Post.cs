@@ -24,6 +24,7 @@ public class Post
     public int Views { get; set; } = 0;
 
     public List<PostCategory> PostCategories { get; set; } = new();
+    public List<Comment> Comments { get; set; } = new();
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

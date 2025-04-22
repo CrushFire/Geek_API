@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class AAA : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,7 @@ namespace DataAccess.Migrations
                     UserName = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    Role = table.Column<string>(type: "text", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -50,16 +51,10 @@ namespace DataAccess.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    EntityCommunityId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Categories_Communities_EntityCommunityId",
-                        column: x => x.EntityCommunityId,
-                        principalTable: "Communities",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -73,23 +68,23 @@ namespace DataAccess.Migrations
                     AuthorId = table.Column<long>(type: "bigint", nullable: false),
                     CommunityId = table.Column<long>(type: "bigint", nullable: false),
                     Views = table.Column<int>(type: "integer", nullable: false),
-                    Likes = table.Column<int>(type: "integer", nullable: false),
-                    Dislikes = table.Column<int>(type: "integer", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_Communities_CommunityId",
+                        name: "FK_Community_Posts",
                         column: x => x.CommunityId,
                         principalTable: "Communities",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Posts_Users_AuthorId",
+                        name: "FK_User_Posts",
                         column: x => x.AuthorId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,15 +101,17 @@ namespace DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_UsersCommunities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UsersCommunities_Communities_CommunityId",
+                        name: "FK_UserCommunity_Community",
                         column: x => x.CommunityId,
                         principalTable: "Communities",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UsersCommunities_Users_UserId",
+                        name: "FK_UserCommunity_User",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,16 +129,17 @@ namespace DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Posts_PostId",
+                        name: "FK_Comment_Author",
+                        column: x => x.AuthorId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comment_Post",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Comments_Users_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -153,29 +151,57 @@ namespace DataAccess.Migrations
                     ImageUrl = table.Column<string>(type: "text", nullable: false),
                     ImageType = table.Column<string>(type: "text", nullable: false),
                     EntityTarget = table.Column<string>(type: "text", nullable: false),
-                    EntityId = table.Column<long>(type: "bigint", nullable: false),
-                    EntityCommunityId = table.Column<long>(type: "bigint", nullable: true),
-                    EntityPostId = table.Column<long>(type: "bigint", nullable: true),
-                    EntityUserId = table.Column<long>(type: "bigint", nullable: true)
+                    EntityId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Images_Communities_EntityCommunityId",
-                        column: x => x.EntityCommunityId,
+                        name: "FK_Community_Images",
+                        column: x => x.EntityId,
                         principalTable: "Communities",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Images_Posts_EntityPostId",
-                        column: x => x.EntityPostId,
+                        name: "FK_Post_Images",
+                        column: x => x.EntityId,
                         principalTable: "Posts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Images_Users_EntityUserId",
-                        column: x => x.EntityUserId,
+                        name: "FK_User_Images",
+                        column: x => x.EntityId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Likes",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    PostId = table.Column<long>(type: "bigint", nullable: false),
+                    IsLike = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Like_Post",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Like_User",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,22 +217,18 @@ namespace DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_PostsCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PostsCategories_Categories_CategoryId",
+                        name: "FK_PostCategory_Category",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PostsCategories_Posts_PostId",
+                        name: "FK_PostCategory_Post",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_EntityCommunityId",
-                table: "Categories",
-                column: "EntityCommunityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_AuthorId",
@@ -219,19 +241,19 @@ namespace DataAccess.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_EntityCommunityId",
+                name: "IX_Images_EntityId",
                 table: "Images",
-                column: "EntityCommunityId");
+                column: "EntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_EntityPostId",
-                table: "Images",
-                column: "EntityPostId");
+                name: "IX_Likes_PostId",
+                table: "Likes",
+                column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_EntityUserId",
-                table: "Images",
-                column: "EntityUserId");
+                name: "IX_Likes_UserId",
+                table: "Likes",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_AuthorId",
@@ -272,6 +294,9 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Likes");
 
             migrationBuilder.DropTable(
                 name: "PostsCategories");

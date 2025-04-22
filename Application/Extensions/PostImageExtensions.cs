@@ -21,7 +21,7 @@ public static class PostImageExtensions
                 Views = post.Views,
                 CreateAt = post.CreateAt,
                 Images = post.Images
-                    .Where(img => img.EntityTarget == "EntityPost" && img.EntityId == post.Id)
+                    .Where(img => img.EntityTarget == nameof(Post) && img.EntityId == post.Id)
                     .ToList()
             });
     }

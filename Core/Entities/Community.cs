@@ -12,8 +12,6 @@ public class Community
 
     public List<Image> Images { get; set; } = new();
 
-    public List<Category> Categories { get; set; } = new();
-
     public List<UserCommunity> UserCommunities { get; set; } = new();
     public List<Post> Posts { get; set; } = new();
 

@@ -26,7 +26,7 @@ public class ImageService : IImageService
         if (uploadedImages == null || !uploadedImages.Any())
             throw new ArgumentException("Список загруженных изображений пуст.");
 
-        var request = _httpContextAccessor.HttpContext?.Request;
+        var request = _httpContextAccessor.HttpContext?.Request; //?
         if (request == null)
             throw new Exception("Не удалось получить адрес сервера");
 
@@ -56,10 +56,13 @@ public class ImageService : IImageService
             });
         }
 
+        await _context.Images.AddRangeAsync(resultImages);
+        await _context.SaveChangesAsync();
+
         return resultImages;
     }
 
-    public Task<List<Image>> AddImageUrlsAsync(
+    public async Task<List<Image>> AddImageUrlsAsync(
         string entityType,
         long entityId,
         string imageType,
@@ -79,7 +82,10 @@ public class ImageService : IImageService
             })
             .ToList();
 
-        return Task.FromResult(resultImages);
+        await _context.Images.AddRangeAsync(resultImages);
+        await _context.SaveChangesAsync();
+
+        return resultImages;
     }
 
 

@@ -35,7 +35,7 @@ public class UserController : CustomControllerBase
     [HttpGet("byCommunity")]
     public async Task<IActionResult> GetUsersByCommunityAsync(long communityId, int page = 1, int pageSize = 10)
     {
-        var result = await _userService.GetUsersByCommunityAsync(page, pageSize);
+        var result = await _userService.GetUsersByCommunityAsync(communityId, page, pageSize);
         return result.IsSuccess
             ? Ok(ApiResponse.CreateSuccess(result.Data))
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));

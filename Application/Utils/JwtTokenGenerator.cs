@@ -19,7 +19,7 @@ public class JwtTokenGenerator
         _audience = configuration["Jwt:Audience"];
     }
 
-    public string GenerateToken(string nameIdentifier, string email, string role)
+    public string GenerateToken(string nameIdentifier, string userName, string role)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_key);
@@ -29,7 +29,7 @@ public class JwtTokenGenerator
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, nameIdentifier),
-                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.Email, userName),
                 new Claim(ClaimTypes.Role, role)
             }),
             Expires = DateTime.UtcNow.AddMinutes(99999999),
