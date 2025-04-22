@@ -23,27 +23,25 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        ////////////УДАЛИ В БД ВСЕ ВНЕШНИЕ КЛЮЧИ У IMAGE\\\\\\\\\\\\\\\\\\\\\
         modelBuilder.Entity<Image>(entity =>
         {
             // Связь с User, если EntityTarget = "User"
             entity.HasOne<User>()
                 .WithMany(u => u.Images) // Навигационное свойство для User
                 .HasForeignKey(i => i.EntityId) // Связь через EntityId
-                .HasConstraintName("FK_Images_User")
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Связь с Community, если EntityTarget = "Community"
             entity.HasOne<Community>()
                 .WithMany(c => c.Images) // Навигационное свойство для Community
                 .HasForeignKey(i => i.EntityId) // Связь через EntityId
-                .HasConstraintName("FK_Images_Community")
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Связь с Post, если EntityTarget = "Post"
             entity.HasOne<Post>()
                 .WithMany(p => p.Images) // Навигационное свойство для Post
                 .HasForeignKey(i => i.EntityId) // Связь через EntityId
-                .HasConstraintName("FK_Images_Post")
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

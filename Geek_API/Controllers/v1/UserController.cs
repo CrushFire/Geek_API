@@ -41,12 +41,13 @@ public class UserController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateUserInfoAsync([FromBody] UserUpdateRequest user, long id)
+    [HttpPut]
+    public async Task<IActionResult> UpdateUserInfoAsync([FromBody] UserUpdateRequest user)
     {
         if (UserId == null)
             StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
-        var result = await _userService.UpdateUserInfoAsync(user, id);
+
+        var result = await _userService.UpdateUserInfoAsync(user, UserId.Value);
 
         return result.IsSuccess
             ? Ok(ApiResponse.CreateSuccess(result.Data))
@@ -74,13 +75,13 @@ public class UserController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpPut("avatar")]
-    public async Task<IActionResult> UploadAvatarUserAsync(IFormFile images, [FromRoute] long id)
+    [HttpPut("{id}/avatar")]
+    public async Task<IActionResult> UploadAvatarUserAsync(IFormFile image, [FromRoute] long id)
     {
         if (UserId == null)
             StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
 
-        var result = await _userService.UploadAvatarAsync(images, id);
+        var result = await _userService.UploadAvatarAsync(image, id);
         return result.IsSuccess
             ? Ok(ApiResponse.CreateSuccess(result.Data))
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
