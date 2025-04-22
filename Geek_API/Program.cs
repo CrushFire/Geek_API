@@ -85,7 +85,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IImageService, ImageService>();
-//builder.Services.AddScoped<ICategoryService, CategoryService>();?????????????????????????????????????????????????
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
 
 

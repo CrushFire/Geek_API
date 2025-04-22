@@ -13,7 +13,7 @@ namespace Application.Services
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        CategoryService(ApplicationDbContext context, IMapper mapper)
+        public CategoryService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
