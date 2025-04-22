@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Interfaces.Services;
 using Core.Models.Category;
 using Core.Results;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {

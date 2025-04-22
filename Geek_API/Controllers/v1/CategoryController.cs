@@ -1,14 +1,15 @@
 ﻿using Application.Services;
+using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Geek_API.Controllers.v1;
 
 [ApiVersion("1.0")]
-public class CategoriesController : CustomControllerBase
+public class CategoryController : CustomControllerBase
 {
     private readonly ICategoryService _categoryService;
 
-    public CategoriesController(ICategoryService categoryService)
+    public CategoryController(ICategoryService categoryService)
     {
         _categoryService = categoryService;
     }
