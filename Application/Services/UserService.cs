@@ -1,53 +1,68 @@
-﻿using Application.Exceptions;
-using Application.Extensions;
+﻿using Application.Extensions;
 using AutoMapper;
+using Core.Entities;
 using Core.Interfaces;
+using Core.Interfaces.Services;
 using Core.Models;
 using Core.Results;
 using DataAccess;
-using DataAccess.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
 public class UserService : IUserService
 {
-    private readonly ApplicationDbContext _applicationDbContext;
+    private readonly ApplicationDbContext _context;
+    private readonly IImageService _imageService;
     private readonly IMapper _mapper;
 
-    public UserService(ApplicationDbContext applicationDbContext, IMapper autoMapper)
+    public UserService(ApplicationDbContext context, IMapper autoMapper, IImageService imageService)
     {
-        _applicationDbContext = applicationDbContext;
+        _context = context;
         _mapper = autoMapper;
+        _imageService = imageService;
     }
 
-    public async Task<ServiceResult<UserResponse>> GetUserAsync(int id)
+    public async Task<ServiceResult<UserResponse>> GetUserByIdAsync(long id)
     {
-        var user = _mapper.Map<UserResponse>(await _applicationDbContext.Users.Where(x => x.Id == id).FirstAsync());
+        var user = await _context.Users
+            .Where(x => x.Id == id)
+            .IncludeUserImages()
+            .FirstOrDefaultAsync();
 
         if (user == null)
-            return ServiceResult<UserResponse>.Failure("Пользователя с таким айди не существует");
+            return ServiceResult<UserResponse>.Failure("Пользователя с таким id не существует");
 
-        var banners = _mapper.Map<List<ImageResponse>>(await _applicationDbContext.Images
-            .Where(img => img.EntityTarget == "EntityUser" && img.EntityId == id)
-            .ToListAsync());
+        var userResponse = _mapper.Map<UserResponse>(user);
 
-        //user.Banners = banners;
-        return ServiceResult<UserResponse>.Success(user);
+        return ServiceResult<UserResponse>.Success(userResponse);
+    }
+
+    //Объединил бы в один
+    public async Task<ServiceResult<List<UserResponse>>> GetUsersByCommunityAsync(long communityId, int page = 1,
+        int pageSize = 10)
+    {
+        var user = await _context.Users
+            .Include(u => u.UserCommunities)
+            .Where(u => u.UserCommunities.Any(uc => uc.CommunityId == communityId))
+            .IncludeUserImages()
+            .OrderBy(u => u.UserName)
+            .Skip((page - 1) * pageSize)
+            .Take(page)
+            .ToListAsync();
+
+        var userResponse = _mapper.Map<List<UserResponse>>(user);
+
+        return ServiceResult<List<UserResponse>>.Success(userResponse);
     }
 
     public async Task<ServiceResult<List<UserResponse>>> GetUsersAsync(int page = 1, int limit = 10)
     {
-        if (page < 1 || limit < 1)
-            return ServiceResult<List<UserResponse>>.Failure(
-                "Стартовая позиция или количество элементов имеют некорректное значение");
-
-        var users = await _applicationDbContext.Users
+        var users = await _context.Users
+            .OrderBy(u => u.UserName)
             .Skip((page - 1) * limit)
             .Take(limit)
-            .OrderBy(u => u.UserName)
             .IncludeUserImages()
             .ToListAsync();
 
@@ -56,77 +71,81 @@ public class UserService : IUserService
         return ServiceResult<List<UserResponse>>.Success(mappingUsers);
     }
 
-    public async Task<ServiceResult<bool>> DeleteUser(int id)
+    public async Task<ServiceResult<bool>> DeleteUser(long id)
     {
-        var user = await _applicationDbContext.Users.FindAsync(id);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         if (user == null)
             return ServiceResult<bool>.Failure("Пользователь не найден");
 
-        var images = await _applicationDbContext.Images
-            .Where(img => img.EntityTarget == "EntityUser" && img.EntityId == id)
+        var imageIds = await _context.Images
+            .Where(i => i.EntityId == id && i.EntityTarget == nameof(User))
+            .Select(i => i.Id)
             .ToListAsync();
 
-        _applicationDbContext.Images.RemoveRange(images);
+        await _imageService.RemoveImages(imageIds);
 
-        _applicationDbContext.Users.Remove(user);
-
-        await _applicationDbContext.SaveChangesAsync();
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
 
         return ServiceResult<bool>.Success();
     }
 
-    public async Task<ServiceResult<long>> AddUserAsync(UserUpdateRequest userDto)
+    public async Task<ServiceResult<Image>> UploadAvatarAsync(string avatarPath, long userId)
     {
-        if (userDto == null)
-            return ServiceResult<long>.Failure("Данные о пользователе отсутствуют");
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+            return ServiceResult<Image>.Failure("Пользователь не найден");
 
-        var user = _mapper.Map<UserEntity>(userDto);
+        var oldAvatar = await _context.Images
+            .FirstOrDefaultAsync(i => i.EntityTarget == nameof(User) && i.EntityId == userId);
 
-        var passwordHasher = new PasswordHasher<object>();
-        user.PasswordHash = passwordHasher.HashPassword(null, user.PasswordHash);
+        if (oldAvatar != null) await _imageService.RemoveImages(new List<long> { oldAvatar.Id });
 
-        await _applicationDbContext.Users.AddAsync(user);
-        await _applicationDbContext.SaveChangesAsync();
+        await _imageService.AddImageUrlsAsync(nameof(User), user.Id, "avatar", new List<string> { avatarPath });
 
-        return ServiceResult<long>.Success(user.Id);
+        return ServiceResult<Image>.Success();
     }
 
-    //обновление аватарки(или загрузка)
-    //public async Task<ServiceResult<string>> UploadAvatar(IFormFile avatar, int userId)
-    //{
-    //    if (avatar == null || avatar.Length == 0) //Проверить на png,jpg... макс размер файла
-    //        return ServiceResult<string>.Failure("Неверный формат ошибка");
-
-    //    var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "avatars");
-
-    //    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(avatar.FileName)}";
-    //    var filePath = Path.Combine(uploadsPath, fileName);
-
-    //    using (var stream = new FileStream(filePath, FileMode.Create))
-    //    {
-    //        await avatar.CopyToAsync(stream);
-    //    }
-
-    //    var user = await _applicationDbContext.Users.FindAsync(userId);
-    //    if (user == null)
-    //        throw new NotFoundException("Пользователь не найден");
-
-    //    user.AvatarUrl = $"/uploads/avatars/{fileName}";
-    //    await _applicationDbContext.SaveChangesAsync();
-
-    //    return ServiceResult<string>.Success(user.AvatarUrl);
-    //}
-
-    //обновление юзера
-    public async Task<ServiceResult<bool>> UpdateUserAsync(UserUpdateRequest userDto, int id)
+    public async Task<ServiceResult<Image>> UploadBannerAsync(List<IFormFile> images, long userId)
     {
-        if (userDto == null)
-            return ServiceResult<bool>.Failure("Данные о пользователе отсутствуют");
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+            return ServiceResult<Image>.Failure("Пользователь не найден");
 
-        var user = _mapper.Map<UserEntity>(userDto);
-        user.Id = id;
-        _applicationDbContext.Users.Update(user);
-        await _applicationDbContext.SaveChangesAsync();
+        //Удаляем старые?
+        /*
+        var oldBanner = await _context.Images
+            .Where(i => i.EntityTarget == nameof(User) && i.EntityId == userId)
+            .Select(i => i.Id)
+            .ToListAsync();
+
+        if (oldBanner.Count > 0)
+        {
+            await _imageService.RemoveImages(oldBanner);
+        }*/
+
+        await _imageService.AddUploadedImagesAsync(nameof(User), user.Id, "banner", images);
+
+        return ServiceResult<Image>.Success();
+    }
+
+
+    public async Task<ServiceResult<bool>> UpdateUserInfoAsync(UserUpdateRequest userDto, long id)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        if (user == null)
+            return ServiceResult<bool>.Failure("Пользователь не найден");
+
+        if (user.UserName != userDto.UserName)
+        {
+            var uniqueUserName = await _context.Users.AnyAsync(u => u.UserName == userDto.UserName);
+        }
+
+        user.UserName = userDto.UserName;
+        user.Description = userDto.Description;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
 
         return ServiceResult<bool>.Success();
     }

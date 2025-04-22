@@ -1,8 +1,11 @@
 using System.Security.Claims;
 using System.Text;
 using Application.Services;
+using Application.Utils;
 using Core.Interfaces;
+using Core.Interfaces.Services;
 using DataAccess;
+using Geek_API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,8 +81,24 @@ builder.Services.AddAuthentication(options =>
 #region Services
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+
+
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<JwtTokenGenerator>();
 
 #endregion
+
+#region Filters
+
+builder.Services.AddControllers(options => { options.Filters.Add<ValidateModelAttribute>(); });
+
+#endregion
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
 {
@@ -93,7 +112,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -108,6 +126,12 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGet("/", async context =>
+{
+    context.Response.ContentType = "text/html";
+    await context.Response.SendFileAsync("wwwroot/index.html");
+});
 
 app.MapControllers();
 

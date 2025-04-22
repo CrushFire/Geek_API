@@ -1,14 +1,14 @@
-﻿using DataAccess.Entities;
+﻿using Core.Entities;
 
 namespace Application.Extensions;
 
 public static class PostImageExtensions
 {
     // Метод для добавления изображений для поста
-    public static IQueryable<PostEntity> IncludePostImages(this IQueryable<PostEntity> query)
+    public static IQueryable<Post> IncludePostImages(this IQueryable<Post> query)
     {
         return query
-            .Select(post => new PostEntity
+            .Select(post => new Post
             {
                 Id = post.Id,
                 Title = post.Title,
@@ -19,8 +19,6 @@ public static class PostImageExtensions
                 Community = post.Community,
                 PostCategories = post.PostCategories,
                 Views = post.Views,
-                Likes = post.Likes,
-                Dislikes = post.Dislikes,
                 CreateAt = post.CreateAt,
                 Images = post.Images
                     .Where(img => img.EntityTarget == "EntityPost" && img.EntityId == post.Id)

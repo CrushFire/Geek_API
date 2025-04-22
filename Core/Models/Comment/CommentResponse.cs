@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace Core.Models.Comment;
+﻿namespace Core.Models.Comment;
 
 public class CommentResponse
 {
@@ -12,4 +9,5 @@ public class CommentResponse
     public UserResponse Author { get; set; }
 
     public long PostId { get; set; }
+    public DateTime CreateAt { get; set; }
 }

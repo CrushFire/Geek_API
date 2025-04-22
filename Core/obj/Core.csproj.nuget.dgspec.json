@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Core.csproj": {}
+    "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Core.csproj": {}
   },
   "projects": {
-    "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Core.csproj": {
+    "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Core.csproj",
+        "projectUniqueName": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Core.csproj",
         "projectName": "Core",
-        "projectPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Core.csproj",
-        "packagesPath": "C:\\Users\\CrushFire\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\obj\\",
+        "projectPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Core.csproj",
+        "packagesPath": "C:\\Users\\artem\\.nuget\\packages\\",
+        "outputPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\CrushFire\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\artem\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -83,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

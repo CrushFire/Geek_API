@@ -15,9 +15,9 @@ public class UserController : CustomControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserAsync(int id)
+    public async Task<IActionResult> GetUserAsync(long id)
     {
-        var result = await _userService.GetUserAsync(id);
+        var result = await _userService.GetUserByIdAsync(id);
         return result.IsSuccess
             ? Ok(ApiResponse.CreateSuccess(result.Data))
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
@@ -33,18 +33,28 @@ public class UserController : CustomControllerBase
     }
 
     [HttpGet("byCommunity")]
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    [HttpPost]
-    public async Task<IActionResult> AddUserAsync([FromBody] UserUpdateRequest user)
+    public async Task<IActionResult> GetUsersByCommunityAsync(long communityId, int page = 1, int pageSize = 10)
     {
-        var result = await _userService.AddUserAsync(user);
+        var result = await _userService.GetUsersByCommunityAsync(page, pageSize);
+        return result.IsSuccess
+            ? Ok(ApiResponse.CreateSuccess(result.Data))
+            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateUserInfoAsync([FromBody] UserUpdateRequest user)
+    {
+        if (UserId == null)
+            StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
+
+        var result = await _userService.UpdateUserInfoAsync(user, UserId.Value);
         return result.IsSuccess
             ? Ok(ApiResponse.CreateSuccess(result.Data))
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUserAsync([FromRoute] int id)
+    public async Task<IActionResult> DeleteUserAsync([FromRoute] long id)
     {
         var result = await _userService.DeleteUser(id);
         return result.IsSuccess
@@ -52,21 +62,27 @@ public class UserController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser([FromBody] UserUpdateRequest user, int id)
+    [HttpPut("banner")]
+    public async Task<IActionResult> UpdateUserBannerAsync(List<IFormFile> images, long id)
     {
-        var result = await _userService.UpdateUserAsync(user, id);
+        if (UserId == null)
+            StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
+
+        var result = await _userService.UploadBannerAsync(images, id);
         return result.IsSuccess
             ? NoContent()
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    //[HttpPut("{id}/avatar")]
-    //public async Task<IActionResult> UploadAvatarUserAsync([FromBody] IFormFile file, [FromRoute] int id)
-    //{
-    //    var result = await _userService.UploadAvatar(file, id);
-    //    return result.IsSuccess
-    //        ? Ok(ApiResponse.CreateSuccess(result.Data))
-    //        : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
-    //}
+    [HttpPut("avatar")]
+    public async Task<IActionResult> UploadAvatarUserAsync(string avatarPath, [FromRoute] long id)
+    {
+        if (UserId == null)
+            StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
+
+        var result = await _userService.UploadAvatarAsync(avatarPath, id);
+        return result.IsSuccess
+            ? Ok(ApiResponse.CreateSuccess(result.Data))
+            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    }
 }

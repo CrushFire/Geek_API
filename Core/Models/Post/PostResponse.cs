@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Core.Models.Community;
+﻿namespace Core.Models.Post;
 
-namespace Core.Models.Post;
 public class PostResponse
 {
     public long Id { get; set; }
@@ -14,6 +11,7 @@ public class PostResponse
     public UserResponse Author { get; set; }
 
     public long CommunityId { get; set; }
+    //Можно мапить название комьюнити, но это лишний join постоянно, хз
 
     public List<ImageResponse> Images { get; set; } = new();
 

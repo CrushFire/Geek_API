@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
+using Core.Entities;
 using Core.Models;
 using Core.Models.Category;
 using Core.Models.Comment;
 using Core.Models.Community;
-using Core.Models.Image;
 using Core.Models.Post;
-using DataAccess.Entities;
 
 namespace Geek_API.Mappers;
 
@@ -13,31 +12,37 @@ public class AutoMapper : Profile
 {
     public AutoMapper()
     {
-        CreateMap<UserEntity, UserResponse>();
-        CreateMap<UserUpdateRequest, UserEntity>()
-            .ForMember(x => x.Id, opt => opt.Ignore());
+        CreateMap<User, UserResponse>()
+            .ForMember(dest => dest.NumberOfPosts,
+                opt => opt.MapFrom(src => src.Posts.Count))
+            .ForMember(dest => dest.NumberOfComments,
+                opt => opt.MapFrom(src => src.Comments.Count));
 
-        CreateMap<ImageEntity, ImageResponse>();
-        CreateMap<ImageAddRequest, ImageEntity>()
-            .ForMember(x => x.Id, opt => opt.Ignore());
+        //CreateMap<UserUpdateRequest, User>(); Этот мап не нужен, если понадобился, то ты даун
 
-        CreateMap<PostEntity, PostResponse>();
-        CreateMap<PostAddRequest, PostEntity>()
-            .ForMember(x => x.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Community, opt => opt.MapFrom(x => x.CommunityId));
+        CreateMap<Image, ImageResponse>();
 
-        CreateMap<CommunityEntity, CommunityResponse>();
-        CreateMap<CommunityAddRequest, CommunityEntity>()
-            .ForMember(x => x.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Categories, opt => opt.MapFrom(x => x.CategoriesId));
+        CreateMap<PostAddRequest, Post>();
+        CreateMap<Post, PostResponse>();
+        CreateMap<PostWithLikes, PostResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Post.Id))
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Post.Title))
+            .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Post.Content))
+            .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Post.Author))
+            .ForMember(dest => dest.CommunityId, opt => opt.MapFrom(src => src.Post.CommunityId))
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Post.Images))
+            .ForMember(dest => dest.Views, opt => opt.MapFrom(src => src.Post.Views))
+            .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => src.Post.CreateAt))
+            .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.CountLikes))
+            .ForMember(dest => dest.Dislikes, opt => opt.MapFrom(src => src.CountDislikes));
 
-        CreateMap<CommentEntity, CommentResponse>();
-        CreateMap<CommentAddRequest, CommentEntity>()
-            .ForMember(x => x.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Post, opt => opt.MapFrom(x => x.PostId));
 
-        CreateMap<CategoryEntity, CategoryResponse>();
-        CreateMap<CategoryAddRequest, CategoryEntity>()
-            .ForMember(x => x.Id, opt => opt.Ignore());
+        CreateMap<Community, CommunityResponse>();
+        //CreateMap<CommunityAddRequest, Community>() Этот мап не нужен, если понадобился, то ты даун
+
+        CreateMap<Comment, CommentResponse>();
+        //CreateMap<CommentAddRequest, Comment>(); Этот мап не нужен, если понадобился, то ты даун
+
+        CreateMap<Category, CategoryResponse>();
     }
 }

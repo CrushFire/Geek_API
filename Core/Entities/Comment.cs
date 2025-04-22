@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccess.Entities;
+namespace Core.Entities;
 
-public class CommentEntity
+public class Comment
 {
     [Key] public long Id { get; set; }
 
@@ -11,11 +11,11 @@ public class CommentEntity
 
     [Required] public long AuthorId { get; set; }
 
-    [ForeignKey(nameof(AuthorId))] public UserEntity? Author { get; set; } = null;
+    [ForeignKey(nameof(AuthorId))] public User? Author { get; set; } = null;
 
     [Required] public long PostId { get; set; }
 
-    [ForeignKey(nameof(PostId))] public PostEntity? Post { get; set; } = null;
+    [ForeignKey(nameof(PostId))] public Post? Post { get; set; } = null;
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

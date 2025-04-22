@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccess.Entities;
+namespace Core.Entities;
 
-public class PostCategoryEntity
+public class PostCategory
 {
     [Key] public long Id { get; set; }
 
     [Required] public long PostId { get; set; }
 
-    [ForeignKey(nameof(PostId))] public PostEntity? Post { get; set; } = null!;
+    [ForeignKey(nameof(PostId))] public Post? Post { get; set; } = null!;
 
     [Required] public int CategoryId { get; set; }
 
-    [ForeignKey(nameof(CategoryId))] public CategoryEntity Category { get; set; } = null!;
+    [ForeignKey(nameof(CategoryId))] public Category Category { get; set; } = null!;
 }

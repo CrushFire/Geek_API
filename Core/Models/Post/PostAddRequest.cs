@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Core.Models.Image;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Core.Models.Post;
+
 public class PostAddRequest
 {
     public string Title { get; set; } = string.Empty;
@@ -11,5 +10,5 @@ public class PostAddRequest
 
     public long CommunityId { get; set; }
 
-    public List<ImageAddRequest> Images { get; set; } = new();
+    public List<IFormFile> Images { get; set; } = new();
 }

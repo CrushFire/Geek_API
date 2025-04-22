@@ -1,5 +1,4 @@
 ﻿using Core.Models.Category;
-using System.ComponentModel.DataAnnotations;
 
 namespace Core.Models.Community;
 
@@ -15,4 +14,6 @@ public class CommunityResponse
 
     public List<CategoryResponse> Categories { get; set; } = new();
 
+    //TODO
+    //Кол-во постов? Опять таки лишний join
 }

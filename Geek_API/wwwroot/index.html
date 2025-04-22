@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Full Page Image with Top Button</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-image: url('https://teamly.ru/storage/upload/news/e8AOFG1YVRpQTqAAzNoWbbnvkFiOXREuRieU6Y1Z.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: sans-serif;
+        }
+
+        .top-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+            .top-link:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
+    </style>
+</head>
+<body>
+<a class="top-link" href="/swagger/index.html">Перейти к API</a>
+</body>
+</html>

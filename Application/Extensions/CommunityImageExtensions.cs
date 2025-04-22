@@ -1,14 +1,14 @@
-﻿using DataAccess.Entities;
+﻿using Core.Entities;
 
 namespace Application.Extensions;
 
 public static class CommunityImageExtensions
 {
     // Метод для добавления изображений для сообщества
-    public static IQueryable<CommunityEntity> IncludeCommunityImages(this IQueryable<CommunityEntity> query)
+    public static IQueryable<Community> IncludeCommunityImages(this IQueryable<Community> query)
     {
         return query
-            .Select(community => new CommunityEntity
+            .Select(community => new Community
             {
                 Id = community.Id,
                 Name = community.Name,

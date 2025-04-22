@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataAccess.Entities;
+namespace Core.Entities;
 
-public class ImageEntity
+public class Image
 {
     [Key] public long Id { get; set; }
 

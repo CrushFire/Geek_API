@@ -1,102 +1,46 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\",
+  "WorkspaceRootPath": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\geek_api\\mappers\\automapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\mappers\\automapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\core\\entities\\usercommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\entities\\usercommunity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\user\\userupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\core\\entities\\community.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\entities\\community.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\geek_api\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\geek_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\geek_api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\geek_api\\controllers\\v1\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{189ED2BE-7A89-4CC5-B70E-3A6FD623D7C1}|Geek_API\\Geek_API.csproj|solutionrelative:geek_api\\controllers\\v1\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\core\\models\\user\\userupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\user\\userupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\userentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\userentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\image\\imageaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\image\\imageaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\imageentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\imageentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\category\\categoryaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\category\\categoryaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\categoryentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\categoryentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\comment\\commentaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\comment\\commentaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\commententity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\commententity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\community\\communityaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\community\\communityaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\communityentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\communityentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\post\\postaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\post\\postaddrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\dataaccess\\entities\\postentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{26C391BF-FDE8-4672-86AA-9D44EDC90BCA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\entities\\postentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\post\\postresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\post\\postresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\user\\userresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\user\\userresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\validators\\titlevalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\validators\\titlevalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6D67A73-8C7B-4089-ABCB-82ED885668B4}|Application\\Application.csproj|solutionrelative:application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\authorisation\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\authorisation\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\core\\interfaces\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\interfaces\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\authorisation\\passwordupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\authorisation\\passwordupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\authorisation\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\authorisation\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\category\\categoryresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\category\\categoryresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\comment\\commentresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\comment\\commentresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\community\\communityresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\community\\communityresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\users\\crushfire\\source\\repos\\geek_api\\core\\models\\image\\imageresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\models\\image\\imageresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|c:\\studies\\university\\fifthsemestr\\maks\\geek_api\\core\\validators\\titlevalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40CDBEB6-1D35-4D56-8F5B-D64F735D5A43}|Core\\Core.csproj|solutionrelative:core\\validators\\titlevalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -106,15 +50,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 292,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
             },
             {
               "$type": "Bookmark",
@@ -134,314 +74,132 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "CommentEntity.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\CommentEntity.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\CommentEntity.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\CommentEntity.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\CommentEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T23:41:13.448Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "CommunityEntity.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\CommunityEntity.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\CommunityEntity.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\CommunityEntity.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\CommunityEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T23:38:05.318Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AutoMapper.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Mappers\\AutoMapper.cs",
-              "RelativeDocumentMoniker": "Geek_API\\Mappers\\AutoMapper.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Geek_API\\Mappers\\AutoMapper.cs",
-              "RelativeToolTip": "Geek_API\\Mappers\\AutoMapper.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAA+wBEAAAA3AAAAAAAAAA==",
+              "Title": "UserCommunity.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Entities\\UserCommunity.cs",
+              "RelativeDocumentMoniker": "Core\\Entities\\UserCommunity.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Entities\\UserCommunity.cs",
+              "RelativeToolTip": "Core\\Entities\\UserCommunity.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:57:57.137Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "CategoryEntity.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\CategoryEntity.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\CategoryEntity.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\CategoryEntity.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\CategoryEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:57:15.2Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "TitleValidator.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Validators\\TitleValidator.cs",
-              "RelativeDocumentMoniker": "Core\\Validators\\TitleValidator.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Validators\\TitleValidator.cs",
-              "RelativeToolTip": "Core\\Validators\\TitleValidator.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAACgAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:52:37.626Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "Application\\Services\\UserService.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Application\\Services\\UserService.cs",
-              "RelativeToolTip": "Application\\Services\\UserService.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAqwCQAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:49:18.527Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "PostResponse.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Post\\PostResponse.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Post\\PostResponse.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Post\\PostResponse.cs",
-              "RelativeToolTip": "Core\\Models\\Post\\PostResponse.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAA1wA0AAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:38:01.341Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "PostAddRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Post\\PostAddRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Post\\PostAddRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Post\\PostAddRequest.cs",
-              "RelativeToolTip": "Core\\Models\\Post\\PostAddRequest.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:37:57.939Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "PostEntity.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\PostEntity.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\PostEntity.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\PostEntity.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\PostEntity.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAzwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:34:39.092Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserEntity.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\UserEntity.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\UserEntity.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\UserEntity.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\UserEntity.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAQwBMAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:26:34.821Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "PasswordUpdateRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Authorisation\\PasswordUpdateRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Authorisation\\PasswordUpdateRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Authorisation\\PasswordUpdateRequest.cs",
-              "RelativeToolTip": "Core\\Models\\Authorisation\\PasswordUpdateRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:25:55.647Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "LoginRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Authorisation\\LoginRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Authorisation\\LoginRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Authorisation\\LoginRequest.cs",
-              "RelativeToolTip": "Core\\Models\\Authorisation\\LoginRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:24:10.241Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "RegisterRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Authorisation\\RegisterRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Authorisation\\RegisterRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Authorisation\\RegisterRequest.cs",
-              "RelativeToolTip": "Core\\Models\\Authorisation\\RegisterRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:21:39.206Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "UserResponse.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\User\\UserResponse.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\User\\UserResponse.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\User\\UserResponse.cs",
-              "RelativeToolTip": "Core\\Models\\User\\UserResponse.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:20:54.751Z",
+              "WhenOpened": "2025-04-22T12:38:23.094Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UserUpdateRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\User\\UserUpdateRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\User\\UserUpdateRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\User\\UserUpdateRequest.cs",
-              "RelativeToolTip": "Core\\Models\\User\\UserUpdateRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA8AAAAAAAAAA==",
+              "Title": "Community.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Entities\\Community.cs",
+              "RelativeDocumentMoniker": "Core\\Entities\\Community.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Entities\\Community.cs",
+              "RelativeToolTip": "Core\\Entities\\Community.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:20:50.056Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "CategoryResponse.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Category\\CategoryResponse.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Category\\CategoryResponse.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Category\\CategoryResponse.cs",
-              "RelativeToolTip": "Core\\Models\\Category\\CategoryResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:20:41.928Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "CategoryAddRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Category\\CategoryAddRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Category\\CategoryAddRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Category\\CategoryAddRequest.cs",
-              "RelativeToolTip": "Core\\Models\\Category\\CategoryAddRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:20:39.676Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "CommentResponse.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Comment\\CommentResponse.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Comment\\CommentResponse.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Comment\\CommentResponse.cs",
-              "RelativeToolTip": "Core\\Models\\Comment\\CommentResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:20:32.124Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "CommentAddRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Comment\\CommentAddRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Comment\\CommentAddRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Comment\\CommentAddRequest.cs",
-              "RelativeToolTip": "Core\\Models\\Comment\\CommentAddRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:20:25.392Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "CommunityResponse.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Community\\CommunityResponse.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Community\\CommunityResponse.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Community\\CommunityResponse.cs",
-              "RelativeToolTip": "Core\\Models\\Community\\CommunityResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABDAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:20:14.04Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "CommunityAddRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Community\\CommunityAddRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Community\\CommunityAddRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Community\\CommunityAddRequest.cs",
-              "RelativeToolTip": "Core\\Models\\Community\\CommunityAddRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:20:08.113Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "ImageResponse.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Image\\ImageResponse.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Image\\ImageResponse.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Image\\ImageResponse.cs",
-              "RelativeToolTip": "Core\\Models\\Image\\ImageResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:14:50.627Z",
+              "WhenOpened": "2025-04-22T12:37:41.927Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ImageEntity.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\ImageEntity.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Entities\\ImageEntity.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\DataAccess\\Entities\\ImageEntity.cs",
-              "RelativeToolTip": "DataAccess\\Entities\\ImageEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:14:08.642Z",
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Geek_API\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Geek_API\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-22T12:27:19.913Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "index.html",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\wwwroot\\index.html",
+              "RelativeDocumentMoniker": "Geek_API\\wwwroot\\index.html",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\wwwroot\\index.html",
+              "RelativeToolTip": "Geek_API\\wwwroot\\index.html",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACEAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-04-22T12:23:30.173Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ImageAddRequest.cs",
-              "DocumentMoniker": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Image\\ImageAddRequest.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\Image\\ImageAddRequest.cs",
-              "ToolTip": "C:\\Users\\CrushFire\\source\\repos\\Geek_API\\Core\\Models\\Image\\ImageAddRequest.cs",
-              "RelativeToolTip": "Core\\Models\\Image\\ImageAddRequest.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\Program.cs",
+              "RelativeDocumentMoniker": "Geek_API\\Program.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\Program.cs",
+              "RelativeToolTip": "Geek_API\\Program.cs",
+              "ViewState": "AQIAAFwAAAAAAAAAAAAAAIQAAAAyAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T22:13:55.489Z",
+              "WhenOpened": "2025-04-22T12:22:25.366Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UserUpdateRequest.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Models\\User\\UserUpdateRequest.cs",
+              "RelativeDocumentMoniker": "Core\\Models\\User\\UserUpdateRequest.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Models\\User\\UserUpdateRequest.cs",
+              "RelativeToolTip": "Core\\Models\\User\\UserUpdateRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T12:18:50.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "Application\\Services\\UserService.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Application\\Services\\UserService.cs",
+              "RelativeToolTip": "Application\\Services\\UserService.cs",
+              "ViewState": "AQIAAIcAAAAAAAAAAAAkwIkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T11:49:10.694Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Interfaces\\Services\\IUserService.cs",
+              "RelativeDocumentMoniker": "Core\\Interfaces\\Services\\IUserService.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Interfaces\\Services\\IUserService.cs",
+              "RelativeToolTip": "Core\\Interfaces\\Services\\IUserService.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABAAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T11:48:32.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\Controllers\\v1\\UserController.cs",
+              "RelativeDocumentMoniker": "Geek_API\\Controllers\\v1\\UserController.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Geek_API\\Controllers\\v1\\UserController.cs",
+              "RelativeToolTip": "Geek_API\\Controllers\\v1\\UserController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T11:47:37.968Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TitleValidator.cs",
+              "DocumentMoniker": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Validators\\TitleValidator.cs",
+              "RelativeDocumentMoniker": "Core\\Validators\\TitleValidator.cs",
+              "ToolTip": "C:\\studies\\University\\FifthSemestr\\Maks\\Geek_API\\Core\\Validators\\TitleValidator.cs",
+              "RelativeToolTip": "Core\\Validators\\TitleValidator.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAQwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T11:47:18.054Z",
               "EditorCaption": ""
             }
           ]

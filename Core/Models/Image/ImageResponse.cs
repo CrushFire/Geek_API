@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Core.Models;
+﻿namespace Core.Models;
 
 public class ImageResponse
 {
-    public long Id { get; set; } //для дропа
+    public long Id { get; set; }
 
     public string ImageUrl { get; set; } = string.Empty;
 
-    public string ImageType { get; set; } //?????
+    public string ImageType { get; set; } //Нужно ли?
 }

@@ -11,17 +11,17 @@ public class ServiceResult<T>
         return new ServiceResult<T> { IsSuccess = true, Data = data, Error = null };
     }
 
-    public static ServiceResult<T> Failure(string? error, int statusCode = 400)
+    public static ServiceResult<T> Failure(string error, int statusCode = 400)
     {
         return new ServiceResult<T> { IsSuccess = false, Data = default, Error = new ErrorResponse(error, statusCode) };
     }
 
     public class ErrorResponse
     {
-        public string? ErrorMessage;
+        public string ErrorMessage;
         public int StatusCode;
 
-        public ErrorResponse(string? errorMessage, int statusCode)
+        public ErrorResponse(string errorMessage, int statusCode)
         {
             ErrorMessage = errorMessage;
             StatusCode = statusCode;

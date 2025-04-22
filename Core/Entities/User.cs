@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataAccess.Entities;
+namespace Core.Entities;
 
-public class UserEntity
+public class User
 {
     [Key] public long Id { get; set; }
 
@@ -12,11 +12,11 @@ public class UserEntity
 
     public string? Description { get; set; } = string.Empty;
 
-    public List<ImageEntity> Images { get; set; } = new();
+    public List<Image> Images { get; set; } = new();
 
-    public List<PostEntity> Posts { get; set; } = new();
-    public List<UserCommunityEntity> UserCommunities { get; set; } = new();
-    public List<CommentEntity> Comments { get; set; } = new();
+    public List<Post> Posts { get; set; } = new();
+    public List<UserCommunity> UserCommunities { get; set; } = new();
+    public List<Comment> Comments { get; set; } = new();
     [Required] public string Role { get; set; }
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
