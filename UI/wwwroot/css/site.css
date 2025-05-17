@@ -98,3 +98,83 @@ body {
     gap: 10px; /* Расстояние между кнопками */
 }
 
+.app-wrapper {
+    background-color: white;
+    background-image: radial-gradient(circle at 10% 20%, rgba(0, 59, 149, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 40%, rgba(0, 59, 149, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 30% 70%, rgba(0, 59, 149, 0.05) 0%, transparent 60%);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: white;
+    min-height: 100vh; /* было height: 100vh */
+    padding: 1rem;
+    position: fixed;
+    left: 0;
+    top: 61px;
+    bottom: 0;
+    border-right: 1px solid #ccc;
+}
+
+
+    .sidebar .nav-link {
+        color: black;
+        margin: 0.25rem 0;
+    }
+
+        .sidebar .nav-link:hover {
+            background-color: #dbe9ff;
+            border-radius: 5px;
+        }
+
+.main-content {
+    margin-left: 260px;
+    padding: 2rem;
+    padding-bottom: 100px; /* отступ для футера */
+}
+
+
+.post {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.spoiler {
+    background: #1a1a2e;
+    color: transparent;
+    text-align: center;
+    border-radius: 10px;
+    padding: 100px 0;
+    position: relative;
+}
+
+    .spoiler button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #003580;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 0.5rem 1rem;
+    }
+
+    .spoiler.revealed {
+        color: #ddd;
+        background-color: #333;
+    }
+
+.footer {
+    text-align: center;
+    color: #6c757d;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+

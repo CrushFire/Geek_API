@@ -55,6 +55,7 @@
                 <label asp-for="Password">@ViewBag.ElFormPassword:</label>
                 <input asp-for="Password" class="form-control" type="password" />
                 <span class="text-danger">@((ViewBag.Errors != null && ViewBag.Errors.ContainsKey("Password")) ? ViewBag.Errors["Password"] : "")</span>
+                <span class="text-danger">@((ViewBag.Errors != null && ViewBag.Errors.ContainsKey("UserNotExists")) ? ViewBag.Errors["UserNotExists"] : "")</span>
             </div>
 
             <div class="button-group">

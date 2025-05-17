@@ -1,0 +1,60 @@
+﻿@using Core.Models
+@model UserResponse
+@{
+
+}
+
+@section Head {
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="sidebar">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Popular</a>
+            <a href="#" class="nav-link">Explore</a>
+            <a href="#" class="nav-link">New</a>
+
+            <hr>
+
+            <h6>TO LIGHT FIRE</h6>
+            <a href="#" class="nav-link">- Create a custom post</a>
+
+            <hr>
+
+            <h6>CREATE CAMPFIRE</h6>
+            <a href="#" class="nav-link">- Create a community</a>
+
+            <hr>
+
+            <h6>RESOURCES</h6>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Advertise</a>
+            <a href="#" class="nav-link">Help</a>
+
+            <hr>
+
+            <h6>THE BESTS</h6>
+            <a href="#" class="nav-link">Communities</a>
+            <a href="#" class="nav-link">Fires</a>
+            <a href="#" class="nav-link">Topics</a>
+        </div>
+
+        <div class="main-content">
+            <div class="post">
+                
+            </div>
+        </div>
+    </div>
+
+        <script>
+            function revealSpoiler() {
+                const spoiler = document.getElementById('spoilerContent');
+                spoiler.classList.add('revealed');
+                spoiler.innerHTML = '<p>This is the spoiler content revealed.</p>';
+            }
+        </script>
+}
+
+@section Script {
+}

@@ -63,14 +63,26 @@ public class AuthController : CustomControllerBase
 
         if (result.IsSuccess == false)
         {
-            ViewBag.Email = loginRequest.UserEmail;
-            ViewBag.UserName = loginRequest.UserName;
-            ViewBag.Password = loginRequest.Password;
-            ViewBag.Errors = "Неверный логин или пароль";//result.Message;
+            ModelState.AddModelError("UserNotExists", "UserNotExists");
+            ViewBag.Errors = ModelState
+                .Where(ms => ms.Value.Errors.Count > 0)
+                .ToDictionary(
+                    kvp => kvp.Key, // имя поля модели
+                    kvp => _errorMessages.GetMessage(kvp.Value.Errors.First().ErrorMessage, ViewBag.Language)
+                );
+            //ViewBag.Errors.Add("Dublicate", "Это дополнительная ошибка");
             return View();
         }
 
-        return Redirect("/Home");//страница на которую перейти
+        Response.Cookies.Append("jwt_token", result.Data, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true, // включи только если HTTPS
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddHours(1)
+        });
+
+        return Redirect($"/Home/{UserId}");//страница на которую перейти
         
     }
 
@@ -114,11 +126,25 @@ public class AuthController : CustomControllerBase
 
         if (!result.IsSuccess)
         {
-            ModelState.AddModelError(string.Empty, result.Error.ErrorMessage);
+            ModelState.AddModelError("Duplicate", "Duplicate");
+            ViewBag.Errors = ModelState
+                .Where(ms => ms.Value.Errors.Count > 0)
+                .ToDictionary(
+                    kvp => kvp.Key, // имя поля модели
+                    kvp => _errorMessages.GetMessage(kvp.Value.Errors.First().ErrorMessage, ViewBag.Language)
+                );
             return View(registerRequest);
         }
 
-        return Redirect("/Home");
+        Response.Cookies.Append("jwt_token", result.Data, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true, // включи только если HTTPS
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddHours(1)
+        });
+
+        return Redirect($"/Home/{UserId}");
     }
 
     [Authorize]

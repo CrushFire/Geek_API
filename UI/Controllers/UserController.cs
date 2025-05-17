@@ -1,4 +1,6 @@
-﻿using Core.Interfaces;
+﻿using Application.Utils;
+using Core.Entities;
+using Core.Interfaces;
 using Core.Models;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +18,16 @@ public class UserController : CustomControllerBase
         _userService = userService;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("/Home/{UserId}")]
     public async Task<IActionResult> GetUserByIdAsync(long id)
     {
+        //var auth = await _dataPage.GetByPageAsync("Authorization");
+
+        //Штука для смены языка, как раз таки мой мидлвеар
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
         var result = await _userService.GetUserByIdAsync(id);
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        return View("Home", new UserResponse());
     }
 
     [HttpGet]
