@@ -1,4 +1,4 @@
-﻿namespace Geek_API.Controllers;
+﻿namespace Core.Results;
 
 public class ApiResponse
 {

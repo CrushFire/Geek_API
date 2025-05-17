@@ -1,0 +1,100 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.my-header {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 60px;
+}
+
+.header-brand {
+    color: cornflowerblue;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+.header-nav .header-link {
+    color: #333;
+}
+
+    .header-nav .header-link:hover {
+        color: #FF4500;
+    }
+
+.search-bar input {
+    width: 300px;
+    border-radius: 20px;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-top: 10px;
+}
+
+.header-right-icons .header-item {
+    margin-left: 20px;
+}
+
+.shadow-header {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 15vh;
+}
+
+.login-form {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border: 2px solid #e0e0e0;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 360px;
+}
+
+.text-initial {
+    text-align: initial;
+}
+
+.submit-button {
+    margin-top: 15px;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column; /* Кнопки по вертикали */
+    gap: 10px; /* Расстояние между кнопками */
+}
+

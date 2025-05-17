@@ -7,6 +7,7 @@ public class User
     [Key] public long Id { get; set; }
 
     [Required] public string UserName { get; set; }
+    [Required] public string UserEmail { get; set; }
 
     [Required] public string PasswordHash { get; set; }
 

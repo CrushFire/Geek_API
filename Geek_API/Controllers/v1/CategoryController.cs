@@ -1,5 +1,7 @@
 ﻿using Application.Services;
 using Core.Interfaces.Services;
+using Core.Models.Category;
+using Core.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Geek_API.Controllers.v1;
@@ -14,7 +16,7 @@ public class CategoryController : CustomControllerBase
         _categoryService = categoryService;
     }
 
-    [HttpGet]
+    [HttpGet("{id}")]
 
     public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
     {
@@ -24,11 +26,11 @@ public class CategoryController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
 
     public async Task<IActionResult> GetCategoryAsync([FromQuery] int page = 1, int pageSize = 10)
     {
-        var result = await _categoryService.GetCategoryAsync(1, 10);
+        var result = await _categoryService.GetCategoryAsync(page, pageSize);
         return result.IsSuccess
         ? Ok(ApiResponse.CreateSuccess(result.Data))
         : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
@@ -36,9 +38,9 @@ public class CategoryController : CustomControllerBase
 
     [HttpPost]
 
-    public async Task<IActionResult> AddCategoryAsync([FromBody] string title)
+    public async Task<IActionResult> AddCategoryAsync([FromBody] CategoryRequest categoryRequest)
     {
-        var result = await _categoryService.AddCategoryAsync(title);
+        var result = await _categoryService.AddCategoryAsync(categoryRequest);
         return result.IsSuccess
         ? Ok(ApiResponse.CreateSuccess(result.Data))
         : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
@@ -46,9 +48,9 @@ public class CategoryController : CustomControllerBase
 
     [HttpPut]
 
-    public async Task<IActionResult> UpdateCategoryAsync([FromBody] string title, [FromRoute] int id)
+    public async Task<IActionResult> UpdateCategoryAsync([FromBody] CategoryRequest categoryRequest, [FromRoute] int id)
     {
-        var result = await _categoryService.UpdateCategoryAsync(title, id);
+        var result = await _categoryService.UpdateCategoryAsync(categoryRequest, id);
         return result.IsSuccess
         ? Ok(ApiResponse.CreateSuccess(result.Data))
         : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));

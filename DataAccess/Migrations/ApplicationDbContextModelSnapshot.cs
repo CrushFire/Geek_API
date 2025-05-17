@@ -30,6 +30,10 @@ namespace DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("EngTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -90,6 +94,35 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Communities");
+                });
+
+            modelBuilder.Entity("Core.Entities.DataPage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("EngData")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NameData")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NamePage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataPages");
                 });
 
             modelBuilder.Entity("Core.Entities.Image", b =>
@@ -230,6 +263,10 @@ namespace DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasColumnType("text");
 

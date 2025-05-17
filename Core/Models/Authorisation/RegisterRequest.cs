@@ -1,8 +1,18 @@
-﻿namespace Core.Models.Authorisation;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class RegisterRequest
+namespace Core.Models.Authorisation
 {
-    public string UserName { get; set; }
+    public class RegisterRequest
+    {
+        [Required(ErrorMessage = "RequiredUserName")]
+        public string UserName { get; set; }
 
-    public string Password { get; set; }
+        [Required(ErrorMessage = "RequiredEmail")]
+        [EmailAddress(ErrorMessage = "InvalidEmailFormat")]
+        public string UserEmail { get; set; }
+
+        [Required(ErrorMessage = "RequiredPassword")]
+        [MinLength(8, ErrorMessage = "MinLengthPassword")]
+        public string Password { get; set; }
+    }
 }

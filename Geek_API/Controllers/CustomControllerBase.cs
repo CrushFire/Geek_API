@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Geek_API.Controllers;
 
-[Route("api/v{version:apiVersion}/[controller]")]
-[ApiController]
+//[Route("api/v{version:apiVersion}/[controller]")]
 public class CustomControllerBase : Controller
 {
     //Из токена получаем id пользователя, если токена нет, то Null

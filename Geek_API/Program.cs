@@ -87,6 +87,7 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
+builder.Services.AddScoped<IDataPageService, DataPageService>();
 
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -123,6 +124,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseMiddleware<LanguageMiddleware>();
 
 app.UseRouting();
 

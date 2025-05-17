@@ -1,0 +1,16 @@
+﻿{
+  "eng": {
+    "RequiredUserName": "User name is required",
+    "RequiredEmail": "Email is required",
+    "InvalidEmailFormat": "Invalid email format",
+    "RequiredPassword": "Password is required",
+    "MinLengthPassword": "Password must be at least 8 characters long"
+  },
+  "ru": {
+    "RequiredUserName": "Имя пользователя не может быть пустым",
+    "RequiredEmail": "Email не может быть пустым",
+    "InvalidEmailFormat": "Неверный формат email",
+    "RequiredPassword": "Пароль не может быть пустым",
+    "MinLengthPassword": "Пароль должен содержать минимум 8 символов"
+  }
+}

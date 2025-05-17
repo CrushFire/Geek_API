@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20250422143242_AAA.cs" />
+    <Compile Remove="Migrations\20250422143242_AAA.Designer.cs" />
+    <Compile Remove="Migrations\20250422201113_A.cs" />
+    <Compile Remove="Migrations\20250422201113_A.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentNHibernate" Version="3.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="Npgsql" Version="9.0.3" />

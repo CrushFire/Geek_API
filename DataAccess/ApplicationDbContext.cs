@@ -18,6 +18,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Image> Images { get; set; }
     public DbSet<UserCommunity> UsersCommunities { get; set; }
     public DbSet<PostCategory> PostsCategories { get; set; }
+    public DbSet<DataPage> DataPages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

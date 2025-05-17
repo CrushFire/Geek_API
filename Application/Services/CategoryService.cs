@@ -40,10 +40,11 @@ namespace Application.Services
             return ServiceResult<List<CategoryResponse>>.Success(categoriesResponse);
         }
 
-        public async Task<ServiceResult<CategoryResponse>> AddCategoryAsync(string title)
+        public async Task<ServiceResult<CategoryResponse>> AddCategoryAsync(CategoryRequest categoryRequest)
         {
             Category category = new Category();
-            category.Title = title;
+            category.Title = categoryRequest.RuTitle;
+            category.EngTitle = categoryRequest.EngTitle;
 
             var categoryResponse = _mapper.Map<CategoryResponse>(category);
 
@@ -52,7 +53,7 @@ namespace Application.Services
             return ServiceResult<CategoryResponse>.Success(categoryResponse);
         }
 
-        public async Task<ServiceResult<bool>> UpdateCategoryAsync(string title, int id)
+        public async Task<ServiceResult<bool>> UpdateCategoryAsync(CategoryRequest categoryRequest, int id)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
 
@@ -61,7 +62,8 @@ namespace Application.Services
                 return ServiceResult<bool>.Failure("Данной категории не найдено");
             }
 
-            category.Title = title;
+            category.Title = categoryRequest.RuTitle;
+            category.EngTitle = categoryRequest.EngTitle;
             _context.Categories.Update(category);
             await _context.SaveChangesAsync();
 
