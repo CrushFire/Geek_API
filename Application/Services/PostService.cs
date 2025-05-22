@@ -98,6 +98,14 @@ public class PostService : IPostService
         var post = _mapper.Map<Post>(request);
         post.AuthorId = userId;
 
+        var postCategories = request.CategoryIds
+            .Select(categoryId => new PostCategory
+            {
+                PostId = post.Id,
+                CategoryId = categoryId
+            })
+            .ToList();
+
         await _context.Posts.AddAsync(post);
         await _context.SaveChangesAsync();
 
@@ -125,6 +133,14 @@ public class PostService : IPostService
         //TODO
         //Удалить старые создать новые
         //Отслеживать ли как-то существующие???
+
+        var postCategories = request.CategoryIds
+            .Select(categoryId => new PostCategory
+            {
+                PostId = post.Id,
+                CategoryId = categoryId
+            })
+            .ToList();
 
         _context.Posts.Update(post);
         await _context.SaveChangesAsync();

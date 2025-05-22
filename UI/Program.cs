@@ -105,6 +105,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+builder.Services.AddSingleton(timeZone);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

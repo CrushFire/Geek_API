@@ -1,4 +1,6 @@
-﻿namespace Core.Models.Post;
+﻿using Core.Models.Category;
+
+namespace Core.Models.Post;
 
 public class PostResponse
 {
@@ -9,6 +11,7 @@ public class PostResponse
     public string Content { get; set; } = string.Empty;
 
     public UserResponse Author { get; set; }
+    public List<CategoryResponse> Categories { get; set; }
 
     public long CommunityId { get; set; }
     //Можно мапить название комьюнити, но это лишний join постоянно, хз
