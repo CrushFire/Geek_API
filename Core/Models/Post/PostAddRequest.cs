@@ -9,7 +9,8 @@ public class PostAddRequest
     public string Content { get; set; } = string.Empty;
 
     public long CommunityId { get; set; }
-    public List<int> CategoryIds { get; set; }
+
+    public string Categories { get; set; }
 
     public List<IFormFile> Images { get; set; } = new();
 }

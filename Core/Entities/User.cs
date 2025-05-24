@@ -19,6 +19,7 @@ public class User
     public List<UserCommunity> UserCommunities { get; set; } = new();
     public List<Comment> Comments { get; set; } = new();
     [Required] public string Role { get; set; }
+    public List<Like> Reactions { get; set; } = new();
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

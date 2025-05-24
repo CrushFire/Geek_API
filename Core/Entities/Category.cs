@@ -9,6 +9,4 @@ public class Category
     [Required] public string Title { get; set; }
 
     [Required] public string EngTitle { get; set; }
-
-    public List<PostCategory> PostCategories { get; set; } = new();
 }

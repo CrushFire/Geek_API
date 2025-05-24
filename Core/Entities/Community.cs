@@ -11,6 +11,8 @@ public class Community
     public string? Description { get; set; }
 
     public List<Image> Images { get; set; } = new();
+    [Required]
+    public string Categories { get; set; }
 
     public List<UserCommunity> UserCommunities { get; set; } = new();
     public List<Post> Posts { get; set; } = new();

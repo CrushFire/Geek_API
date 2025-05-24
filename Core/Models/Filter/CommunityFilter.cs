@@ -14,5 +14,6 @@ namespace Core.Models.Filter
         public string Category { get; set; } = string.Empty;
         [PositiveNumberValidator(min: 0)]
         public int MinFollowers { get; set; } = 0;
+        public string Categories {  get; set; } = string.Empty;
     }
 }

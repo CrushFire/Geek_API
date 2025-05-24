@@ -17,7 +17,7 @@ public static class PostImageExtensions
                 Author = post.Author,
                 CommunityId = post.CommunityId,
                 Community = post.Community,
-                PostCategories = post.PostCategories,
+                Categories = post.Categories,
                 Views = post.Views,
                 CreateAt = post.CreateAt,
                 Images = post.Images

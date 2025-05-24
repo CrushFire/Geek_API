@@ -11,7 +11,7 @@ public class PostResponse
     public string Content { get; set; } = string.Empty;
 
     public UserResponse Author { get; set; }
-    public List<CategoryResponse> Categories { get; set; }
+    public string Categories { get; set; }
 
     public long CommunityId { get; set; }
     //Можно мапить название комьюнити, но это лишний join постоянно, хз

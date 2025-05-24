@@ -22,9 +22,10 @@ public class Post
     public List<Image> Images { get; set; } = new();
 
     public int Views { get; set; } = 0;
-
-    public List<PostCategory> PostCategories { get; set; } = new();
+    [Required]
+    public string Categories { get; set; }
     public List<Comment> Comments { get; set; } = new();
+    public List<Like> Reactions { get; set; } = new();
 
     public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 }

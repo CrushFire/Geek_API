@@ -13,6 +13,6 @@ namespace Core.Models.Filter
     {
         [PositiveNumberValidator(min: 0)]
         public int MinViews { get; set; } = 0;
-        public List<int> CategoryIds { get; set; } = new List<int>();
+        public string Categories { get; set; } = string.Empty;
     }
 }

@@ -9,7 +9,7 @@ public class CommunityResponse
     public string Name { get; set; }
 
     public string Description { get; set; } = string.Empty;
-
+    public string Categories {  get; set; }
     public List<ImageResponse> Images { get; set; } = new();
 
     //ublic List<CategoryResponse> Categories { get; set; } = new();
