@@ -15,7 +15,7 @@ public class Post
 
     [ForeignKey(nameof(AuthorId))] public User? Author { get; set; } = null;
 
-    [Required] public long CommunityId { get; set; }
+    public long? CommunityId { get; set; } //тк юзер может от своего имени закреейтить
 
     [ForeignKey(nameof(CommunityId))] public Community? Community { get; set; } = null;
 
@@ -23,7 +23,7 @@ public class Post
 
     public int Views { get; set; } = 0;
     [Required]
-    public string Categories { get; set; }
+    public string Categories { get; set; } = string.Empty;
     public List<Comment> Comments { get; set; } = new();
     public List<Like> Reactions { get; set; } = new();
 

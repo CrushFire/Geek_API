@@ -13,6 +13,9 @@ namespace Core.Models.Filter
     {
         [PositiveNumberValidator(min: 0)]
         public int MinViews { get; set; } = 0;
+        [PositiveNumberValidator(min: 0)]
+        public int MinLikes { get; set; } = 0;
+        public long? CommunityId { get; set; } = null;
         public string Categories { get; set; } = string.Empty;
     }
 }

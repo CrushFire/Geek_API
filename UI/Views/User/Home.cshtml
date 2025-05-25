@@ -1,7 +1,8 @@
 ﻿@using Core.Models
 @model UserResponse
-@{
 
+@{
+    ViewBag.CurPage = 1;
 }
 
 @section Head {
@@ -41,8 +42,8 @@
         </div>
 
         <div class="main-content">
-            <div class="post">
-                
+            <div class="post" id="posts">
+                <p>Загрузка постов...</p>
             </div>
         </div>
     </div>
@@ -57,4 +58,63 @@
 }
 
 @section Script {
+    <script>
+        let curPage = 1;
+            let loading = false; // чтобы не запускалось несколько раз одновременно
+            let reachedEnd = false; // чтобы остановить подгрузку, если постов больше нет
+
+        async function loadPosts() {
+            if (loading || reachedEnd) return;
+
+            loading = true;
+            try {
+                const response = await fetch(`/by-filter/home?curPage=${curPage}`);
+                const posts = await response.json();
+
+                if (!posts || posts.length === 0) {
+                    reachedEnd = true;
+                    const endMsg = document.createElement("p");
+                    endMsg.className = "text-center text-muted";
+                    endMsg.innerText = "Все посты загружены.";
+                    document.getElementById("posts").appendChild(endMsg);
+                    return;
+                }
+
+                const postsDiv = document.getElementById("posts");
+                if (curPage === 1) {
+                    postsDiv.innerHTML = ""; // очистить "Загрузка..."
+                }
+
+                posts.forEach(post => {
+                    const div = document.createElement("div");
+                    div.className = "card mb-3";
+                    div.innerHTML = `
+                                        <div class="card-body">
+                                            <h5>${post.title}</h5>
+                                            <p>${post.content}</p>
+                                            <p class="text-muted">👤 ${post.author.userName} — 💙 ${post.likes} / 👎 ${post.dislikes}  👀${post.views}</p>
+                                        </div>
+                                    `;
+                    postsDiv.appendChild(div);
+                });
+
+                curPage++;
+            } catch (error) {
+                document.getElementById("posts").innerHTML = "<p>Не удалось загрузить посты.</p>";
+                console.error("Ошибка загрузки постов:", error);
+            } finally {
+                loading = false;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadPosts(); // загрузка первой страницы
+            window.addEventListener("scroll", () => {
+                const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+                if (nearBottom) {
+                    loadPosts(); // подгружаем следующую
+                }
+            });
+        });
+    </script>
 }

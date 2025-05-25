@@ -1,4 +1,5 @@
 ﻿using Core.Models.Category;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.Models.Post;
 
@@ -11,7 +12,8 @@ public class PostResponse
     public string Content { get; set; } = string.Empty;
 
     public UserResponse Author { get; set; }
-    public string Categories { get; set; }
+    [Required]
+    public string Categories { get; set; } = string.Empty;
 
     public long CommunityId { get; set; }
     //Можно мапить название комьюнити, но это лишний join постоянно, хз

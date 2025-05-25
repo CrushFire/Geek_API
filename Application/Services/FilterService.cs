@@ -1,5 +1,8 @@
-﻿using AutoMapper;
+﻿using Application.Extensions;
+using AutoMapper;
+using Core.Entities;
 using Core.Enums;
+using Core.Interfaces.Services;
 using Core.Models;
 using Core.Models.Community;
 using Core.Models.Filter;
@@ -16,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class FilterService
+    public class FilterService : IFilterService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -27,36 +30,53 @@ namespace Application.Services
             _mapper = mapper;
         }
 
+
         public async Task<ServiceResult<List<PostResponse>>> GetPostsByFilter(ParametersFilter filter)
         {
-            var query = _context.Posts.AsQueryable();
+            // Начинаем запрос с нужными Include
+            var query = _context.Posts
+                .Include(p => p.Author)
+                .Include(p => p.Community)
+                .IncludePostImages()
+                .Select(p => new
+                {
+                    Post = p,
+                    LikeCount = _context.Likes.Count(l => l.PostId == p.Id && l.IsLike),
+                    DislikeCount = _context.Likes.Count(l => l.PostId == p.Id && !l.IsLike)
+                }).AsQueryable();
 
-            if (!string.IsNullOrEmpty(filter.Name))
+            // Безопасная проверка filter.Name
+            if (!string.IsNullOrWhiteSpace(filter.Name))
             {
-                string[] parts = filter.Name.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var parts = filter.Name
+                    .ToLower()
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
                 query = query
-                    .Where(p => parts.Any(part => p.Title.ToLower().Contains(part)))
-                    .Select(p => new
-                    {
-                        Post = p,
-                        MatchCount = parts.Count(part => p.Title.ToLower().Contains(part))
-                    })
-                    .OrderByDescending(x => x.MatchCount)
-                    .ThenBy(x => x.Post.Title)
-                    .Select(x => x.Post);
+                    .Where(p =>  parts.Any(part => p.Post.Title.Contains(part,StringComparison.OrdinalIgnoreCase)))
+                    .OrderByDescending(p => parts.Count(part => p.Post.Title.ToLower().Contains(part)))
+                    .ThenBy(p => p.Post.Title);
             }
 
-            if(filter.PostFilter.MinViews > 0)
+            // Фильтрация по минимальному количеству просмотров
+            if (filter.PostFilter?.MinViews > 0)
             {
-                query = query.Where(p => p.Views >= filter.PostFilter.MinViews);
+                query = query.Where(p => p.Post.Views >= filter.PostFilter.MinViews);
             }
 
-            if (!string.IsNullOrEmpty(filter.PostFilter.Categories))
+            // Фильтрация по категориям с проверкой на null
+            if (!string.IsNullOrEmpty(filter.PostFilter?.Categories))
             {
-                query = query.Where(p => p.Categories.Contains(filter.PostFilter.Categories));
+                query = query.Where(p => !string.IsNullOrEmpty(p.Post.Categories) && p.Post.Categories.Contains(filter.PostFilter.Categories));
             }
 
+            // Фильтр по сообществу
+            if (filter.PostFilter?.CommunityId != null)
+            {
+                query = query.Where(p => p.Post.CommunityId == filter.PostFilter.CommunityId);
+            }
+
+            // Фильтр по дате создания
             if (filter.DateCreateAt != DateCreateRange.None)
             {
                 var dateThreshold = filter.DateCreateAt switch
@@ -72,34 +92,50 @@ namespace Application.Services
                     _ => DateTime.MinValue
                 };
 
-                query = query.Where(p => p.CreateAt >= dateThreshold);
+                query = query.Where(p => p.Post.CreateAt >= dateThreshold);
             }
 
+            // Сортировка с учётом направления (дефолт — ascending = true)
             if (!string.IsNullOrEmpty(filter.SortBy))
             {
-                bool ascending = filter.DirectionSort?.ToLower() == "ask";
+                bool ascending = string.Equals(filter.DirectionSort, "ask", StringComparison.OrdinalIgnoreCase);
 
                 query = filter.SortBy.ToLower() switch
                 {
-                    "views" => ascending ? query.OrderBy(p => p.Views) : query.OrderByDescending(p => p.Views),
-                    "title" => ascending ? query.OrderBy(p => p.Title) : query.OrderByDescending(p => p.Title),
-                    "created" => ascending ? query.OrderBy(p => p.CreateAt) : query.OrderByDescending(p => p.CreateAt),
-                    _ => ascending ? query.OrderBy(p => p.Views) : query.OrderByDescending(p => p.Views)
+                    "views" => ascending ? query.OrderBy(p => p.Post.Views) : query.OrderByDescending(p => p.Post.Views),
+                    "title" => ascending ? query.OrderBy(p => p.Post.Title) : query.OrderByDescending(p => p.Post.Title),
+                    "likes" => ascending ? query.OrderBy(p => p.LikeCount) : query.OrderByDescending(p => p.LikeCount),
+                    "created" => ascending ? query.OrderBy(p => p.Post.CreateAt) : query.OrderByDescending(p => p.Post.CreateAt),
+                    _ => ascending ? query.OrderBy(p => p.Post.Views) : query.OrderByDescending(p => p.Post.Views)
                 };
             }
 
-            var skip = (filter.Pagination.Page - 1) * filter.Pagination.PageSize;
-            query = query.Skip(skip).Take(filter.Pagination.PageSize);
+            // Пагинация с защитой от нулей и отрицательных
+            int page = filter.Pagination?.Page > 0 ? filter.Pagination.Page : 1;
+            int pageSize = filter.Pagination?.PageSize > 0 ? filter.Pagination.PageSize : 10;
+            int skip = (page - 1) * pageSize;
 
-            var posts = await query.ToListAsync();
-            var result = _mapper.Map<List<PostResponse>>(posts);
+            query = query.Skip(skip).Take(pageSize);
 
-            return ServiceResult<List<PostResponse>>.Success(result);
+            var posts = await query.Select(p => new PostWithLikes()
+            {
+                Post = p.Post,
+                CountLikes = p.LikeCount,
+                CountDislikes = p.DislikeCount
+            })
+                .ToListAsync();
+
+            var mappingPost = _mapper.Map<List<PostResponse>>(posts);
+
+            return ServiceResult<List<PostResponse>>.Success(mappingPost);
         }
 
         public async Task<ServiceResult<List<CommunityResponse>>> GetCommunitiesByFilter(ParametersFilter filter)
         {
-            var query = _context.Communities.AsQueryable();
+            var query = _context.Communities
+            .Include(p => p.UserCommunities)//?
+            .IncludeCommunityImages().AsQueryable();
+
 
             if (!string.IsNullOrEmpty(filter.Name))
             {
@@ -117,12 +153,12 @@ namespace Application.Services
                     .Select(x => x.Community);
             }
 
-            if(filter.CommunityFilter.MinFollowers > 0)
+            if (filter.CommunityFilter.MinFollowers > 0)
             {
                 query = query.Where(c => c.UserCommunities.Count() >= filter.CommunityFilter.MinFollowers);
             }
 
-            if(filter.DateCreateAt != DateCreateRange.None)
+            if (filter.DateCreateAt != DateCreateRange.None)
             {
                 var dateThreshold = filter.DateCreateAt switch
                 {
@@ -167,7 +203,7 @@ namespace Application.Services
             return ServiceResult<List<CommunityResponse>>.Success(result);
         }
 
-        public async Task<ServiceResult<List<UserResponse>>> GetUsersByFilter (ParametersFilter filter)
+        public async Task<ServiceResult<List<UserResponse>>> GetUsersByFilter(ParametersFilter filter)
         {
             var query = _context.Users.Include(u => u.Reactions).AsQueryable();
 
@@ -193,17 +229,17 @@ namespace Application.Services
                 query = query.Where(u => u.Reactions.Count(r => r.IsLike == true) >= filter.UserFilter.MinLikes);
             }
 
-            if(filter.UserFilter.MinPublishPosts > 0)
+            if (filter.UserFilter.MinPublishPosts > 0)
             {
                 query = query.Where(u => u.Posts.Count() >= filter.UserFilter.MinPublishPosts);
             }
 
-            if(filter.UserFilter.MinWrittenComments > 0)
+            if (filter.UserFilter.MinWrittenComments > 0)
             {
                 query = query.Where(u => u.Comments.Count() >= filter.UserFilter.MinWrittenComments);
             }
 
-            if(filter.DateCreateAt != DateCreateRange.None)
+            if (filter.DateCreateAt != DateCreateRange.None)
             {
                 var dateThreshold = filter.DateCreateAt switch
                 {

@@ -10,7 +10,6 @@ namespace Core.Models.Filter
 {
     public class ParametersFilter
     {
-        [Required(ErrorMessage = "NameSearchObjectIsRequired")]
         public string Name { get; set; } = string.Empty;
         public PostFilter PostFilter { get; set; } = new PostFilter();
         public CommunityFilter CommunityFilter { get; set; } = new CommunityFilter();

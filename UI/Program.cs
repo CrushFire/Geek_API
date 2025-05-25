@@ -79,6 +79,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
 builder.Services.AddScoped<IDataPageService, DataPageService>();
 builder.Services.AddScoped<IErrorMessages, ErrorMessages>();
+builder.Services.AddScoped<IFilterService, FilterService>();
 
 
 

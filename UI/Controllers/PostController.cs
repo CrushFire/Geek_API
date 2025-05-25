@@ -1,7 +1,13 @@
-﻿using Core.Interfaces.Services;
+﻿using Application.Utils;
+using Core.Entities;
+using Core.Enums;
+using Core.Interfaces.Services;
+using Core.Models;
+using Core.Models.Filter;
 using Core.Models.Post;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace UI.Controllers;
 
@@ -10,9 +16,11 @@ namespace UI.Controllers;
 public class PostsController : CustomControllerBase
 {
     private readonly IPostService _postService;
+    private readonly IFilterService _filterService;
 
-    public PostsController(IPostService postService)
+    public PostsController(IPostService postService, IFilterService filterService)
     {
+        _filterService = filterService;
         _postService = postService;
     }
 
@@ -25,11 +33,8 @@ public class PostsController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    //TODO 
-    //Объеденил бы в один общий с блекджеком и шлюхами
     [HttpGet("byCommunity")]
-    public async Task<IActionResult> GetByCommunityIdAsync([FromQuery] long communityId, int page = 1,
-        int pageSize = 10)
+    public async Task<IActionResult> GetByCommunityIdAsync([FromQuery] long communityId, int page = 1, int pageSize = 10)
     {
         if (page < 1 || pageSize < 1)
             StatusCode(400, ApiResponse.CreateFailure("Ошибка параметров page или pageSize"));
@@ -50,6 +55,32 @@ public class PostsController : CustomControllerBase
         return result.IsSuccess
             ? Ok(ApiResponse.CreateSuccess(result.Data))
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    }
+
+    [HttpGet("/by-filter/home/")]
+    public async Task<IActionResult> GetByFilterToHome([FromQuery] int curPage = 1)
+    {
+        var filter = new ParametersFilter()
+        {
+            DirectionSort = "ask",
+            DateCreateAt = DateCreateRange.Week,
+            SortBy = "likes",
+            Pagination = new PaginationRequest() { Page = curPage, PageSize = 20 },
+            PostFilter = new PostFilter()
+        };
+        var result = await _filterService.GetPostsByFilter(filter);
+
+        //Штука для смены языка, как раз таки мой мидлвеар
+        //ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
+
+        if (result == null)
+            return StatusCode(500, "Ошибка: результат фильтрации — null");
+
+        if (result.Data == null)
+            return StatusCode(500, "Ошибка: Data в результате — null");
+
+        return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
     }
 
     [HttpPost]

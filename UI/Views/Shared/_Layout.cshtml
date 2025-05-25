@@ -19,55 +19,54 @@
     }
     @RenderSection("Head", required: false)
 </head>
-<header>
-    @if (IsSectionDefined("Header"))
-    {
-        @RenderSection("Header", required: false)
-    }
-    else
-    {
-        <div class="my-header navbar-expand-lg navbar-light">
-            <div class="container">
-                <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Логотип -->
-                <a class="header-brand" href="#">CFork</a>
-                                <!-- Иконка профиля -->
-                    <div class="header-item">
-                        <a class="header-link" href="#">
-                            <img src="~/images/fire (1).svg" alt="Profile" class="profile-icon">
-                        </a>
-                    </div>
-                    <!-- Поиск -->
-                    <div class="search-bar ms-auto d-flex align-items-center">
-                        <input type="text" class="form-control" placeholder=@ViewBag.Search>
-                    </div>
-                    <div class="ms-auto d-flex align-items-center gap-2">
-                        <button type="button" class="btn btn-sm @(ViewBag.Language == "ru" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('ru')">ru</button>
-                        <button type="button" class="btn btn-sm @(ViewBag.Language == "eng" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('eng')">eng</button>
+
+<body>
+    <header>
+        @if (IsSectionDefined("Header"))
+        {
+            @RenderSection("Header", required: false)
+        }
+        else
+        {
+            <div class="my-header navbar-expand-lg navbar-light">
+                <div class="container">
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <!-- Логотип -->
+                        <a class="header-brand" href="#">CFork</a>
+                        <!-- Иконка профиля -->
+                        <div class="header-item">
+                            <a class="header-link" href="#">
+                                <img src="~/images/fire (1).svg" alt="Profile" class="profile-icon">
+                            </a>
+                        </div>
+                        <!-- Поиск -->
+                        <div class="search-bar ms-auto d-flex align-items-center">
+                            <input type="text" class="form-control" placeholder=@ViewBag.Search>
+                        </div>
+                        <div class="ms-auto d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-sm @(ViewBag.Language == "ru" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('ru')">ru</button>
+                            <button type="button" class="btn btn-sm @(ViewBag.Language == "eng" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('eng')">eng</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
     </header>
-<body>
         @RenderSection("Body", required: false)
+        @RenderSection("Script", required: false);
+            <script>
+        function setLanguage(language) {
+            // Сохраняем куку
+            document.cookie = "Language=" + language + "; path=/; max-age=" + 60 * 60 * 24 * 30;
+
+            // Перезагрузка с добавлением параметра language в URL
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set("lang", language);
+            window.location.href = currentUrl.toString();
+        }
+    </script>
 </body>
 <footer>
 
 </footer>
-<script>
-    @RenderSection("Script", required: false);
-</script>
-    <script>
-    function setLanguage(language) {
-        // Сохраняем куку
-        document.cookie = "Language=" + language + "; path=/; max-age=" + 60 * 60 * 24 * 30;
-
-        // Перезагрузка с добавлением параметра language в URL
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set("lang", language);
-        window.location.href = currentUrl.toString();
-    }
-</script>
 </html>
