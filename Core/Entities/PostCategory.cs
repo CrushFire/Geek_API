@@ -10,9 +10,9 @@ public class PostCategory
 
     [Required] public long PostId { get; set; }
 
-    [ForeignKey(nameof(PostId))] public Post Post { get; set; } = null!;
+    [ForeignKey(nameof(PostId))] public Post Post { get; set; }
 
     [Required] public int CategoryId { get; set; }
 
-    [ForeignKey(nameof(CategoryId))] public Category Category { get; set; } = null!;
+    [ForeignKey(nameof(CategoryId))] public Category Category { get; set; }
 }

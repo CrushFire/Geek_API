@@ -96,6 +96,29 @@ namespace DataAccess.Migrations
                     b.ToTable("Communities");
                 });
 
+            modelBuilder.Entity("Core.Entities.CommunityCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("CommunityId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CommunityId");
+
+                    b.ToTable("CommunityCategories");
+                });
+
             modelBuilder.Entity("Core.Entities.DataPage", b =>
                 {
                     b.Property<int>("Id")
@@ -104,11 +127,11 @@ namespace DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Data")
+                    b.Property<string>("InfEng")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("EngData")
+                    b.Property<string>("InfRu")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -195,7 +218,7 @@ namespace DataAccess.Migrations
                     b.Property<long>("AuthorId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CommunityId")
+                    b.Property<long?>("CommunityId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Content")
@@ -241,7 +264,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostsCategories");
+                    b.ToTable("PostCategories");
                 });
 
             modelBuilder.Entity("Core.Entities.User", b =>
@@ -327,6 +350,27 @@ namespace DataAccess.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("Core.Entities.CommunityCategory", b =>
+                {
+                    b.HasOne("Core.Entities.Category", "Category")
+                        .WithMany("CommunityCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CommunityCategory_Category");
+
+                    b.HasOne("Core.Entities.Community", "Community")
+                        .WithMany("CommunityCategories")
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CommunityCategory_Community");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Community");
+                });
+
             modelBuilder.Entity("Core.Entities.Image", b =>
                 {
                     b.HasOne("Core.Entities.Community", null)
@@ -354,14 +398,14 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Core.Entities.Like", b =>
                 {
                     b.HasOne("Core.Entities.Post", "Post")
-                        .WithMany()
+                        .WithMany("Reactions")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Like_Post");
 
                     b.HasOne("Core.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Reactions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -384,8 +428,6 @@ namespace DataAccess.Migrations
                     b.HasOne("Core.Entities.Community", "Community")
                         .WithMany("Posts")
                         .HasForeignKey("CommunityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_Community_Posts");
 
                     b.Navigation("Author");
@@ -437,11 +479,15 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Core.Entities.Category", b =>
                 {
+                    b.Navigation("CommunityCategories");
+
                     b.Navigation("PostCategories");
                 });
 
             modelBuilder.Entity("Core.Entities.Community", b =>
                 {
+                    b.Navigation("CommunityCategories");
+
                     b.Navigation("Images");
 
                     b.Navigation("Posts");
@@ -456,6 +502,8 @@ namespace DataAccess.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("PostCategories");
+
+                    b.Navigation("Reactions");
                 });
 
             modelBuilder.Entity("Core.Entities.User", b =>
@@ -465,6 +513,8 @@ namespace DataAccess.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Posts");
+
+                    b.Navigation("Reactions");
 
                     b.Navigation("UserCommunities");
                 });

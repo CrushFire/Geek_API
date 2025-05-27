@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Entities;
 
+[Table("Likes")]
 public class Like
 {
     [Key] public long Id { get; set; }

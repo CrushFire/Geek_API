@@ -19,7 +19,11 @@ public class AutoMapper : Profile
                 opt => opt.MapFrom(src => src.Posts.Count))
             .ForMember(dest => dest.NumberOfComments,
                 opt => opt.MapFrom(src => src.Comments.Count));
-        CreateMap<Like, UserReactionsResponse>();
+        CreateMap<Like, UserReactionsResponse>()
+            .ForMember(dest => dest.PostId,
+                opt => opt.MapFrom(src => src.PostId))
+            .ForMember(dest => dest.IsLike,
+                opt => opt.MapFrom(src => src.IsLike));
 
         //CreateMap<UserUpdateRequest, User>(); Этот мап не нужен, если понадобился, то ты даун
 

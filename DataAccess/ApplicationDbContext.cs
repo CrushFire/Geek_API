@@ -90,13 +90,13 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Like>(entity =>
         {
             entity.HasOne(l => l.User)
-                .WithMany() // Навигационное свойство для User
+                .WithMany(l => l.Reactions) // Навигационное свойство для User
                 .HasForeignKey(l => l.UserId)
                 .HasConstraintName("FK_Like_User")
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(l => l.Post)
-                .WithMany() // Навигационное свойство для Post
+                .WithMany(l => l.Reactions) // Навигационное свойство для Post
                 .HasForeignKey(l => l.PostId)
                 .HasConstraintName("FK_Like_Post")
                 .OnDelete(DeleteBehavior.Cascade);

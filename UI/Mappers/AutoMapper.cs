@@ -6,6 +6,7 @@ using Core.Models.Comment;
 using Core.Models.Community;
 using Core.Models.DataPage;
 using Core.Models.Post;
+using Core.Models.User;
 
 namespace UI.Mappers;
 
@@ -18,6 +19,11 @@ public class AutoMapper : Profile
                 opt => opt.MapFrom(src => src.Posts.Count))
             .ForMember(dest => dest.NumberOfComments,
                 opt => opt.MapFrom(src => src.Comments.Count));
+        CreateMap<Like, UserReactionsResponse>()
+            .ForMember(dest => dest.PostId,
+                opt => opt.MapFrom(src => src.PostId))
+            .ForMember(dest => dest.IsLike,
+                opt => opt.MapFrom(src => src.IsLike));
 
         //CreateMap<UserUpdateRequest, User>(); Этот мап не нужен, если понадобился, то ты даун
 
@@ -29,6 +35,11 @@ public class AutoMapper : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Post.Id))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Post.Title))
             .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Post.Content))
+            .ForMember(dest => dest.CategoriesRu, opt => opt.MapFrom(src => src.CategoriesRu))
+            .ForMember(dest => dest.CategoriesEng, opt => opt.MapFrom(src => src.CategoriesEng))
+            .ForMember(dest => dest.CommunityName, opt => opt.MapFrom(src => src.CommunityName))
+            .ForMember(dest => dest.CommunityAvatar, opt => opt.MapFrom(src => src.CommunityAvatar))
+            .ForMember(dest => dest.UserAvatar, opt => opt.MapFrom(src => src.UserAvatar))
             .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Post.Author))
             .ForMember(dest => dest.CommunityId, opt => opt.MapFrom(src => src.Post.CommunityId))
             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Post.Images))

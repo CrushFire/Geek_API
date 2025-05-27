@@ -19,22 +19,27 @@ public class UserController : CustomControllerBase
     }
 
     [HttpGet("/Home/{UserId}")]
-    public async Task<IActionResult> GetUserByIdAsync([FromRoute] long id)
+    public async Task<IActionResult> GetUserByIdAsync([FromRoute] long UserId)
     {
         //var auth = await _dataPage.GetByPageAsync("Authorization");
 
         //Штука для смены языка, как раз таки мой мидлвеар
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
         //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
-        var result = await _userService.GetUserByIdAsync(id);
+        var result = await _userService.GetUserByIdAsync(UserId);
 
         return View("Home", result.Data);
     }
 
-    [HttpGet("/take-reactions/{UserId}")]
-    public async Task<IActionResult> GetUserReactions([FromRoute] long id)
+    [HttpGet("/take-reactions/{userId}")]
+    public async Task<IActionResult> GetUserReactions([FromRoute] long userId)
     {
-        var result = await _userService.GetUserReactionsAsync(id);
+        var result = await _userService.GetUserReactionsAsync(userId);
+
+        if (!result.IsSuccess)
+        {
+            return NotFound("Таких реакий не найдено");
+        }
 
         return Json(result.Data);
     }

@@ -34,11 +34,6 @@ public class UserService : IUserService
             .IncludeUserImages()
             .FirstOrDefaultAsync();
 
-        if (user == null)
-            return ServiceResult<UserResponse>.Failure("Пользователя с таким id не существует");
-
-        Console.WriteLine(user);
-
         var userResponse = _mapper.Map<UserResponse>(user);
 
         return ServiceResult<UserResponse>.Success(userResponse);
@@ -69,6 +64,9 @@ public class UserService : IUserService
     {
         var reactions = await _context.Likes.Where(l => l.UserId == id)
             .ToListAsync();
+
+        if (reactions == null)
+            return ServiceResult<List<UserReactionsResponse>>.Failure("У этого пользователя нет реакций");
 
         var reactionsResponse = _mapper.Map<List<UserReactionsResponse>>(reactions);
 
