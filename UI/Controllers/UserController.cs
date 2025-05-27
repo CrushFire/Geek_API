@@ -19,7 +19,7 @@ public class UserController : CustomControllerBase
     }
 
     [HttpGet("/Home/{UserId}")]
-    public async Task<IActionResult> GetUserByIdAsync(long id)
+    public async Task<IActionResult> GetUserByIdAsync([FromRoute] long id)
     {
         //var auth = await _dataPage.GetByPageAsync("Authorization");
 
@@ -27,7 +27,16 @@ public class UserController : CustomControllerBase
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
         //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
         var result = await _userService.GetUserByIdAsync(id);
-        return View("Home", new UserResponse());
+
+        return View("Home", result.Data);
+    }
+
+    [HttpGet("/take-reactions/{UserId}")]
+    public async Task<IActionResult> GetUserReactions([FromRoute] long id)
+    {
+        var result = await _userService.GetUserReactionsAsync(id);
+
+        return Json(result.Data);
     }
 
     [HttpGet]

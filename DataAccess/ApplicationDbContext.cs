@@ -12,7 +12,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<Like> Likes { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<PostCategory> PostCategories { get; set; }
     public DbSet<Community> Communities { get; set; }
+    public DbSet<CommunityCategory> CommunityCategories { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Image> Images { get; set; }
@@ -130,19 +132,34 @@ public class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        //modelBuilder.Entity<PostCategory>(entity =>
-        //{
-        //    entity.HasOne(pc => pc.Post)
-        //        .WithMany(p => p.PostCategories) // Навигационное свойство для Post
-        //        .HasForeignKey(pc => pc.PostId)
-        //        .HasConstraintName("FK_PostCategory_Post")
-        //        .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<PostCategory>(entity =>
+        {
+            entity.HasOne(pc => pc.Post)
+                .WithMany(p => p.PostCategories) // Навигационное свойство для Post
+                .HasForeignKey(pc => pc.PostId)
+                .HasConstraintName("FK_PostCategory_Post")
+                .OnDelete(DeleteBehavior.Cascade);
 
-        //    entity.HasOne(pc => pc.Category)
-        //        .WithMany(c => c.PostCategories) // Навигационное свойство для Category
-        //        .HasForeignKey(pc => pc.CategoryId)
-        //        .HasConstraintName("FK_PostCategory_Category")
-        //        .OnDelete(DeleteBehavior.Cascade);
-        //});
+            entity.HasOne(pc => pc.Category)
+                .WithMany(c => c.PostCategories) // Навигационное свойство для Category
+                .HasForeignKey(pc => pc.CategoryId)
+                .HasConstraintName("FK_PostCategory_Category")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<CommunityCategory>(entity =>
+        {
+            entity.HasOne(cc => cc.Community)
+                .WithMany(c => c.CommunityCategories) // Навигационное свойство для Post
+                .HasForeignKey(cc => cc.CommunityId)
+                .HasConstraintName("FK_CommunityCategory_Community")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(cc => cc.Category)
+                .WithMany(c => c.CommunityCategories) // Навигационное свойство для Category
+                .HasForeignKey(cc => cc.CategoryId)
+                .HasConstraintName("FK_CommunityCategory_Category")
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }

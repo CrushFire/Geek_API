@@ -13,7 +13,12 @@ public class PostResponse
 
     public UserResponse Author { get; set; }
     [Required]
-    public string Categories { get; set; } = string.Empty;
+    public List<string> CategoriesRu { get; set; }
+    [Required]
+    public List<string> CategoriesEng { get; set; }
+    public string CommunityName {  get; set; }
+    public string CommunityAvatar {  get; set; }
+    public string UserAvatar { get; set; }
 
     public long CommunityId { get; set; }
     //Можно мапить название комьюнити, но это лишний join постоянно, хз

@@ -183,3 +183,14 @@ body {
     font-size: 0.9rem;
 }
 
+.border-user {
+    border: 2px solid #5bc0de; /* голубой */
+    padding: 2px; /* чтобы рамка не "съедала" изображение */
+}
+
+.border-community {
+    border: 2px solid #007bff; /* синий (bootstrap primary blue) */
+    padding: 2px;
+}
+
+

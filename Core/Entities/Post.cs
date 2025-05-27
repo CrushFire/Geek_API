@@ -23,7 +23,7 @@ public class Post
 
     public int Views { get; set; } = 0;
     [Required]
-    public string Categories { get; set; } = string.Empty;
+    public List<PostCategory> PostCategories { get; set; } = new();
     public List<Comment> Comments { get; set; } = new();
     public List<Like> Reactions { get; set; } = new();
 

@@ -43,6 +43,22 @@ public class PostService : IPostService
         return ServiceResult<PostResponse>.Success(postResponse);
     }
 
+    public async Task<ServiceResult<bool>> HasBeenSeen(long id)
+    {
+        var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
+
+        if(post == null)
+        {
+            return ServiceResult<bool>.Failure("Пост не найден");
+        }
+
+        post.Views++;
+
+        _context.SaveChanges();
+
+        return ServiceResult<bool>.Success(true);
+    }
+
     public async Task<ServiceResult<List<PostResponse>>> GetByCommunityIdAsync(long communityId, int page, int pageSize)
     {
         var posts = await _context.Posts

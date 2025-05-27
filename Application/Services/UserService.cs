@@ -4,6 +4,7 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.Interfaces.Services;
 using Core.Models;
+using Core.Models.User;
 using Core.Results;
 using DataAccess;
 using Microsoft.AspNetCore.Http;
@@ -52,6 +53,7 @@ public class UserService : IUserService
             .Where(u => u.UserCommunities.Any(uc => uc.CommunityId == communityId))
             .Include(u => u.Posts)
             .Include(u => u.Comments)
+            .Include(u => u.Reactions)
             .IncludeUserImages()
             .OrderBy(u => u.UserName)
             .Skip((page - 1) * pageSize)
@@ -61,6 +63,16 @@ public class UserService : IUserService
         var userResponse = _mapper.Map<List<UserResponse>>(user);
 
         return ServiceResult<List<UserResponse>>.Success(userResponse);
+    }
+
+    public async Task<ServiceResult<List<UserReactionsResponse>>> GetUserReactionsAsync (long id)
+    {
+        var reactions = await _context.Likes.Where(l => l.UserId == id)
+            .ToListAsync();
+
+        var reactionsResponse = _mapper.Map<List<UserReactionsResponse>>(reactions);
+
+        return ServiceResult<List<UserReactionsResponse>>.Success(reactionsResponse);
     }
 
     public async Task<ServiceResult<List<UserResponse>>> GetUsersAsync(int page = 1, int limit = 10)

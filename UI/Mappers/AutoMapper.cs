@@ -7,7 +7,7 @@ using Core.Models.Community;
 using Core.Models.DataPage;
 using Core.Models.Post;
 
-namespace Geek_API.Mappers;
+namespace UI.Mappers;
 
 public class AutoMapper : Profile
 {

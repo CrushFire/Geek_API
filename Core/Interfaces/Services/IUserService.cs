@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Models;
+using Core.Models.User;
 using Core.Results;
 using Microsoft.AspNetCore.Http;
 
@@ -9,6 +10,7 @@ public interface IUserService
 {
     Task<ServiceResult<bool>> DeleteUser(long id);
     Task<ServiceResult<UserResponse>> GetUserByIdAsync(long id);
+    Task<ServiceResult<List<UserReactionsResponse>>> GetUserReactionsAsync(long id);
     Task<ServiceResult<List<UserResponse>>> GetUsersByCommunityAsync(long сommunityId, int page = 1, int pageSize = 10);
     Task<ServiceResult<List<UserResponse>>> GetUsersAsync(int page = 1, int limit = 10);
     Task<ServiceResult<bool>> UpdateUserInfoAsync(UserUpdateRequest user, long id);

@@ -12,6 +12,7 @@ public static class CommunityImageExtensions
             {
                 Id = community.Id,
                 Name = community.Name,
+                CommunityCategories = community.CommunityCategories,
                 Description = community.Description,
                 CreateAt = community.CreateAt,
                 Images = community.Images

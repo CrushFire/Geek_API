@@ -8,6 +8,7 @@ using Core.Models.Post;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace UI.Controllers;
 
@@ -62,7 +63,7 @@ public class PostsController : CustomControllerBase
     {
         var filter = new ParametersFilter()
         {
-            DirectionSort = "ask",
+            DirectionSort = "desk",
             DateCreateAt = DateCreateRange.Week,
             SortBy = "likes",
             Pagination = new PaginationRequest() { Page = curPage, PageSize = 20 },
@@ -82,6 +83,20 @@ public class PostsController : CustomControllerBase
 
         return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
     }
+
+    [HttpPost("/increment-view/{postId}")]
+    public async Task<IActionResult> IncrementView([FromRoute] int postId)
+    {
+        var result = await _postService.HasBeenSeen(postId);
+
+        if(result == null)
+        {
+            return NotFound("Такого поста нет");
+        }
+
+        return Ok(result.Data);
+    }
+
 
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] PostAddRequest request)

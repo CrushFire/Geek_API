@@ -10,8 +10,10 @@ using Core.Models.Post;
 using Core.Results;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -36,10 +38,16 @@ namespace Application.Services
             // Начинаем запрос с нужными Include
             var query = _context.Posts
                 .Include(p => p.Author)
+                .Include(p => p.PostCategories)
+                    .ThenInclude(pc => pc.Category)
                 .Include(p => p.Community)
+                .Include(p => p.Reactions)
                 .IncludePostImages()
                 .Select(p => new
                 {
+                    CommunityName = p.Community.Name,
+                    CommunityAvatar = _context.Images.Where(i => i.EntityTarget == "Community" && i.EntityId == p.CommunityId && i.ImageType == "avatar").FirstOrDefault(),
+                    UserAvatar = _context.Images.Where(i => i.EntityTarget == "User" && i.EntityId == p.AuthorId && i.ImageType == "avatar").FirstOrDefault(),
                     Post = p,
                     LikeCount = _context.Likes.Count(l => l.PostId == p.Id && l.IsLike),
                     DislikeCount = _context.Likes.Count(l => l.PostId == p.Id && !l.IsLike)
@@ -65,10 +73,10 @@ namespace Application.Services
             }
 
             // Фильтрация по категориям с проверкой на null
-            if (!string.IsNullOrEmpty(filter.PostFilter?.Categories))
-            {
-                query = query.Where(p => !string.IsNullOrEmpty(p.Post.Categories) && p.Post.Categories.Contains(filter.PostFilter.Categories));
-            }
+            //if (!string.IsNullOrEmpty(filter.PostFilter?.Categories))
+            //{
+            //    query = query.Where(p => !string.IsNullOrEmpty(p.Post) && p.Post.Categories.Contains(filter.PostFilter.Categories));
+            //}
 
             // Фильтр по сообществу
             if (filter.PostFilter?.CommunityId != null)
@@ -117,13 +125,25 @@ namespace Application.Services
 
             query = query.Skip(skip).Take(pageSize);
 
-            var posts = await query.Select(p => new PostWithLikes()
+            var postDtos = await query
+                .ToListAsync();  // Сначала выгружаем все данные из БД
+
+            var posts = postDtos.Select(p => new PostWithLikes()
             {
                 Post = p.Post,
                 CountLikes = p.LikeCount,
-                CountDislikes = p.DislikeCount
-            })
-                .ToListAsync();
+                CountDislikes = p.DislikeCount,
+                CategoriesRu = p.Post.PostCategories
+                    .Select(pc => pc.Category.Title)
+                    .ToList(),
+                CategoriesEng = p.Post.PostCategories
+                    .Select(pc => pc.Category.EngTitle)
+                    .ToList(),
+                CommunityName = p.CommunityName,
+                CommunityAvatar = p.CommunityAvatar?.ImageUrl,
+                UserAvatar = p.UserAvatar?.ImageUrl
+                //CommunityAvatar = p.Post.Images
+            });
 
             var mappingPost = _mapper.Map<List<PostResponse>>(posts);
 
@@ -176,10 +196,10 @@ namespace Application.Services
                 query = query.Where(p => p.CreateAt >= dateThreshold);
             }
 
-            if (!string.IsNullOrEmpty(filter.CommunityFilter.Categories))
-            {
-                query = query.Where(p => p.Categories.Contains(filter.CommunityFilter.Categories));
-            }
+            //if (!string.IsNullOrEmpty(filter.CommunityFilter.Categories))
+            //{
+            //    query = query.Where(p => p.Categories.Contains(filter.CommunityFilter.Categories));
+            //}
 
             if (!string.IsNullOrEmpty(filter.SortBy))
             {

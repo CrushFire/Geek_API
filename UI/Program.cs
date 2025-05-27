@@ -20,7 +20,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration["ConnectionStrings:ConnectionString"]));
 
-builder.Services.AddAutoMapper(typeof(Geek_API.Mappers.AutoMapper));
+builder.Services.AddAutoMapper(typeof(UI.Mappers.AutoMapper));
 
 builder.Services.AddAuthentication(options =>
 {
