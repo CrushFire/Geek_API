@@ -97,6 +97,24 @@ public class PostsController : CustomControllerBase
         return Ok(result.Data);
     }
 
+    [HttpPost("/update-reactions")]
+    public async Task<IActionResult> UpdateReactions([FromBody] PostReaction reaction)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await _postService.PostReactionsAsync(reaction);
+
+        if(result == null)
+        {
+            return NotFound("Таких реакций к посту нет");
+        }
+
+        return Ok(result.Data);
+    }
+
 
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] PostAddRequest request)

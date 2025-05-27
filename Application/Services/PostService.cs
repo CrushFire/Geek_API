@@ -59,6 +59,56 @@ public class PostService : IPostService
         return ServiceResult<bool>.Success(true);
     }
 
+    public async Task<ServiceResult<PostReactionResult>> PostReactionsAsync(PostReaction reaction)
+    {
+        var existing = await _context.Likes
+            .FirstOrDefaultAsync(r => r.PostId == reaction.PostId && r.UserId == reaction.UserId);
+
+        if (existing != null)
+        {
+            if (existing.IsLike == reaction.IsLike)
+            {
+                _context.Likes.Remove(existing);
+                await _context.SaveChangesAsync();
+                return await BuildReactionResult(reaction.PostId, null);
+            }
+            else
+            {
+                existing.IsLike = reaction.IsLike;
+                await _context.SaveChangesAsync();
+                return await BuildReactionResult(reaction.PostId, reaction.IsLike);
+            }
+        }
+        else
+        {
+            await _context.Likes.AddAsync(new Like
+            {
+                PostId = reaction.PostId,
+                UserId = reaction.UserId,
+                IsLike = reaction.IsLike
+            });
+        }
+
+        await _context.SaveChangesAsync();
+        return await BuildReactionResult(reaction.PostId, reaction.IsLike);
+    }
+
+    private async Task<ServiceResult<PostReactionResult>> BuildReactionResult(int postId, bool? userReacted)
+    {
+        var likes = await _context.Likes.CountAsync(r => r.PostId == postId && r.IsLike);
+        var dislikes = await _context.Likes.CountAsync(r => r.PostId == postId && !r.IsLike);
+
+        var resultReactions = new PostReactionResult
+        {
+            Likes = likes,
+            Dislikes = dislikes,
+            UserReaction = userReacted
+        };
+
+        return ServiceResult<PostReactionResult>.Success(resultReactions);
+    }
+
+
     public async Task<ServiceResult<List<PostResponse>>> GetByCommunityIdAsync(long communityId, int page, int pageSize)
     {
         var posts = await _context.Posts

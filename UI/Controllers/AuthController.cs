@@ -82,7 +82,7 @@ public class AuthController : CustomControllerBase
             Expires = DateTimeOffset.UtcNow.AddHours(1)
         });
 
-        return Redirect($"/Home/{UserId}");//страница на которую перейти
+        return Redirect($"/Popular/{UserId}");//страница на которую перейти
         
     }
 
@@ -144,7 +144,7 @@ public class AuthController : CustomControllerBase
             Expires = DateTimeOffset.UtcNow.AddHours(1)
         });
 
-        return Redirect($"/Home/{UserId}");
+        return Redirect($"/Popular/{UserId}");
     }
 
     [Authorize]

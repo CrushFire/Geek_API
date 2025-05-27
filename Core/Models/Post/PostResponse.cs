@@ -30,6 +30,7 @@ public class PostResponse
     public int Likes { get; set; } = 0;
 
     public int Dislikes { get; set; } = 0;
+    public int Comments { get; set; } = 0;
 
     public DateTime CreateAt { get; set; }
 }

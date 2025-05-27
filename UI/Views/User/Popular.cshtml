@@ -1,0 +1,201 @@
+﻿@using Core.Models
+@using System.Text.Json
+@model UserResponse
+
+@{
+    var language = ViewBag.Language;
+}
+
+@section Head {
+}
+
+@section Body {
+    <div class="app-wrapper">
+
+        <div class="main-content">
+            <div class="post" id="posts">
+                <p>Загрузка постов...</p>
+            </div>
+        </div>
+    </div>
+
+        <script>
+            function revealSpoiler() {
+                const spoiler = document.getElementById('spoilerContent');
+                spoiler.classList.add('revealed');
+                spoiler.innerHTML = '<p>This is the spoiler content revealed.</p>';
+            }
+        </script>
+}
+
+@section Script {
+    <script>
+        let curPage = 1;
+        let loading = false;
+        let reachedEnd = false;
+        const language = "@language";
+        const userId = @Model.Id;
+        let userReactions = [];
+
+        async function loadUserReactions() {
+            try {
+                const response = await fetch(`/take-reactions/${userId}`);
+                userReactions = await response.json();
+            } catch (err) {
+                console.error("Ошибка загрузки реакций", err);
+            }
+        }
+
+        async function loadPosts() {
+            if (loading || reachedEnd) return;
+
+            loading = true;
+            try {
+                const response = await fetch(`/by-filter/home?curPage=${curPage}`);
+                const posts = await response.json();
+
+                if (!posts || posts.length === 0) {
+                    reachedEnd = true;
+                    const endMsg = document.createElement("p");
+                    endMsg.className = "text-center text-muted";
+                    endMsg.innerText = "Все посты загружены.";
+                    document.getElementById("posts").appendChild(endMsg);
+                    return;
+                }
+
+                const postsDiv = document.getElementById("posts");
+                if (curPage === 1) {
+                    postsDiv.innerHTML = "";
+                }
+
+                posts.forEach(post => {
+                    const categoriesStr = language === "ru"
+                        ? (Array.isArray(post.categoriesRu) ? post.categoriesRu.map(cat => `#${cat}`).join(" ") : "")
+                        : (Array.isArray(post.categoriesEng) ? post.categoriesEng.map(cat => `#${cat}`).join(" ") : "");
+
+                    const isCommunityPost = !!post.communityName;
+                    const name = isCommunityPost ? post.communityName : post.author.userName;
+                    const avatarUrl = isCommunityPost ? post.communityAvatar : post.userAvatar;
+                    const borderClass = isCommunityPost ? "border-community" : "border-user";
+
+                    const reaction = userReactions.find(r => Number(r.postId) === Number(post.id));
+                    const isUserLiked = reaction?.isLike === true;
+                    const isUserDisliked = reaction?.isLike === false;
+
+                    const div = document.createElement("div");
+                    div.className = "card mb-3";
+
+                    div.innerHTML = `
+                        <div class="card-body position-relative">
+                            <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                                ${new Date(post.createAt).toLocaleDateString()} ${new Date(post.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+
+                            <div class="d-flex align-items-center mb-3">
+                                        <img src="${avatarUrl || '/images/Гость.webp'}" alt="avatar" class="rounded-circle me-2 ${borderClass}" style="width: 45px; height: 45px; object-fit: cover;">
+                                <strong>${name}</strong>
+                            </div>
+
+                            <h5>${post.title}</h5>
+                            <p>${post.content}</p>
+                            <span class="badge bg-primary me-1">${categoriesStr}</span>
+                            <p class="text-muted mt-2">
+                            <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''}" id="like-${post.id}">💙 <span>${post.likes}</span></button>
+                            /
+                            <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>  👀${post.views}
+                            <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
+                            ${post.comments} 💬 Комментарии 
+                            </a>
+                            </p>
+                        </div>
+                    `;
+                    
+                    observeViews(post.id, div); //Добавь руссификацию
+                    postsDiv.appendChild(div);
+                });
+
+                curPage++;
+            } catch (error) {
+                document.getElementById("posts").innerHTML = "<p>Не удалось загрузить посты.</p>";
+                console.error("Ошибка загрузки постов:", error);
+            } finally {
+                loading = false;
+            }
+        }
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadUserReactions();
+            await loadPosts();
+            window.addEventListener("scroll", () => {
+                const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+                if (nearBottom) {
+                    loadPosts();
+                }
+            });
+        });
+
+        function observeViews(postId, div) {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        fetch(`/increment-view/${postId}`, { method: 'POST' });
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            observer.observe(div);
+        }
+
+        async function handleReaction(postId, isLike) {
+            const reaction = userReactions.find(r => Number(r.postId) === Number(postId));
+            let newReaction;
+
+            if (!reaction) {
+                newReaction = { postId, userId, isLike };
+            } else if (reaction.isLike === isLike) {
+                // Нажал то же самое → снять реакцию
+                newReaction = { postId, userId, isLike };
+            } else {
+                // Смена реакции
+                newReaction = { postId, userId, isLike };
+            }
+
+            try {
+                const response = await fetch('/update-reactions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newReaction)
+                });
+
+                const result = await response.json();
+
+                // Обновление userReactions
+                if (result.userReaction === null) {
+                    userReactions = userReactions.filter(r => r.postId !== postId);
+                } else {
+                    const index = userReactions.findIndex(r => r.postId === postId);
+                    if (index >= 0) {
+                        userReactions[index].isLike = result.userReaction;
+                    } else {
+                        userReactions.push({ postId, userId, isLike: result.userReaction });
+                    }
+                }
+
+                // Обновление отображения
+                const likeBtn = document.getElementById(`like-${postId}`);
+                const dislikeBtn = document.getElementById(`dislike-${postId}`);
+
+                likeBtn.classList.toggle("user-liked", result.userReaction === true);
+                dislikeBtn.classList.toggle("user-disliked", result.userReaction === false);
+
+                likeBtn.querySelector("span").innerText = result.likes;
+                dislikeBtn.querySelector("span").innerText = result.dislikes;
+
+            } catch (err) {
+                console.error("Ошибка обновления реакции", err);
+            }
+        }
+    </script>
+}
