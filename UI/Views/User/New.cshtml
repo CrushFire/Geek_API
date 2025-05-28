@@ -91,6 +91,13 @@
                     const div = document.createElement("div");
                     div.className = "card mb-3";
 
+
+                    const avatarHtml = avatarUrl
+                        ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 ${borderClass}" style="width: 45px; height: 45px; object-fit: cover;">`
+                        : `<div class="rounded-circle me-2 ${borderClass} d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                                    ${name.charAt(0).toUpperCase()}
+                                  </div>`;
+
                     div.innerHTML = `
                         <div class="card-body position-relative">
                             <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
@@ -99,7 +106,7 @@
 
                             <div class="d-flex align-items-center mb-3">
                                 <a href="${isCommunityPost ? `/Community/${post.communityId}` : `/UserPage/${post.author.id}`}" class="d-flex align-items-center text-decoration-none text-dark">
-                                    <img src="${avatarUrl || '/images/Гость.webp'}" alt="avatar" class="rounded-circle me-2 ${borderClass}" style="width: 45px; height: 45px; object-fit: cover;">
+                                    ${avatarHtml}
                                     <strong>${name}</strong>
                                 </a>
                             </div>

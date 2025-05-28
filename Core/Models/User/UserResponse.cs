@@ -17,4 +17,7 @@ public class UserResponse
     public int NumberOfPosts { get; set; } = 0;
 
     public int NumberOfComments { get; set; } = 0;
+
+    public int NumberOfLikes { get; set; } = 0;
+    public int NumberOfCommunities { get; set; } = 0;
 }

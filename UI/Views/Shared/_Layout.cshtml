@@ -71,7 +71,7 @@
     @if (!ViewBag.isAuthPage)
     {
         <div class="sidebar">
-            <a href="#" class="nav-link">Home</a>
+            <a href="/Home/@ViewBag.userIdToken" class="nav-link">Home</a>
             <a href="/Popular/@ViewBag.userIdToken" class="nav-link">Popular</a>
             <a href="#" class="nav-link">Explore</a>
             <a href="/New/@ViewBag.userIdToken" class="nav-link">New</a>

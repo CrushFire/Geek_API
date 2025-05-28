@@ -62,6 +62,44 @@ public class ImageService : IImageService
         return resultImages;
     }
 
+    public async Task<Image> AddUploadedImageAsync(
+    string entityType,
+    long entityId,
+    string imageType,
+    IFormFile uploadedImage)
+    {
+        if (uploadedImage == null)
+            throw new ArgumentException("Список загруженных изображений пуст.");
+
+        var request = _httpContextAccessor.HttpContext?.Request; //?
+        if (request == null)
+            throw new Exception("Не удалось получить адрес сервера");
+
+        var baseUrl = $"{request.Scheme}://{request.Host}";
+
+            var extension = Path.GetExtension(uploadedImage.FileName);
+            var fileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+            await using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await uploadedImage.CopyToAsync(stream);
+            }
+
+            var resultImage = new Image
+            {
+                ImageUrl = $"{baseUrl}/images/{fileName}",
+                EntityId = entityId,
+                EntityTarget = entityType,
+                ImageType = imageType
+            };
+
+        await _context.Images.AddAsync(resultImage);
+        await _context.SaveChangesAsync();
+
+        return resultImage;
+    }
+
     //public async Task<List<Image>> AddImageUrlsAsync(
     //    string entityType,
     //    long entityId,
@@ -106,6 +144,23 @@ public class ImageService : IImageService
         }
 
         _context.Images.RemoveRange(images);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task RemoveImage(long imageId)
+    {
+        var image = await _context.Images
+            .Where(im => im.Id == imageId)
+            .FirstOrDefaultAsync();
+
+            var imageUrl = image.ImageUrl;
+            var startIndex = imageUrl.IndexOf("images/") + "images/".Length;
+            var fileName = imageUrl.Substring(startIndex);
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+            if (File.Exists(filePath)) File.Delete(filePath);
+
+        _context.Images.Remove(image);
         await _context.SaveChangesAsync();
     }
 }

@@ -18,7 +18,12 @@ public class AutoMapper : Profile
             .ForMember(dest => dest.NumberOfPosts,
                 opt => opt.MapFrom(src => src.Posts.Count))
             .ForMember(dest => dest.NumberOfComments,
-                opt => opt.MapFrom(src => src.Comments.Count));
+                opt => opt.MapFrom(src => src.Comments.Count))
+            .ForMember(dest => dest.NumberOfLikes,
+                opt => opt.MapFrom(src => src.Reactions.Count))
+            .ForMember(dest => dest.NumberOfCommunities,
+                opt => opt.MapFrom(src => src.UserCommunities.Count));
+
         CreateMap<Like, UserReactionsResponse>()
             .ForMember(dest => dest.PostId,
                 opt => opt.MapFrom(src => src.PostId))

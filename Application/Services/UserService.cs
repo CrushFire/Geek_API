@@ -31,6 +31,8 @@ public class UserService : IUserService
             .Where(x => x.Id == id)
             .Include(u => u.Comments)
             .Include(u => u.Posts)
+            .Include(u => u.Reactions)
+            .Include(u => u.UserCommunities)
             .IncludeUserImages()
             .FirstOrDefaultAsync();
 
@@ -130,16 +132,34 @@ public class UserService : IUserService
     public async Task<ServiceResult<bool>> UpdateUserInfoAsync(UserUpdateRequest userDto, long id)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        var userAvatar = await _context.Images.Where(i => i.EntityTarget == "User" && i.ImageType == "avatar" && i.EntityId == id).FirstOrDefaultAsync();
+
         if (user == null)
             return ServiceResult<bool>.Failure("Пользователь не найден");
 
         if (user.UserName != userDto.UserName)
         {
             var uniqueUserName = await _context.Users.AnyAsync(u => u.UserName == userDto.UserName);
+
+            if (uniqueUserName)
+            {
+                return ServiceResult<bool>.Failure("Такой юзер уже есть", 203);
+            }
         }
 
         user.UserName = userDto.UserName;
         user.Description = userDto.Description;
+
+        if (userAvatar != null && userDto.Avatar != null)
+        {
+            var newImage = _imageService.AddUploadedImageAsync("User", id, "avatar", userDto.Avatar);
+            userAvatar.ImageUrl = newImage.Result.ImageUrl;
+            _context.Images.Update(userAvatar);
+        }
+        else if (userAvatar == null && userDto.Avatar != null)
+        {
+            var newUploadImage = _imageService.AddUploadedImageAsync("User", id, "avatar", userDto.Avatar);
+        }
 
         _context.Users.Update(user);
         await _context.SaveChangesAsync();

@@ -1,6 +1,7 @@
 ﻿using Application.Utils;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Interfaces.Services;
 using Core.Models;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace UI.Controllers;
 public class UserController : CustomControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IErrorMessages _errorMessages;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IErrorMessages errorMessages)
     {
         _userService = userService;
+        _errorMessages = errorMessages;
     }
 
     [HttpGet("/Popular/{UserId}")]
@@ -50,6 +53,22 @@ public class UserController : CustomControllerBase
         return View("New", result.Data);
     }
 
+    [HttpGet("/Home/{UserId}")]
+    public async Task<IActionResult> GetUserByIdForHomeAsync([FromRoute] long UserId)
+    {
+        if (UserId != base.UserId)
+            return RedirectToAction("Login", "Auth");
+        // Проверка авторизации
+        //var auth = await _dataPage.GetByPageAsync("Authorization");
+
+        //Штука для смены языка, как раз таки мой мидлвеар
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
+        var result = await _userService.GetUserByIdAsync(UserId);
+
+        return View("Home", result.Data);
+    }
+
     [HttpGet("/take-reactions/{userId}")]
     public async Task<IActionResult> GetUserReactions([FromRoute] long userId)
     {
@@ -81,17 +100,31 @@ public class UserController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateUserInfoAsync([FromBody] UserUpdateRequest user)
+    [HttpPost("/UpdateProfile")]
+    public async Task<IActionResult> UpdateUserInfoAsync([FromForm] UserUpdateRequest userRequest)
     {
-        if (UserId == null)
-            StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
+        if (UserId != base.UserId)
+            return RedirectToAction("Login", "Auth");
 
-        var result = await _userService.UpdateUserInfoAsync(user, UserId.Value);
+        var result = await _userService.UpdateUserInfoAsync(userRequest, UserId.Value);
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        if (!result.IsSuccess)
+        {
+            if(result.Error.StatusCode == 203)
+            {
+                ModelState.AddModelError("Duplicate", "Duplicate");
+                ViewBag.Errors = ModelState
+                    .Where(ms => ms.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        kvp => kvp.Key, // имя поля модели
+                        kvp => _errorMessages.GetMessage(kvp.Value.Errors.First().ErrorMessage, ViewBag.Language)
+                    );
+                return View();
+            }
+            return BadRequest("Не удалось обновить данные юзера!");
+        }
+
+        return Json(result.Data);
     }
 
     [HttpDelete("{id}")]
