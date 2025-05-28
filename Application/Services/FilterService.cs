@@ -51,7 +51,7 @@ namespace Application.Services
                     Post = p,
                     LikeCount = _context.Likes.Count(l => l.PostId == p.Id && l.IsLike),
                     DislikeCount = _context.Likes.Count(l => l.PostId == p.Id && !l.IsLike),
-                    CommentsCount = _context.Comments.Count(c => c.PostId == p.Id)
+                    CommentsCount = _context.Comments.Count(c => c.PostId == p.Id),
                 }).AsQueryable();
 
             // Безопасная проверка filter.Name
@@ -143,7 +143,8 @@ namespace Application.Services
                 CommunityName = p.CommunityName,
                 CommunityAvatar = p.CommunityAvatar?.ImageUrl,
                 UserAvatar = p.UserAvatar?.ImageUrl,
-                CountComments = p.CommentsCount
+                CountComments = p.CommentsCount,
+                PostImages = _context.Images.Where(i => i.EntityTarget == "Post" && i.EntityId == p.Post.Id && i.ImageType == "image").Select(p => p.ImageUrl).ToList()
             });
 
             var mappingPost = _mapper.Map<List<PostResponse>>(posts);

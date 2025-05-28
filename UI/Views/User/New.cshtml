@@ -25,13 +25,13 @@
 
     </div>
 
-        <script>
-            function revealSpoiler() {
-                const spoiler = document.getElementById('spoilerContent');
-                spoiler.classList.add('revealed');
-                spoiler.innerHTML = '<p>This is the spoiler content revealed.</p>';
-            }
-        </script>
+    <script>
+        function revealSpoiler() {
+            const spoiler = document.getElementById('spoilerContent');
+            spoiler.classList.add('revealed');
+            spoiler.innerHTML = '<p>This is the spoiler content revealed.</p>';
+        }
+    </script>
 }
 
 @section Script {
@@ -57,7 +57,7 @@
 
             loading = true;
             try {
-                const response = await fetch(`/by-filter/popular?curPage=${curPage}`);
+                const response = await fetch(`/by-filter/new?curPage=${curPage}`);
                 const posts = await response.json();
 
                 if (!posts || posts.length === 0) {
@@ -119,12 +119,12 @@
                             /
                             <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>  👀${post.views}
                             <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
-                            ${post.comments} 💬 Комментарии 
+                            ${post.comments} 💬 Комментарии
                             </a>
                             </p>
                         </div>
                     `;
-                    
+
                     observeViews(post.id, div); //Добавь руссификацию
                     postsDiv.appendChild(div);
                 });

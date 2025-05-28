@@ -43,6 +43,7 @@ public class AutoMapper : Profile
             .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Post.Author))
             .ForMember(dest => dest.CommunityId, opt => opt.MapFrom(src => src.Post.CommunityId))
             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Post.Images))
+            .ForMember(dest => dest.PostImages, opt => opt.MapFrom(src => src.PostImages))
             .ForMember(dest => dest.Views, opt => opt.MapFrom(src => src.Post.Views))
             .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => src.Post.CreateAt))
             .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.CountLikes))

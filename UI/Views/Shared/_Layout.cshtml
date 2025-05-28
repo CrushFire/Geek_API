@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -17,6 +18,18 @@
     {
         ViewBag.Search = "Search...";
     }
+    @{
+        string? userId = null;
+
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            ViewBag.userIdToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        var path = Context.Request.Path.Value?.ToLower() ?? "";
+        ViewBag.isAuthPage = path.Contains("/auth/login") || path.Contains("/auth/registration");
+    }
+
     @RenderSection("Head", required: false)
 </head>
 
@@ -54,11 +67,14 @@
             </div>
             </header>
 
+        }
+    @if (!ViewBag.isAuthPage)
+    {
         <div class="sidebar">
             <a href="#" class="nav-link">Home</a>
-            <a href="#" class="nav-link">Popular</a>
+            <a href="/Popular/@ViewBag.userIdToken" class="nav-link">Popular</a>
             <a href="#" class="nav-link">Explore</a>
-            <a href="#" class="nav-link">New</a>
+            <a href="/New/@ViewBag.userIdToken" class="nav-link">New</a>
 
             <hr>
 
@@ -84,7 +100,7 @@
             <a href="#" class="nav-link">Fires</a>
             <a href="#" class="nav-link">Topics</a>
         </div>
-        }
+    }
         @RenderSection("Body", required: false)
         @RenderSection("Script", required: false);
             <script>

@@ -11,4 +11,5 @@ public class PostWithLikes
     public string CommunityAvatar {  get; set; }
     public string UserAvatar { get; set; }
     public int CountComments { get; set; }
+    public List<string> PostImages { get; set; }
 }

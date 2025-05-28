@@ -58,14 +58,40 @@ public class PostsController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpGet("/by-filter/home/")]
-    public async Task<IActionResult> GetByFilterToHome([FromQuery] int curPage = 1)
+    [HttpGet("/by-filter/popular/")]
+    public async Task<IActionResult> GetByFilterToPopular([FromQuery] int curPage = 1)
     {
         var filter = new ParametersFilter()
         {
             DirectionSort = "desk",
             DateCreateAt = DateCreateRange.Week,
             SortBy = "likes",
+            Pagination = new PaginationRequest() { Page = curPage, PageSize = 20 },
+            PostFilter = new PostFilter()
+        };
+        var result = await _filterService.GetPostsByFilter(filter);
+
+        //Штука для смены языка, как раз таки мой мидлвеар
+        //ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
+
+        if (result == null)
+            return StatusCode(500, "Ошибка: результат фильтрации — null");
+
+        if (result.Data == null)
+            return StatusCode(500, "Ошибка: Data в результате — null");
+
+        return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
+    }
+
+    [HttpGet("/by-filter/new/")]
+    public async Task<IActionResult> GetByFilterToNew([FromQuery] int curPage = 1)
+    {
+        var filter = new ParametersFilter()
+        {
+            DirectionSort = "desk",
+            DateCreateAt = DateCreateRange.Week,
+            SortBy = "created",
             Pagination = new PaginationRequest() { Page = curPage, PageSize = 20 },
             PostFilter = new PostFilter()
         };
