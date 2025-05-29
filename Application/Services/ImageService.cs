@@ -143,7 +143,6 @@ public class ImageService : IImageService
             if (File.Exists(filePath)) File.Delete(filePath);
         }
 
-        _context.Images.RemoveRange(images);
         await _context.SaveChangesAsync();
     }
 
@@ -160,7 +159,6 @@ public class ImageService : IImageService
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
             if (File.Exists(filePath)) File.Delete(filePath);
 
-        _context.Images.Remove(image);
         await _context.SaveChangesAsync();
     }
 }

@@ -110,17 +110,6 @@ public class UserController : CustomControllerBase
 
         if (!result.IsSuccess)
         {
-            if(result.Error.StatusCode == 203)
-            {
-                ModelState.AddModelError("Duplicate", "Duplicate");
-                ViewBag.Errors = ModelState
-                    .Where(ms => ms.Value.Errors.Count > 0)
-                    .ToDictionary(
-                        kvp => kvp.Key, // имя поля модели
-                        kvp => _errorMessages.GetMessage(kvp.Value.Errors.First().ErrorMessage, ViewBag.Language)
-                    );
-                return View();
-            }
             return BadRequest("Не удалось обновить данные юзера!");
         }
 

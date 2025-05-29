@@ -140,7 +140,6 @@ namespace Application.Services
                 CategoriesEng = p.Post.PostCategories
                     .Select(pc => pc.Category.EngTitle)
                     .ToList(),
-                CommunityName = p.CommunityName,
                 CommunityAvatar = p.CommunityAvatar?.ImageUrl,
                 UserAvatar = p.UserAvatar?.ImageUrl,
                 CountComments = p.CommentsCount,

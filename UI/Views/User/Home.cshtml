@@ -2,6 +2,8 @@
 @model UserResponse
 
 @{
+    var errors = ViewBag.Errors as IEnumerable<string>;
+
     var language = ViewBag.Language;
     var avatarImage = Model.Images?.FirstOrDefault(i => i.ImageType == "avatar");
 }
@@ -44,7 +46,7 @@
                                 </div>
                                 <div>
                                     <h5>@Model.NumberOfCommunities</h5>
-                                    <p>Communities 👥</p>
+                                    <p>Subscribes 👥</p>
                                 </div>
                             </div>
                         </div>
@@ -78,10 +80,18 @@
                 <hr class="my-4" />
 
                 <div class="d-flex justify-content-around mb-4">
-                    <a href="/User/LikedPosts/@Model.Id" class="btn btn-outline-secondary">Liked Posts</a>
+                    <button class="btn btn-outline-secondary" onclick="loadLikedPosts()">Liked Posts</button>
                     <a href="/User/MyPosts/@Model.Id" class="btn btn-outline-secondary">My Posts</a>
                     <a href="/User/SubscribedCommunities/@Model.Id" class="btn btn-outline-secondary">Subscriptions</a>
                     <a href="/User/OwnedCommunities/@Model.Id" class="btn btn-outline-secondary">My Communities</a>
+                </div>
+
+                <div class="post" id="liked-posts">
+                    
+                </div>
+
+                <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
+                    <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
                 </div>
             </div>
         </div>
@@ -89,12 +99,14 @@
 }
 @section Script {
     <script>
+        const errorMessage = "@language" == "ru" ? "Пользователь с таким ником уже существует" : "User with name yet exists"
         document.getElementById("profileForm").addEventListener("submit", async function (e) {
             e.preventDefault();
 
             const form = e.target;
             const formData = new FormData(form);
 
+            try {
                 const response = await fetch("/UpdateProfile", {
                     method: "POST", // <-- важно
                     body: formData
@@ -113,6 +125,196 @@
                 }
 
                 alert("Профиль обновлён!");
+            } catch (error) {
+                alert(errorMessage);
+            }
+        });
+
+        const userId = @Model.Id;
+        const language = "@language";
+        let likedPage = 1;
+        let likedLoading = false;
+        let likedReachedEnd = false;
+        let userReactions = [];
+
+        async function loadUserReactions() {
+            try {
+                const response = await fetch(`/take-reactions/${userId}`);
+                userReactions = await response.json();
+            } catch (err) {
+                console.error("Ошибка загрузки реакций", err);
+            }
+        }
+
+        async function loadLikedPosts() {
+            if (likedLoading || likedReachedEnd) return;
+
+            likedLoading = true;
+            const container = document.getElementById("liked-posts");
+
+            try {
+                const response = await fetch(`/liked-posts/?curPage=${likedPage}`);
+                const posts = await response.json();
+
+                if (!posts || posts.length === 0) {
+                    likedReachedEnd = true;
+                    const endMsg = document.createElement("p");
+                    endMsg.className = "text-center text-muted";
+                    endMsg.innerText = language === "ru" ? "Понравившиеся посты закончились." : "No more liked posts.";
+                    container.appendChild(endMsg);
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const categoriesStr = language === "ru"
+                        ? (Array.isArray(post.categoriesRu) ? post.categoriesRu.map(c => `#${c}`).join(" ") : "")
+                        : (Array.isArray(post.categoriesEng) ? post.categoriesEng.map(c => `#${c}`).join(" ") : "");
+
+                    const isCommunityPost = !!post.communityName;
+                    const name = isCommunityPost ? post.communityName : post.author.userName;
+                    const avatarUrl = isCommunityPost ? post.communityAvatar : post.userAvatar;
+                    const borderClass = isCommunityPost ? "border-community" : "border-user";
+
+                    const reaction = userReactions.find(r => Number(r.postId) === Number(post.id));
+                    const isUserLiked = reaction?.isLike === true;
+                    const isUserDisliked = reaction?.isLike === false;
+
+                    const div = document.createElement("div");
+                    div.className = "card mb-3";
+
+                    const avatarHtml = avatarUrl
+                        ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 ${borderClass}" style="width: 45px; height: 45px; object-fit: cover;">`
+                        : `<div class="rounded-circle me-2 ${borderClass} d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                               ${name.charAt(0).toUpperCase()}
+                           </div>`;
+
+                    div.innerHTML = `
+                        <div class="card-body position-relative">
+                            <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                                ${new Date(post.createAt).toLocaleDateString()} ${new Date(post.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+
+                            <div class="d-flex align-items-center mb-3">
+                                <a href="${isCommunityPost ? `/Community/${post.communityId}` : `/UserPage/${post.author.id}`}" class="d-flex align-items-center text-decoration-none text-dark">
+                                    ${avatarHtml}
+                                    <strong>${name}</strong>
+                                </a>
+                            </div>
+
+                            <h5>${post.title}</h5>
+                            <div class="post-images mb-3 d-flex flex-wrap gap-2">
+                                ${post.postImages.map((imgUrl) => `
+                                    <img src="${imgUrl}" alt="post image" class="img-thumbnail post-img-thumb"
+                                         style="max-width: 120px; cursor: pointer;"
+                                         onclick="openImageModal('${imgUrl}')">`).join("")}
+                            </div>
+                            <p>${post.content}</p>
+                            <span class="badge bg-primary me-1">${categoriesStr}</span>
+                            <p class="text-muted mt-2">
+                                <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''}" id="like-${post.id}">💙 <span>${post.likes}</span></button>
+                                /
+                                <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>
+                                👀${post.views}
+                                <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
+                                    ${post.comments} 💬 ${language === "ru" ? "Комментарии" : "Comments"}
+                                </a>
+                            </p>
+                        </div>
+                    `;
+
+                    observeViews(post.id, div);//ломает эта залупа
+                    container.appendChild(div);
+                });
+
+                likedPage++;
+            } catch (err) {
+                container.innerHTML = `<p>${language === "ru" ? "Ошибка загрузки понравившихся постов." : "Failed to load liked posts."}</p>`;
+                console.error(err);
+            } finally {
+                likedLoading = false;
+            }
+        }
+
+        function observeViews(postId, div) {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        fetch(`/increment-view/${postId}`, { method: 'POST' });
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            observer.observe(div);
+        }
+
+                async function handleReaction(postId, isLike) {
+            const reaction = userReactions.find(r => Number(r.postId) === Number(postId));
+            let newReaction;
+
+            if (!reaction) {
+                newReaction = { postId, userId, isLike };
+            } else if (reaction.isLike === isLike) {
+                // Нажал то же самое → снять реакцию
+                newReaction = { postId, userId, isLike };
+            } else {
+                // Смена реакции
+                newReaction = { postId, userId, isLike };
+            }
+
+            try {
+                const response = await fetch('/update-reactions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newReaction)
+                });
+
+                const result = await response.json();
+
+                // Обновление userReactions
+                if (result.userReaction === null) {
+                    userReactions = userReactions.filter(r => r.postId !== postId);
+                } else {
+                    const index = userReactions.findIndex(r => r.postId === postId);
+                    if (index >= 0) {
+                        userReactions[index].isLike = result.userReaction;
+                    } else {
+                        userReactions.push({ postId, userId, isLike: result.userReaction });
+                    }
+                }
+
+                // Обновление отображения
+                const likeBtn = document.getElementById(`like-${postId}`);
+                const dislikeBtn = document.getElementById(`dislike-${postId}`);
+
+                likeBtn.classList.toggle("user-liked", result.userReaction === true);
+                dislikeBtn.classList.toggle("user-disliked", result.userReaction === false);
+
+                likeBtn.querySelector("span").innerText = result.likes;
+                dislikeBtn.querySelector("span").innerText = result.dislikes;
+
+            } catch (err) {
+                console.error("Ошибка обновления реакции", err);
+            }
+        }
+
+        function openImageModal(url) {
+            const modal = document.getElementById("imageModalSimple");
+            const modalImg = document.getElementById("modalImageSimple");
+            modalImg.src = url;
+            modal.style.display = "flex";
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById("imageModalSimple");
+            modal.style.display = "none";
+        }
+        // Вызов при загрузке страницы
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadUserReactions();
+            await loadLikedPosts(); // <-- Вызов загрузки постов
         });
     </script>
 }

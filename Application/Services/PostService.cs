@@ -2,6 +2,8 @@
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.Services;
+using Core.Models;
+using Core.Models.Filter;
 using Core.Models.Post;
 using Core.Results;
 using DataAccess;
@@ -106,6 +108,54 @@ public class PostService : IPostService
         };
 
         return ServiceResult<PostReactionResult>.Success(resultReactions);
+    }
+
+    public async Task<ServiceResult<List<PostResponse>>> GetUserLikesPost(PaginationRequest paginationRequest, long id)
+    {
+        var likedPosts = await _context.Posts
+            .Include(p => p.Author)
+            .Include(p => p.PostCategories)
+                .ThenInclude(pc => pc.Category)
+            .Include(p => p.Community)
+            .Include(p => p.Reactions).Where(p => p.Reactions.Any(r => r.UserId == id && r.IsLike == true))
+            .IncludePostImages().OrderByDescending(p => p.CreateAt)
+            .Select(p => new
+            {
+                CommunityName = p.Community.Name,
+                CommunityAvatar = _context.Images.Where(i => i.EntityTarget == "Community" && i.EntityId == p.CommunityId && i.ImageType == "avatar").FirstOrDefault(),
+                UserAvatar = _context.Images.Where(i => i.EntityTarget == "User" && i.EntityId == p.AuthorId && i.ImageType == "avatar").FirstOrDefault(),
+                Post = p,
+                LikeCount = _context.Likes.Count(l => l.PostId == p.Id && l.IsLike),
+                DislikeCount = _context.Likes.Count(l => l.PostId == p.Id && !l.IsLike),
+                CommentsCount = _context.Comments.Count(c => c.PostId == p.Id),
+            }).ToListAsync();
+
+        int page = paginationRequest.Page > 0 ? paginationRequest.Page : 1;
+        int pageSize = paginationRequest.PageSize > 0 ? paginationRequest.PageSize : 10;
+        int skip = (page - 1) * pageSize;
+
+        var likedPostsPag = likedPosts.Skip(skip).Take(pageSize);
+
+        var posts = likedPostsPag.Select(p => new PostWithLikes()
+        {
+            Post = p.Post,
+            CountLikes = p.LikeCount,
+            CountDislikes = p.DislikeCount,
+            CategoriesRu = p.Post.PostCategories
+                .Select(pc => pc.Category.Title)
+                .ToList(),
+            CategoriesEng = p.Post.PostCategories
+                .Select(pc => pc.Category.EngTitle)
+                .ToList(),
+            CommunityAvatar = p.CommunityAvatar?.ImageUrl,
+            UserAvatar = p.UserAvatar?.ImageUrl,
+            CountComments = p.CommentsCount,
+            PostImages = _context.Images.Where(i => i.EntityTarget == "Post" && i.EntityId == p.Post.Id && i.ImageType == "image").Select(p => p.ImageUrl).ToList()
+        });
+
+        var mappingPost = _mapper.Map<List<PostResponse>>(posts);
+
+        return ServiceResult<List<PostResponse>>.Success(mappingPost);
     }
 
 
