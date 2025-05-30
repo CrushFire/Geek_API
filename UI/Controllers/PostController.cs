@@ -26,12 +26,11 @@ public class PostsController : CustomControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetByIdAsync(long id)
+    public async Task<IActionResult> GetById(long id)
     {
         var result = await _postService.GetByIdAsync(id);
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+
+        return View("Post", result.Data);
     }
 
     [HttpGet("byCommunity")]

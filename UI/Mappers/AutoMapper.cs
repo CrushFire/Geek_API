@@ -57,6 +57,26 @@ public class AutoMapper : Profile
             .ForMember(dest => dest.Dislikes, opt => opt.MapFrom(src => src.CountDislikes))
             .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.CountComments));
 
+        CreateMap<PostWithLikes, PostWithCommentsResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Post.Id))
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Post.Title))
+            .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Post.Content))
+            .ForMember(dest => dest.CategoriesRu, opt => opt.MapFrom(src => src.CategoriesRu))
+            .ForMember(dest => dest.CategoriesEng, opt => opt.MapFrom(src => src.CategoriesEng))
+            .ForMember(dest => dest.CommunityName, opt => opt.MapFrom(src => src.CommunityName))
+            .ForMember(dest => dest.CommunityAvatar, opt => opt.MapFrom(src => src.CommunityAvatar))
+            .ForMember(dest => dest.UserAvatar, opt => opt.MapFrom(src => src.UserAvatar))
+            .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Post.Author))
+            .ForMember(dest => dest.CommunityId, opt => opt.MapFrom(src => src.Post.CommunityId))
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Post.Images))
+            .ForMember(dest => dest.PostImages, opt => opt.MapFrom(src => src.PostImages))
+            .ForMember(dest => dest.CommunityName, opt => opt.MapFrom(src => src.CommunityName))
+            .ForMember(dest => dest.Views, opt => opt.MapFrom(src => src.Post.Views))
+            .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => src.Post.CreateAt))
+            .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.CountLikes))
+            .ForMember(dest => dest.Dislikes, opt => opt.MapFrom(src => src.CountDislikes))
+            .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.CountComments));
+
 
         CreateMap<Community, CommunityResponse>()
             .ForMember(dest => dest.CommunityName, opt => opt.MapFrom(src => src.Name))

@@ -1,4 +1,6 @@
-﻿namespace Core.Models.Comment;
+﻿using Core.Models.Community;
+
+namespace Core.Models.Comment;
 
 public class CommentResponse
 {

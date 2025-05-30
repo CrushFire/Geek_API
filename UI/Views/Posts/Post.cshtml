@@ -1,0 +1,234 @@
+﻿@using Core.Models.Post
+@model PostResponse
+
+@{
+    var language = ViewBag.Language as string ?? "ru";
+    var isCommunityPost = Model.CommunityId > 0;
+    var name = isCommunityPost ? Model.CommunityName : Model.Author.UserName;
+    var avatarUrl = isCommunityPost ? Model.CommunityAvatar : Model.UserAvatar;
+    var borderClass = isCommunityPost ? "border-community" : "border-user";
+    var postId = Model.Id;
+    var userId = Model.Author.Id;
+
+    var categories = language == "ru" ? Model.CategoriesRu : Model.CategoriesEng;
+    var categoriesStr = string.Join(" ", categories.Select(c => $"#{c}"));
+}
+
+@section Head {
+
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="post" id="post-@postId">
+
+                <div class="card-body position-relative">
+                    <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                        @Model.CreateAt.ToString("dd.MM.yyyy HH:mm")
+                    </div>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <a href="@(
+                            isCommunityPost ? $"/Community/{Model.CommunityId}" : $"/UserPage/{Model.Author.Id}"
+                        )" class="d-flex align-items-center text-decoration-none text-dark">
+                            @if (!string.IsNullOrEmpty(avatarUrl))
+                            {
+                                <img src="@avatarUrl" alt="avatar" class="rounded-circle me-2 @borderClass"
+                                     style="width: 45px; height: 45px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <div class="rounded-circle me-2 @borderClass d-flex align-items-center justify-content-center"
+                                     style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                                    @name[0].ToString().ToUpper()
+                                </div>
+                            }
+                            <strong>@name</strong>
+                        </a>
+                    </div>
+
+                    <h5>@Model.Title</h5>
+                    <div class="post-images mb-3 d-flex flex-wrap gap-2">
+                        @foreach (var imgUrl in Model.PostImages)
+                        {
+                            <img src="@imgUrl" alt="post image" class="img-thumbnail post-img-thumb"
+                                 style="max-width: 200px; cursor: pointer;"
+                                 onclick="openImageModal('@imgUrl')" />
+                        }
+                    </div>
+                    <p>@Model.Content</p>
+                    <span class="badge bg-primary me-1">@Html.Raw(categoriesStr)</span>
+
+                    <p class="text-muted mt-2">
+                        <button onclick="handleReaction(@postId, true)" class="btn btn-sm text-decoration-none" id="like-@postId">💙 <span>@Model.Likes</button>
+                        /
+                        <button onclick="handleReaction(@postId, false)" class="btn btn-sm text-decoration-none" id="dislike-@postId">💧 <span>@Model.Dislikes</span></button>
+                        👀@Model.Views
+                        <a href="/Post/@postId" class="ms-4 text-muted text-decoration-none">
+                            @Model.Comments 💬 Комментарии
+                        </a>
+                    </p>
+                </div>
+                <div id="commentsSection">
+                    <!-- Здесь комментарии будут добавляться JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно -->
+        <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
+            <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
+        </div>
+    </div>
+}
+
+@section Script {
+    <script>
+        // Получаем данные из Razor-модели: ID поста и ID автора (текущего пользователя)
+        const postId = @Model.Id;
+        const userId = @Model.Author.Id;
+        let curPage = 1;
+
+        // Массив, где будут храниться реакции пользователя (лайки/дизлайки на посты)
+        let userReactions = [];
+
+        // Загружает все реакции текущего пользователя с сервера
+        async function loadUserReactions() {
+            try {
+                const response = await fetch(`/take-reactions/${userId}`);
+                userReactions = await response.json(); // JSON-массив: [{ postId, isLike }, ...]
+
+                // Ищем реакцию пользователя на текущий пост
+                const reaction = userReactions.find(r => Number(r.postId) === postId);
+                if (reaction) {
+                    const likeBtn = document.getElementById(`like-${postId}`);
+                    const dislikeBtn = document.getElementById(`dislike-${postId}`);
+
+                    // Подсвечиваем кнопку в зависимости от типа реакции
+                    likeBtn.classList.toggle("user-liked", reaction.isLike === true);
+                    dislikeBtn.classList.toggle("user-disliked", reaction.isLike === false);
+                }
+            } catch (err) {
+                console.error("Ошибка загрузки реакций", err);
+            }
+        }
+
+        // Отправляет реакцию пользователя на сервер и обновляет UI
+        async function handleReaction(postId, isLike) {
+            // Ищем текущую реакцию пользователя
+            const reaction = userReactions.find(r => Number(r.postId) === postId);
+            const newReaction = { postId, userId, isLike };
+
+            try {
+                const response = await fetch('/update-reactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newReaction)
+                });
+
+                const result = await response.json(); // { likes, dislikes, userReaction }
+
+                // Обновляем локальный массив userReactions
+                if (result.userReaction === null) {
+                    // Реакция удалена
+                    userReactions = userReactions.filter(r => r.postId !== postId);
+                } else {
+                    // Либо обновляем, либо добавляем реакцию
+                    const index = userReactions.findIndex(r => r.postId === postId);
+                    if (index >= 0) {
+                        userReactions[index].isLike = result.userReaction;
+                    } else {
+                        userReactions.push({ postId, userId, isLike: result.userReaction });
+                    }
+                }
+
+                // Обновляем UI: классы и количество лайков/дизлайков
+                const likeBtn = document.getElementById(`like-${postId}`);
+                const dislikeBtn = document.getElementById(`dislike-${postId}`);
+
+                likeBtn.classList.toggle("user-liked", result.userReaction === true);
+                dislikeBtn.classList.toggle("user-disliked", result.userReaction === false);
+
+                likeBtn.querySelector("span").innerText = result.likes;
+                dislikeBtn.querySelector("span").innerText = result.dislikes;
+
+            } catch (err) {
+                console.error("Ошибка обновления реакции", err);
+            }
+        }
+
+        // Открывает модальное окно с изображением
+        function openImageModal(url) {
+            const modal = document.getElementById("imageModalSimple");
+            const modalImg = document.getElementById("modalImageSimple");
+            modalImg.src = url;
+            modal.style.display = "flex";
+        }
+
+        // Закрывает модальное окно с изображением
+        function closeImageModal() {
+            const modal = document.getElementById("imageModalSimple");
+            modal.style.display = "none";
+        }
+
+        // После загрузки DOM выполняем начальные действия
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserReactions();               // Загружаем реакции
+            // loadComments(postId);          // Это закомментируй, если оно затирает commentsSection
+        });
+
+        function createCommentElement(comm) {
+            const div = document.createElement('div');
+            div.className = 'card comment mb-3 position-relative';
+
+            const avatarUrl = comm.author.images.find(img => img.imageType === 'avatar')?.imageUrl || '';
+
+            const avatarHtml = avatarUrl
+                ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 border-user" style="width: 45px; height: 45px; object-fit: cover;">`
+                : `<div class="rounded-circle me-2 border-user d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                       ${comm.author.userName.charAt(0).toUpperCase()}
+                   </div>`;
+
+            div.innerHTML = `
+                <div class="card-body p-3">
+                    <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                        ${new Date(comm.createAt).toLocaleDateString()} ${new Date(comm.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                    <a href="/UserPage/${comm.author.id}" class="d-flex align-items-center text-decoration-none text-dark mb-2">
+                        ${avatarHtml}
+                        <strong>${comm.author.userName}</strong>
+                    </a>
+                    <p>${comm.content || ''}</p>
+                </div>
+            `;
+
+            return div;
+        }
+
+        async function loadComments(postId, page = 1) {
+            try {
+                const response = await fetch(`/by-post?postId=${postId}&curPage=${page}`);
+                if (!response.ok) throw new Error('Ошибка загрузки комментариев');
+                const comments = await response.json();
+
+                const commentsSection = document.getElementById('commentsSection');
+                commentsSection.innerHTML = '';
+
+                comments.forEach(comment => {
+                    const elem = createCommentElement(comment);
+                    commentsSection.appendChild(elem);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComments(postId, curPage);
+        });
+
+
+    </script>
+
+}

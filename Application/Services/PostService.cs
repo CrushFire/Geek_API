@@ -3,6 +3,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.Services;
 using Core.Models;
+using Core.Models.Comment;
 using Core.Models.Community;
 using Core.Models.Filter;
 using Core.Models.Post;
@@ -27,19 +28,37 @@ public class PostService : IPostService
 
     public async Task<ServiceResult<PostResponse>> GetByIdAsync(long id)
     {
-        var post = await _context.Posts
+        var p = await _context.Posts
             .Include(p => p.Author)
+            .Include(p => p.PostCategories)
+                .ThenInclude(pc => pc.Category)
+            .Include(p => p.Community)
             .IncludePostImages()
-            .Select(p => new PostWithLikes
+            .Select(p => new
             {
+                CommunityName = p.Community.Name,
+                CommunityAvatar = _context.Images.Where(i => i.EntityTarget == "Community" && i.EntityId == p.CommunityId && i.ImageType == "avatar").FirstOrDefault(),
+                UserAvatar = _context.Images.Where(i => i.EntityTarget == "User" && i.EntityId == p.AuthorId && i.ImageType == "avatar").FirstOrDefault(),
                 Post = p,
-                CountLikes = _context.Likes.Count(l => l.PostId == p.Id && l.IsLike),
-                CountDislikes = _context.Likes.Count(l => l.PostId == p.Id && !l.IsLike)
             })
             .FirstOrDefaultAsync(p => p.Post.Id == id);
 
-        if (post == null)
-            return ServiceResult<PostResponse>.Failure("Пост не найден");
+        var post = new PostWithLikes()
+        {
+            Post = p.Post,
+            CountLikes = _context.Likes.Count(l => l.IsLike && l.PostId == id),
+            CountDislikes = _context.Likes.Count(l => !l.IsLike && l.PostId == id),
+            CategoriesRu = p.Post.PostCategories
+                .Select(pc => pc.Category.Title)
+                .ToList(),
+            CategoriesEng = p.Post.PostCategories
+                .Select(pc => pc.Category.EngTitle)
+                .ToList(),
+            CommunityAvatar = p.CommunityAvatar?.ImageUrl,
+            UserAvatar = p.UserAvatar?.ImageUrl,
+            CountComments = _context.Comments.Where(c => c.PostId == id).Count(),
+            PostImages = _context.Images.Where(i => i.EntityTarget == "Post" && i.EntityId == p.Post.Id && i.ImageType == "image").Select(p => p.ImageUrl).ToList()
+        };
 
         var postResponse = _mapper.Map<PostResponse>(post);
 

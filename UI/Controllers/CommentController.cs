@@ -1,4 +1,6 @@
-﻿using Core.Interfaces.Services;
+﻿using Core.Entities;
+using Core.Interfaces.Services;
+using Core.Models;
 using Core.Models.Comment;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -37,16 +39,17 @@ public class CommentController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpGet("byPost")]
-    public async Task<IActionResult> GetByPostAsync([FromQuery] long postId, int page = 1, int pageSize = 10)
+    [HttpGet("/by-post/")]
+    public async Task<IActionResult> GetByPostAsync([FromQuery] int postId, int curPage = 1)
     {
-        if (page < 1 || pageSize < 1)
-            StatusCode(400, ApiResponse.CreateFailure("Ошибка параметров page или pageSize"));
+        PaginationRequest pagination = new PaginationRequest()
+        {
+            Page = curPage,
+            PageSize = 20
+        };
+        var result = await _commentService.GetByPostIdAsync(postId, pagination.Page, pagination.PageSize);
 
-        var result = await _commentService.GetByPostIdAsync(postId, page, pageSize);
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        return Json(result.Data);
     }
 
     [HttpPost]

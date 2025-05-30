@@ -1,4 +1,6 @@
-﻿namespace Core.Models.Post;
+﻿using Core.Models.Comment;
+
+namespace Core.Models.Post;
 
 public class PostWithLikes
 {
