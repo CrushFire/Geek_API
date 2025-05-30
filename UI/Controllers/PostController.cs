@@ -141,14 +141,14 @@ public class PostsController : CustomControllerBase
     }
 
     [HttpGet("/liked-posts/")]
-    public async Task<IActionResult> TakeUserLikesPost([FromQuery] int curPage = 1)
+    public async Task<IActionResult> TakeUserLikesPost([FromQuery] long userId, int curPage = 1)
     {
         var pagination = new PaginationRequest()
         {
             Page = curPage,
             PageSize = 10
         };
-        var result = await _postService.GetUserLikesPost(pagination, UserId.Value);
+        var result = await _postService.GetUserLikesPost(pagination, userId);
 
         //Штука для смены языка, как раз таки мой мидлвеар
         //ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
@@ -158,14 +158,14 @@ public class PostsController : CustomControllerBase
     }
 
     [HttpGet("/published-posts/")]
-    public async Task<IActionResult> TakePostPublishUser([FromQuery] int curPage = 1)
+    public async Task<IActionResult> TakePostPublishUser([FromQuery] long userId, int curPage = 1)
     {
         var pagination = new PaginationRequest()
         {
             Page = curPage,
             PageSize = 10
         };
-        var result = await _postService.GetPostPublishUser(pagination, UserId.Value);
+        var result = await _postService.GetPostPublishUser(pagination, userId);
 
         //Штука для смены языка, как раз таки мой мидлвеар
         //ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";

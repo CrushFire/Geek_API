@@ -8,7 +8,9 @@ using Core.Models.Comment;
 using Core.Models.Community;
 using Core.Results;
 using DataAccess;
+using FluentNHibernate.Conventions;
 using Microsoft.EntityFrameworkCore;
+using NHibernate.Util;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -140,6 +142,24 @@ namespace Application.Services
             var communityResponse = _mapper.Map<CommunityResponse>(community);
 
             return ServiceResult<CommunityResponse>.Success(communityResponse);
+        }
+
+        public async Task<ServiceResult<string>> SubOrNo (long userId, long communityId)
+        {
+            var isSub = _context.UsersCommunities.FirstOrDefault(uc => uc.UserId == userId && uc.CommunityId == communityId);
+
+            if(isSub == null)
+            {
+                return ServiceResult<string>.Success("unSub");
+            }
+            else if(isSub.UserRole == "creator")
+            {
+                return ServiceResult<string>.Success("creator");
+            }
+            else
+            {
+                return ServiceResult<string>.Success("sub");
+            }
         }
 
         public async Task<ServiceResult<bool>> SubsribeAsync(long userId, long communityId)

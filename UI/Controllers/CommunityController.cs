@@ -43,7 +43,7 @@ public class CommunityController : CustomControllerBase
 
     [HttpGet("/subscribed-communities/")]
 
-    public async Task<IActionResult> GetCommunitiesSubscribeUser([FromQuery] int curPage)
+    public async Task<IActionResult> GetCommunitiesSubscribeUser([FromQuery] long userId, int curPage)
     {
         var pagination = new PaginationRequest()
         {
@@ -51,14 +51,14 @@ public class CommunityController : CustomControllerBase
             PageSize = 10
         };
 
-        var result = await _communityService.GetCommunitiesSubscribeUser(pagination, UserId.Value);
+        var result = await _communityService.GetCommunitiesSubscribeUser(pagination, userId);
 
         return Json(result.Data);
     }
 
     [HttpGet("/created-communities/")]
 
-    public async Task<IActionResult> GetCommunitiesCreatedUser([FromQuery] int curPage)
+    public async Task<IActionResult> GetCommunitiesCreatedUser([FromQuery] long userId, int curPage)
     {
         var pagination = new PaginationRequest()
         {
@@ -66,7 +66,16 @@ public class CommunityController : CustomControllerBase
             PageSize = 10
         };
 
-        var result = await _communityService.GetCommunitiesCreatedUser(pagination, UserId.Value);
+        var result = await _communityService.GetCommunitiesCreatedUser(pagination, userId);
+
+        return Json(result.Data);
+    }
+
+    [HttpGet("/check-role-community/")]
+
+    public async Task<IActionResult> SubOrNo([FromQuery] long userId, [FromQuery] long communityId)
+    {
+        var result = await _communityService.SubOrNo(userId, communityId);
 
         return Json(result.Data);
     }
@@ -84,18 +93,18 @@ public class CommunityController : CustomControllerBase
 
     [HttpPost("/sub")]
 
-    public async Task<IActionResult> SubscribeAsync([FromBody] long communityId)
+    public async Task<IActionResult> SubscribeAsync([FromBody] long communityId, [FromQuery] long userId)
     {
-        var result = await _communityService.SubsribeAsync(UserId.Value, communityId);
+        var result = await _communityService.SubsribeAsync(userId, communityId);
 
         return Json(result.Data);
     }
 
     [HttpDelete("/unsub")]
 
-    public async Task<IActionResult> UnSubscribeAsync([FromBody] long communityId)
+    public async Task<IActionResult> UnSubscribeAsync([FromBody] long communityId, [FromQuery] long userId)
     {
-        var result = await _communityService.UnSubscribeAsync(UserId.Value, communityId);
+        var result = await _communityService.UnSubscribeAsync(userId, communityId);
 
         return Json(result.Data);
     }

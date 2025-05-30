@@ -69,6 +69,23 @@ public class UserController : CustomControllerBase
         return View("Home", result.Data);
     }
 
+    [HttpGet("/UserPage/{userId}")]
+    public async Task<IActionResult> GetUserByForUserPageAsync([FromRoute] long userId)
+    {
+        if(userId == UserId.Value)
+        {
+            return Redirect($"/Home/{userId}");
+        }
+        Console.WriteLine(UserId + "+" + userId);
+        //Штука для смены языка, как раз таки мой мидлвеар
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.userIdToken = UserId.Value;
+        //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
+        var result = await _userService.GetUserByIdAsync(userId);
+
+        return View("UserPage", result.Data);
+    }
+
     [HttpGet("/take-reactions/{userId}")]
     public async Task<IActionResult> GetUserReactions([FromRoute] long userId)
     {
