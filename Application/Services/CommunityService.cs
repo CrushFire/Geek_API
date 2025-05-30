@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.Services;
+using Core.Models;
 using Core.Models.Category;
 using Core.Models.Comment;
 using Core.Models.Community;
@@ -10,6 +11,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,19 +54,82 @@ namespace Application.Services
             return ServiceResult<List<CommunityResponse>>.Success(communitiesResponse);
         }
 
-        public async Task<ServiceResult<List<CommunityResponse>>> GetByUserIdAsync(long userId, int page = 1, int pageSize = 10)
+        public async Task<ServiceResult<List<CommunityResponse>>> GetCommunitiesSubscribeUser(PaginationRequest paginationRequest, long userId)
         {
-            var communities = await _context.Communities
+            var subscribedCommunities = await _context.Communities
                 .Include(c => c.UserCommunities)
-                .Where(x => x.UserCommunities.Any(u => u.UserId == userId))
-                .IncludeCommunityImages()
+                .Where(u => u.UserCommunities.Any(u => u.UserId == userId && u.UserRole == "subscriber"))
+                .Include(c => c.CommunityCategories)
                 .OrderByDescending(p => p.CreateAt)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .Select(c => new
+                {
+                    Community = c,
+                    CategoriesRu = c.CommunityCategories
+                        .Select(pc => pc.Category.Title)
+                        .ToList(),
+                    CategoriesEng = c.CommunityCategories
+                        .Select(pc => pc.Category.EngTitle)
+                        .ToList(),
+                    Avatar = _context.Images.FirstOrDefault(i => i.EntityTarget == "Community" && i.ImageType == "avatar" && i.EntityId == c.Id),
+                    Author = c.UserCommunities.FirstOrDefault(u => u.CommunityId == c.Id && u.UserRole == "creator")
+                })
+                .Skip((paginationRequest.Page - 1) * paginationRequest.PageSize)
+                .Take(paginationRequest.PageSize)
                 .ToListAsync();
 
-            var communitiesResponse = _mapper.Map<List<CommunityResponse>>(communities);
-            return ServiceResult<List<CommunityResponse>>.Success(communitiesResponse);
+            var communitiesResponse = subscribedCommunities.Select(s => new CommunityResponse()
+            {
+                Id = s.Community.Id,
+                CommunityName = s.Community.Name,
+                Description = s.Community.Description,
+                AvatarUrl = s.Avatar.ImageUrl,
+                CategoriesRu = s.CategoriesRu,
+                CategoriesEng = s.CategoriesEng,
+                NumberOfMember = s.Community.UserCommunities.Count(),
+                Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == s.Author.Id)),
+                CreateAt = s.Community.CreateAt
+            });
+
+            return ServiceResult<List<CommunityResponse>>.Success(communitiesResponse.ToList());
+    }
+
+        public async Task<ServiceResult<List<CommunityResponse>>> GetCommunitiesCreatedUser(PaginationRequest paginationRequest, long userId)
+        {
+            var subscribedCommunities = await _context.Communities
+                .Include(c => c.UserCommunities)
+                .Where(u => u.UserCommunities.Any(u => u.UserId == userId && u.UserRole == "creator"))
+                .Include(c => c.CommunityCategories)
+                .OrderByDescending(p => p.CreateAt)
+                .Select(c => new
+                {
+                    Community = c,
+                    CategoriesRu = c.CommunityCategories
+                        .Select(pc => pc.Category.Title)
+                        .ToList(),
+                    CategoriesEng = c.CommunityCategories
+                        .Select(pc => pc.Category.EngTitle)
+                        .ToList(),
+                    Avatar = _context.Images.FirstOrDefault(i => i.EntityTarget == "Community" && i.ImageType == "avatar" && i.EntityId == c.Id),
+                    Author = _context.Users.FirstOrDefault(u => u.Id == userId)
+                })
+                .Skip((paginationRequest.Page - 1) * paginationRequest.PageSize)
+                .Take(paginationRequest.PageSize)
+                .ToListAsync();
+
+            var communitiesResponse = subscribedCommunities.Select(s => new CommunityResponse()
+            {
+                Id = s.Community.Id,
+                CommunityName = s.Community.Name,
+                Description = s.Community.Description,
+                AvatarUrl = s.Avatar.ImageUrl,
+                CategoriesRu = s.CategoriesRu,
+                CategoriesEng = s.CategoriesEng,
+                NumberOfMember = s.Community.UserCommunities.Count(),
+                Author = _mapper.Map<UserResponse>(s.Author),
+                CreateAt = s.Community.CreateAt
+            });
+
+            return ServiceResult<List<CommunityResponse>>.Success(communitiesResponse.ToList());
         }
 
         public async Task<ServiceResult<CommunityResponse>> AddCommunityAsync(CommunityAddRequest communityAddRequest)
@@ -104,7 +169,7 @@ namespace Application.Services
         public async Task<ServiceResult<bool>> UnSubscribeAsync(long userId, long communityId)
         {
             var userCommunity = await _context.UsersCommunities.FirstOrDefaultAsync(x => x.UserId == userId && x.CommunityId == communityId);
-            if (userCommunity.UserRole == "admin")
+            if (userCommunity.UserRole == "creator")
             {
                 return ServiceResult<bool>.Failure("Админ не может отписаться от сообщества");
             }

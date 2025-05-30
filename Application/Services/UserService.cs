@@ -31,9 +31,9 @@ public class UserService : IUserService
             .Where(x => x.Id == id)
             .Include(u => u.Comments)
             .Include(u => u.Posts)
-            .Include(u => u.Reactions)
+            .Include(u => u.Reactions).Where(p => p.Reactions.Any(r => r.UserId == id && r.IsLike == true))
             .Include(u => u.UserCommunities)
-            .IncludeUserImages()
+            .Include(u => u.Images)//тут был экстендид ну щас вроде ок...
             .FirstOrDefaultAsync();
 
         var userResponse = _mapper.Map<UserResponse>(user);

@@ -265,6 +265,15 @@ body {
     align-items: center;
 }
 
+/* Для состояния "Joined" (синий) */
+.joined-btn {
+    right: 0;
+    top: 38%;
+    transform: translateY(-38%);
+    background-color: #0d6efd; /* Bootstrap primary */
+    color: white;
+    border-color: transparent;
+}
 
 
 

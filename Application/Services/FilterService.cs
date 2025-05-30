@@ -154,8 +154,20 @@ namespace Application.Services
         public async Task<ServiceResult<List<CommunityResponse>>> GetCommunitiesByFilter(ParametersFilter filter)
         {
             var query = _context.Communities
-            .Include(p => p.UserCommunities)//?
-            .IncludeCommunityImages().AsQueryable();
+                .Include(c => c.UserCommunities)
+                .Include(c => c.CommunityCategories)
+                .OrderByDescending(p => p.CreateAt)
+                .Select(c => new
+                {
+                    Community = c,
+                    CategoriesRu = c.CommunityCategories
+                        .Select(pc => pc.Category.Title)
+                        .ToList(),
+                    CategoriesEng = c.CommunityCategories
+                        .Select(pc => pc.Category.EngTitle)
+                        .ToList(),
+                    Avatar = _context.Images.FirstOrDefault(i => i.EntityTarget == "Community" && i.ImageType == "avatar" && i.EntityId == c.Id)
+                }).AsQueryable();
 
 
             if (!string.IsNullOrEmpty(filter.Name))
@@ -163,20 +175,20 @@ namespace Application.Services
                 string[] parts = filter.Name.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
                 query = query
-                    .Where(c => parts.Any(part => c.Name.ToLower().Contains(part)))
+                    .Where(c => parts.Any(part => c.Community.Name.ToLower().Contains(part)))
                     .Select(c => new
                     {
                         Community = c,
-                        MatchCount = parts.Count(part => c.Name.ToLower().Contains(part))
+                        MatchCount = parts.Count(part => c.Community.Name.ToLower().Contains(part))
                     })
                     .OrderByDescending(x => x.MatchCount)
-                    .ThenBy(x => x.Community.Name)
+                    .ThenBy(x => x.Community.Community.Name)
                     .Select(x => x.Community);
             }
 
             if (filter.CommunityFilter.MinFollowers > 0)
             {
-                query = query.Where(c => c.UserCommunities.Count() >= filter.CommunityFilter.MinFollowers);
+                query = query.Where(c => c.Community.UserCommunities.Count() >= filter.CommunityFilter.MinFollowers);
             }
 
             if (filter.DateCreateAt != DateCreateRange.None)
@@ -194,7 +206,7 @@ namespace Application.Services
                     _ => DateTime.MinValue
                 };
 
-                query = query.Where(p => p.CreateAt >= dateThreshold);
+                query = query.Where(p => p.Community.CreateAt >= dateThreshold);
             }
 
             //if (!string.IsNullOrEmpty(filter.CommunityFilter.Categories))
@@ -208,18 +220,29 @@ namespace Application.Services
 
                 query = filter.SortBy.ToLower() switch
                 {
-                    "followers" => ascending ? query.OrderBy(p => p.UserCommunities.Count()) : query.OrderByDescending(p => p.UserCommunities.Count()),
-                    "title" => ascending ? query.OrderBy(p => p.Name) : query.OrderByDescending(p => p.Name),
-                    "created" => ascending ? query.OrderBy(p => p.CreateAt) : query.OrderByDescending(p => p.CreateAt),
-                    _ => ascending ? query.OrderBy(p => p.UserCommunities.Count()) : query.OrderByDescending(p => p.UserCommunities.Count())
+                    "followers" => ascending ? query.OrderBy(p => p.Community.UserCommunities.Count()) : query.OrderByDescending(p => p.Community.UserCommunities.Count()),
+                    "title" => ascending ? query.OrderBy(p => p.Community.Name) : query.OrderByDescending(p => p.Community.Name),
+                    "created" => ascending ? query.OrderBy(p => p.Community.CreateAt) : query.OrderByDescending(p => p.Community.CreateAt),
+                    _ => ascending ? query.OrderBy(p => p.Community.UserCommunities.Count()) : query.OrderByDescending(p => p.Community.UserCommunities.Count())
                 };
             }
 
             var skip = (filter.Pagination.Page - 1) * filter.Pagination.PageSize;
             query = query.Skip(skip).Take(filter.Pagination.PageSize);
 
-            var communities = await query.ToListAsync();
-            var result = _mapper.Map<List<CommunityResponse>>(communities);
+            var communitiesResponse = query.Select(s => new CommunityResponse()
+            {
+                Id = s.Community.Id,
+                CommunityName = s.Community.Name,
+                Description = s.Community.Description,
+                AvatarUrl = s.Avatar.ImageUrl,
+                CategoriesRu = s.CategoriesRu,
+                CategoriesEng = s.CategoriesEng,
+                NumberOfMember = s.Community.UserCommunities.Count(),
+                CreateAt = s.Community.CreateAt
+            });
+
+            var result = communitiesResponse.ToList();
 
             return ServiceResult<List<CommunityResponse>>.Success(result);
         }

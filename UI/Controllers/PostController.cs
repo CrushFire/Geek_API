@@ -158,6 +158,23 @@ public class PostsController : CustomControllerBase
         return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
     }
 
+    [HttpGet("/published-posts/")]
+    public async Task<IActionResult> TakePostPublishUser([FromQuery] int curPage = 1)
+    {
+        var pagination = new PaginationRequest()
+        {
+            Page = curPage,
+            PageSize = 10
+        };
+        var result = await _postService.GetPostPublishUser(pagination, UserId.Value);
+
+        //Штука для смены языка, как раз таки мой мидлвеар
+        //ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
+
+        return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
+    }
+
 
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] PostAddRequest request)

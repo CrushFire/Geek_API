@@ -24,8 +24,8 @@
                         }
                         else
                         {
-                            <div class="rounded-circle d-flex justify-content-center align-items-center user-avatar-placeholder"
-                                 style="width: 150px; height: 150px; font-size: 48px; font-weight: bold; color: white; background-color: #4D96FF;">
+                            <div class="rounded-circle"
+                                 style="width: 200px; height: 200px; font-size: 48px; font-weight: bold; color: white; background-color: #4D96FF;">
                                 @Model.UserName.Substring(0, 1).ToUpper()
                             </div>
                         }
@@ -33,11 +33,11 @@
                         <div style="margin-top: 45px">
                             <div class="d-flex justify-content-around text-center">
                                 <div>
-                                    <h5>@Model.NumberOfPosts</h5>
+                                    <h5>@Model.NumberOfLikes</h5>
                                     <p>Likes 💙</p>
                                 </div>
                                 <div>
-                                    <h5>@Model.NumberOfLikes</h5>
+                                    <h5>@Model.NumberOfPosts</h5>
                                     <p>Posts 📚</p>
                                 </div>
                                 <div>
@@ -81,12 +81,12 @@
 
                 <div class="d-flex justify-content-around mb-4">
                     <button class="btn btn-outline-secondary" onclick="loadLikedPosts()">Liked Posts</button>
-                    <a href="/User/MyPosts/@Model.Id" class="btn btn-outline-secondary">My Posts</a>
-                    <a href="/User/SubscribedCommunities/@Model.Id" class="btn btn-outline-secondary">Subscriptions</a>
-                    <a href="/User/OwnedCommunities/@Model.Id" class="btn btn-outline-secondary">My Communities</a>
+                    <button class="btn btn-outline-secondary" onclick="loadPublishedPosts()">My Posts</button>
+                    <button class="btn btn-outline-secondary" onclick="loadSubscribedCommunities()"> Subscriptions</button>
+                    <button class="btn btn-outline-secondary" onclick="loadOwnedCommunities()">My Communities</button>
                 </div>
 
-                <div class="post" id="liked-posts">
+                <div class="post" id="posts">
                     
                 </div>
 
@@ -132,7 +132,7 @@
 
         const userId = @Model.Id;
         const language = "@language";
-        let likedPage = 1;
+        let page = 1;
         let likedLoading = false;
         let likedReachedEnd = false;
         let userReactions = [];
@@ -147,13 +147,18 @@
         }
 
         async function loadLikedPosts() {
-            if (likedLoading || likedReachedEnd) return;
+            if (likedLoading) return;
+
+            const container = document.getElementById("posts");
+            container.innerHTML = "";
+            page = 1;
+            likedReachedEnd = false;
 
             likedLoading = true;
-            const container = document.getElementById("liked-posts");
+            await loadUserReactions();
 
             try {
-                const response = await fetch(`/liked-posts/?curPage=${likedPage}`);
+                const response = await fetch(`/liked-posts/?curPage=${page}`);
                 const posts = await response.json();
 
                 if (!posts || posts.length === 0) {
@@ -205,7 +210,7 @@
                             <div class="post-images mb-3 d-flex flex-wrap gap-2">
                                 ${post.postImages.map((imgUrl) => `
                                     <img src="${imgUrl}" alt="post image" class="img-thumbnail post-img-thumb"
-                                         style="max-width: 120px; cursor: pointer;"
+                                         style="max-width: 200px; cursor: pointer;"
                                          onclick="openImageModal('${imgUrl}')">`).join("")}
                             </div>
                             <p>${post.content}</p>
@@ -226,7 +231,101 @@
                     container.appendChild(div);
                 });
 
-                likedPage++;
+                page++;
+            } catch (err) {
+                container.innerHTML = `<p>${language === "ru" ? "Ошибка загрузки понравившихся постов." : "Failed to load liked posts."}</p>`;
+                console.error(err);
+            } finally {
+                likedLoading = false;
+            }
+        }
+
+        async function loadPublishedPosts() {
+            if (likedLoading) return;
+
+            const container = document.getElementById("posts");
+            container.innerHTML = "";
+            page = 1;
+            likedReachedEnd = false;
+
+            likedLoading = true;
+            await loadUserReactions();
+
+            try {
+                const response = await fetch(`/published-posts/?curPage=${page}`);
+                const posts = await response.json();
+
+                if (!posts || posts.length === 0) {
+                    likedReachedEnd = true;
+                    const endMsg = document.createElement("p");
+                    endMsg.className = "text-center text-muted";
+                    endMsg.innerText = language === "ru" ? "Понравившиеся посты закончились." : "No more liked posts.";
+                    container.appendChild(endMsg);
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const categoriesStr = language === "ru"
+                        ? (Array.isArray(post.categoriesRu) ? post.categoriesRu.map(c => `#${c}`).join(" ") : "")
+                        : (Array.isArray(post.categoriesEng) ? post.categoriesEng.map(c => `#${c}`).join(" ") : "");
+
+                    const isCommunityPost = !!post.communityName;
+                    const name = isCommunityPost ? post.communityName : post.author.userName;
+                    const avatarUrl = isCommunityPost ? post.communityAvatar : post.userAvatar;
+                    const borderClass = isCommunityPost ? "border-community" : "border-user";
+
+                    const reaction = userReactions.find(r => Number(r.postId) === Number(post.id));
+                    const isUserLiked = reaction?.isLike === true;
+                    const isUserDisliked = reaction?.isLike === false;
+
+                    const div = document.createElement("div");
+                    div.className = "card mb-3";
+
+                    const avatarHtml = avatarUrl
+                        ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 ${borderClass}" style="width: 45px; height: 45px; object-fit: cover;">`
+                        : `<div class="rounded-circle me-2 ${borderClass} d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                                       ${name.charAt(0).toUpperCase()}
+                                   </div>`;
+
+                    div.innerHTML = `
+                                <div class="card-body position-relative">
+                                    <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                                        ${new Date(post.createAt).toLocaleDateString()} ${new Date(post.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+
+                                    <div class="d-flex align-items-center mb-3">
+                                        <a href="${isCommunityPost ? `/Community/${post.communityId}` : `/UserPage/${post.author.id}`}" class="d-flex align-items-center text-decoration-none text-dark">
+                                            ${avatarHtml}
+                                            <strong>${name}</strong>
+                                        </a>
+                                    </div>
+
+                                    <h5>${post.title}</h5>
+                                    <div class="post-images mb-3 d-flex flex-wrap gap-2">
+                                        ${post.postImages.map((imgUrl) => `
+                                            <img src="${imgUrl}" alt="post image" class="img-thumbnail post-img-thumb"
+                                                 style="max-width: 200px; cursor: pointer;"
+                                                 onclick="openImageModal('${imgUrl}')">`).join("")}
+                                    </div>
+                                    <p>${post.content}</p>
+                                    <span class="badge bg-primary me-1">${categoriesStr}</span>
+                                    <p class="text-muted mt-2">
+                                        <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''}" id="like-${post.id}">💙 <span>${post.likes}</span></button>
+                                        /
+                                        <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>
+                                        👀${post.views}
+                                        <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
+                                            ${post.comments} 💬 ${language === "ru" ? "Комментарии" : "Comments"}
+                                        </a>
+                                    </p>
+                                </div>
+                            `;
+
+                    observeViews(post.id, div);//ломает эта залупа
+                    container.appendChild(div);
+                });
+
+                page++;
             } catch (err) {
                 container.innerHTML = `<p>${language === "ru" ? "Ошибка загрузки понравившихся постов." : "Failed to load liked posts."}</p>`;
                 console.error(err);
@@ -316,5 +415,200 @@
             await loadUserReactions();
             await loadLikedPosts(); // <-- Вызов загрузки постов
         });
+
+        let communitiesLoading = false;
+        let communitiesReachedEnd = false;
+
+        async function loadSubscribedCommunities() {
+            if (communitiesLoading) return;
+
+            const container = document.getElementById("posts");
+            container.innerHTML = "";
+            page = 1;
+            communitiesReachedEnd = false;
+
+            communitiesLoading = true;
+
+            try {
+                const response = await fetch(`/subscribed-communities?curPage=${page}`);
+                const communities = await response.json();
+
+                if (!communities || communities.length === 0) {
+                    communitiesReachedEnd = true;
+                    const endMsg = document.createElement("p");
+                    endMsg.className = "text-center text-muted";
+                    endMsg.innerText = language === "ru" ? "Подписки закончились." : "No more subscriptions.";
+                    container.appendChild(endMsg);
+                    return;
+                }
+
+                communities.forEach(comm => {
+                    const categoriesStr = language === "ru"
+                        ? (Array.isArray(comm.categoriesRu) ? comm.categoriesRu.map(c => `#${c}`).join(" ") : "")
+                        : (Array.isArray(comm.categoriesEng) ? comm.categoriesEng.map(c => `#${c}`).join(" ") : "");
+
+                    const isJoined = comm.isJoined === true; // предположим, что есть
+
+                    const avatarHtml = comm.avatarUrl
+                        ? `<img src="${comm.avatarUrl}" alt="avatar" class="rounded-circle me-2 border-community" style="width: 45px; height: 45px; object-fit: cover;">`
+                        : `<div class="rounded-circle me-2 border-community d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                       ${comm.communityName.charAt(0).toUpperCase()}
+                   </div>`;
+
+                    const buttonHtml = 
+                        `<button class="btn btn-light join-btn" data-community-id="${comm.id}"
+                            style="position: absolute; top: 28px; right: 40px; width: 90px; color: #888; border-color: #ccc;">
+                        Unjoin
+                   </button>`;
+
+                    const div = document.createElement("div");
+                    div.className = "card mb-3";
+
+                    div.innerHTML = `
+                <div class="card-body position-relative">
+                    <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                        ${new Date(comm.createAt).toLocaleDateString()} ${new Date(comm.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                    <div class="d-flex align-items-center position-relative">
+                        <a href="/Community/${comm.id}" class="d-flex align-items-center text-decoration-none text-dark">
+                            ${avatarHtml}
+                            <strong>${comm.communityName}</strong>
+                        </a>
+                        ${buttonHtml}
+                    </div>
+                    <p>${comm.description || ''}</p>
+                    <span class="badge bg-primary me-1">${categoriesStr}</span>
+                    <p class="text-muted mb-0">
+                        <small>👥 Подписчиков: ${comm.numberOfMember}</small>
+                    </p>
+                </div>
+            `;
+
+                    container.appendChild(div);
+                });
+
+
+
+                page++;
+            } catch (err) {
+                container.innerHTML = `<p>${language === "ru" ? "Ошибка загрузки сообществ." : "Failed to load communities."}</p>`;
+                console.error(err);
+            } finally {
+                communitiesLoading = false;
+            }
+        }
+
+        document.addEventListener("click", async function (event) {
+            if (event.target.classList.contains("join-btn")) {
+                const button = event.target;
+                const communityId = parseInt(button.dataset.communityId);
+                const isJoined = button.classList.contains("btn-primary");
+
+                const url = isJoined ? "/sub" : "/unsub";
+                const method = isJoined ? "POST" : "DELETE";
+
+                try {
+                    const res = await fetch(url, {
+                        method: method,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(communityId) // передаём только ID сообщества
+                    });
+
+                    const success = await res.json();
+
+                    if (success === true) {
+                        if (isJoined) {
+                            // Отписался
+                            button.classList.remove("btn-primary");
+                            button.classList.add("btn-light");
+                            button.textContent = "Unjoin";
+                            button.style.color = "#888";
+                            button.style.borderColor = "#ccc";
+                        } else {
+                            // Подписался
+                            button.classList.remove("btn-light");
+                            button.classList.add("btn-primary");
+                            button.textContent = "Joined";
+                            button.style.color = "white";
+                            button.style.borderColor = "";
+                        }
+                    } else {
+                        alert(language === "ru" ? "Ошибка подписки." : "Subscription failed.");
+                    }
+                } catch (error) {
+                    console.error("Ошибка при подписке:", error);
+                    alert(language === "ru" ? "Ошибка сети." : "Network error.");
+                }
+            }
+        });
+
+
+        async function loadOwnedCommunities() {
+            if (communitiesLoading) return;
+
+            const container = document.getElementById("posts");
+            container.innerHTML = "";
+            page = 1;
+            communitiesReachedEnd = false;
+
+            communitiesLoading = true;
+
+            try {
+                const response = await fetch(`/created-communities/?curPage=${page}`);
+                const communities = await response.json();
+
+                if (!communities || communities.length === 0) {
+                    communitiesReachedEnd = true;
+                    const endMsg = document.createElement("p");
+                    endMsg.className = "text-center text-muted";
+                    endMsg.innerText = language === "ru" ? "Сообщества закончились." : "No more communities.";
+                    container.appendChild(endMsg);
+                    return;
+                }
+
+                communities.forEach(comm => {
+                    const categoriesStr = language === "ru"
+                        ? (Array.isArray(comm.categoriesRu) ? comm.categoriesRu.map(c => `#${c}`).join(" ") : "")
+                        : (Array.isArray(comm.categoriesEng) ? comm.categoriesEng.map(c => `#${c}`).join(" ") : "");
+
+                    const div = document.createElement("div");
+                    div.className = "card mb-3";
+
+                    const avatarHtml = comm.avatarUrl
+                        ? `<img src="${comm.avatarUrl}" alt="avatar" class="rounded-circle me-2 border-community" style="width: 45px; height: 45px; object-fit: cover;">`
+                        : `<div class="rounded-circle me-2 border-community d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                               ${comm.communityName.charAt(0).toUpperCase()}
+                           </div>`;
+
+                    div.innerHTML = `
+                        <div class="card-body">
+                           <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                            ${new Date(comm.createAt).toLocaleDateString()} ${new Date(comm.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                            <a href="/Community/${comm.id}" class="d-flex align-items-center text-de coration-none text-dark mb-2">
+                                ${avatarHtml}
+                                <strong>${comm.communityName}</strong>
+                            </a>
+                            <p>${comm.description || ''}</p>
+                            <span class="badge bg-primary me-1">${categoriesStr}</span>
+                            <p class="text-muted mb-0">
+                            <small>👥 Подписчиков: ${comm.numberOfMember}</small>
+                            </p>
+                        </div>
+                    `;
+
+                    container.appendChild(div);
+                });
+
+                page++;
+            } catch (err) {
+                container.innerHTML = `<p>${language === "ru" ? "Ошибка загрузки сообществ." : "Failed to load communities."}</p>`;
+                console.error(err);
+            } finally {
+                communitiesLoading = false;
+            }
+        }
     </script>
 }

@@ -7,6 +7,7 @@ using Core.Models.Community;
 using Core.Models.DataPage;
 using Core.Models.Post;
 using Core.Models.User;
+using System.ComponentModel.DataAnnotations;
 
 namespace UI.Mappers;
 
@@ -57,16 +58,19 @@ public class AutoMapper : Profile
             .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.CountComments));
 
 
-        CreateMap<Community, CommunityResponse>();
+        CreateMap<Community, CommunityResponse>()
+            .ForMember(dest => dest.CommunityName, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.NumberOfMember, opt => opt.MapFrom(src => src.UserCommunities.Count()));
+
         CreateMap<CommunityAddRequest, Community>();
 
-        CreateMap<Comment, CommentResponse>();
-        CreateMap<CommentAddRequest, Comment>();
+                CreateMap<Comment, CommentResponse>();
+                CreateMap<CommentAddRequest, Comment>();
 
-        CreateMap<Category, CategoryResponse>();
+                CreateMap<Category, CategoryResponse>();
 
-        CreateMap<DataPage, DataPageResponse>();
-        CreateMap<DataPageRequest, DataPage>();
+                CreateMap<DataPage, DataPageResponse>();
+                CreateMap<DataPageRequest, DataPage>();
 
     }
 }

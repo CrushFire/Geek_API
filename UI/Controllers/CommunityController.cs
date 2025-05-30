@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Core.Interfaces.Services;
+using Core.Models;
 using Core.Models.Community;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -40,15 +41,34 @@ public class CommunityController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpGet("byUser")]
+    [HttpGet("/subscribed-communities/")]
 
-    public async Task<IActionResult> GetByUserIdAsync([FromQuery] long userId)
+    public async Task<IActionResult> GetCommunitiesSubscribeUser([FromQuery] int curPage)
     {
-        var result = await _communityService.GetByUserIdAsync(userId);
+        var pagination = new PaginationRequest()
+        {
+            Page = curPage,
+            PageSize = 10
+        };
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        var result = await _communityService.GetCommunitiesSubscribeUser(pagination, UserId.Value);
+
+        return Json(result.Data);
+    }
+
+    [HttpGet("/created-communities/")]
+
+    public async Task<IActionResult> GetCommunitiesCreatedUser([FromQuery] int curPage)
+    {
+        var pagination = new PaginationRequest()
+        {
+            Page = curPage,
+            PageSize = 10
+        };
+
+        var result = await _communityService.GetCommunitiesCreatedUser(pagination, UserId.Value);
+
+        return Json(result.Data);
     }
 
     [HttpPost]
@@ -62,26 +82,22 @@ public class CommunityController : CustomControllerBase
                 : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpPost("sub")]
+    [HttpPost("/sub")]
 
-    public async Task<IActionResult> SubscribeAsync([FromBody] long userId, long communityId)
+    public async Task<IActionResult> SubscribeAsync([FromBody] long communityId)
     {
-        var result = await _communityService.SubsribeAsync(userId, communityId);
+        var result = await _communityService.SubsribeAsync(UserId.Value, communityId);
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        return Json(result.Data);
     }
 
-    [HttpDelete("unsub")]
+    [HttpDelete("/unsub")]
 
-    public async Task<IActionResult> UnSubscribeAsync([FromBody] long userId, long communityId)
+    public async Task<IActionResult> UnSubscribeAsync([FromBody] long communityId)
     {
-        var result = await _communityService.UnSubscribeAsync(userId, communityId);
+        var result = await _communityService.UnSubscribeAsync(UserId.Value, communityId);
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        return Json(result.Data);
     }
 
     [HttpPut]
