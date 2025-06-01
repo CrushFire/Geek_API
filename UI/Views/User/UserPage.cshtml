@@ -4,7 +4,7 @@
 
 @{
     var language = ViewBag.Language;
-    var avatarImage = Model.Images?.FirstOrDefault(i => i.ImageType == "avatar");
+    var avatarImage = Model.Images?.FirstOrDefault(i => i.ImageType == "avatar" && i.Id == Model.Id && i.EntityTarget == "User");
     var userIdToken = ViewBag.userIdToken;
 }
 
@@ -20,12 +20,15 @@
                     <div class="col-md-4 text-center" style="align-items: center; margin-top: 40px;">
                         @if (avatarImage != null && !string.IsNullOrEmpty(avatarImage.ImageUrl))
                         {
-                            <img src="@avatarImage.ImageUrl" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="Avatar" />
+                            <a onclick="openImageModal('@avatarImage.ImageUrl')" style="cursor: pointer;">
+                                <img src="@avatarImage.ImageUrl" class="rounded-circle mx-auto"
+                                     style="width: 200px; height: 200px; object-fit: cover;" alt="Avatar" />
+                            </a>
                         }
                         else
                         {
-                            <div class="rounded-circle"
-                                 style="width: 200px; height: 200px; font-size: 48px; font-weight: bold; color: white; background-color: #4D96FF;">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                                 style="width: 200px; height: 200px; font-size: 58px; font-weight: bold; color: white; background-color: #4D96FF;">
                                 @Model.UserName.Substring(0, 1).ToUpper()
                             </div>
                         }
@@ -96,10 +99,10 @@
                 <hr class="my-4" />
 
                 <div class="d-flex justify-content-around mb-4">
-                    <button class="btn btn-outline-secondary" onclick="loadLikedPosts()">Liked Posts</button>
-                    <button class="btn btn-outline-secondary" onclick="loadPublishedPosts()">My Posts</button>
-                    <button class="btn btn-outline-secondary" onclick="loadSubscribedCommunities()"> Subscriptions</button>
-                    <button class="btn btn-outline-secondary" onclick="loadOwnedCommunities()">My Communities</button>
+                    <button class="btn btn-outline-secondary" onclick="loadLikedPosts()">User Liked Posts</button>
+                    <button class="btn btn-outline-secondary" onclick="loadPublishedPosts()">User Posts</button>
+                    <button class="btn btn-outline-secondary" onclick="loadSubscribedCommunities()">User Subscriptions</button>
+                    <button class="btn btn-outline-secondary" onclick="loadOwnedCommunities()">User Communities</button>
                 </div>
 
                 <div class="post" id="posts">

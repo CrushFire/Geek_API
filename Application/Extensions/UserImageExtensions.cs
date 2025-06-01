@@ -15,6 +15,7 @@ public static class UserImageExtensions
                 PasswordHash = user.PasswordHash,
                 Description = user.Description,
                 Posts = user.Posts,
+                Reactions = user.Reactions,
                 UserCommunities = user.UserCommunities,
                 Comments = user.Comments,
                 CreateAt = user.CreateAt,

@@ -1,0 +1,275 @@
+﻿@using Core.Models.Community
+@model CommunityResponse
+
+@{
+    var language = ViewBag.Language as string ?? "ru";
+}
+
+@section Head {
+
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="card shadow-lg mb-4 p-4 position-relative" style="border-radius: 1.5rem;" id="community-@Model.Id">
+
+                <div id="subscribeBtnWrapper" style="position: absolute; top: 24px; right: 24px;"></div>
+
+                <div class="d-flex align-items-center mb-4">
+                    @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+                    {
+                        <img src="@Model.AvatarUrl" alt="community avatar"
+                             class="rounded-circle border-community me-4"
+                             style="width: 100px; height: 100px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div class="rounded-circle border-community me-4 d-flex align-items-center justify-content-center"
+                             style="width: 100px; height: 100px; background-color: #4D96FF; font-size: 2.5rem; font-weight: bold; color: white;">
+                            @(Model.CommunityName?[0].ToString().ToUpper() ?? "?")
+                        </div>
+                    }
+
+                    <div>
+                        <h2 class="mb-1">@Model.CommunityName</h2>
+                        <p class="text-muted mb-0">
+                            Создано: @Model.CreateAt.ToString("dd.MM.yyyy HH:mm") • 👥 @Model.NumberOfMember участников
+                        </p>
+                    </div>
+                </div>
+
+                <p class="fs-5">@Html.Raw(Model.Description)</p>
+
+                <div class="mb-3">
+                    @{
+                        var lang = ViewBag.Language as string ?? "ru";
+                        var categories = lang == "ru" ? Model.CategoriesRu : Model.CategoriesEng;
+                    }
+                    @foreach (var cat in categories)
+                    {
+                        <span class="badge bg-primary me-2">#@cat</span>
+                    }
+                </div>
+
+                <hr />
+
+                <div id="postSection" class="mt-4" data-community-id="@Model.Id">
+                    <p>Загрузка постов...</p>
+                </div>
+
+                <!-- Модалка для увеличенного изображения -->
+                <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
+                    <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Script {
+<script>
+    const communityId = @Model.Id;
+    const userId = "@ViewBag.userIdToken";
+    const language = "@(ViewBag.Language ?? "ru")";
+
+    let curPage = 1;
+    let loading = false;
+    let reachedEnd = false;
+    let userReactions = [];
+
+    async function loadUserReactions() {
+        try {
+            const response = await fetch(`/take-reactions/${userId}`);
+            userReactions = await response.json();
+        } catch (err) {
+            console.error("Ошибка загрузки реакций", err);
+        }
+    }
+
+    function createPostElement(post) {
+        const div = document.createElement('div');
+        div.className = "card mb-3";
+
+        const avatarUrl = post.author.images?.find(img => img.imageType === 'avatar')?.imageUrl || '';
+        const avatarHtml = avatarUrl
+            ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 border-user" style="width: 45px; height: 45px; object-fit: cover;">`
+            : `<div class="rounded-circle me-2 border-user d-flex align-items-center justify-content-center" 
+                   style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                   ${post.author.userName?.charAt(0).toUpperCase() || "?"}
+               </div>`;
+
+        const categoriesStr = Array.isArray(post.categories)
+            ? post.categories.map(c => `#${c}`).join(" ")
+            : "";
+
+        const reaction = userReactions.find(r => Number(r.postId) === Number(post.id));
+        const isUserLiked = reaction?.isLike === true;
+        const isUserDisliked = reaction?.isLike === false;
+
+        div.innerHTML = `
+            <div class="card-body position-relative">
+                <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                    ${new Date(post.createAt).toLocaleDateString()} ${new Date(post.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </div>
+                <a href="/UserPage/${post.author.id}" class="d-flex align-items-center text-decoration-none text-dark mb-2">
+                    ${avatarHtml}
+                    <strong>${post.author.userName}</strong>
+                </a>
+                <h5>${post.title}</h5>
+                <div class="post-images mb-3 d-flex flex-wrap gap-2">
+                    ${Array.isArray(post.postImages) 
+                        ? post.postImages.map(imgUrl => `
+                            <img src="${imgUrl}" alt="post image" class="img-thumbnail post-img-thumb" style="max-width: 200px; cursor: pointer;"
+                                 onclick="openImageModal('${imgUrl}')">
+                        `).join("")
+                        : ""}
+                </div>
+                <p>${post.content}</p>
+                <span class="badge bg-primary me-1">${categoriesStr}</span>
+                <p class="text-muted mt-2">
+                    <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''}" id="like-${post.id}">💙 <span>${post.likes}</span></button>
+                    /
+                    <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>  👀${post.views}
+                    <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
+                        ${post.comments} 💬 Комментарии
+                    </a>
+                </p>
+            </div>
+        `;
+
+        observeViews(post.id, div);
+
+        return div;
+    }
+
+    async function loadCommunityPosts(page = 1) {
+        if (loading || reachedEnd) return;
+        loading = true;
+
+        try {
+            const res = await fetch(`/by-community/?communityId=${communityId}&curPage=${page}`);
+            const posts = await res.json();
+
+            if (!Array.isArray(posts) || posts.length === 0) {
+                if (page === 1) {
+                    document.getElementById("postSection").innerHTML = "<p>Постов нет.</p>";
+                }
+                reachedEnd = true;
+                return;
+            }
+
+            const postSection = document.getElementById('postSection');
+            if (page === 1) {
+                postSection.innerHTML = "";
+            }
+
+            posts.forEach(post => {
+                const postElem = createPostElement(post);
+                postSection.appendChild(postElem);
+            });
+
+            curPage++;
+        } catch (err) {
+            console.error("Ошибка загрузки постов:", err);
+            if (curPage === 1) {
+                document.getElementById("postSection").innerHTML = "<p>Не удалось загрузить посты.</p>";
+            }
+        } finally {
+            loading = false;
+        }
+    }
+
+    function observeViews(postId, div) {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    fetch(`/increment-view/${postId}`, { method: 'POST' }).catch(e => console.error(e));
+                    observer.disconnect();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(div);
+    }
+
+    async function handleReaction(postId, isLike) {
+        const reaction = userReactions.find(r => Number(r.postId) === postId);
+        let newReaction;
+
+        // Логика снятия/смены реакции аналогична первой странице
+        if (!reaction) {
+            newReaction = { postId, userId, isLike };
+        } else if (reaction.isLike === isLike) {
+            // Снимаем реакцию (тут зависит от API, можно отправить null или повторить)
+            newReaction = { postId, userId, isLike };
+        } else {
+            // Смена реакции
+            newReaction = { postId, userId, isLike };
+        }
+
+        try {
+            const response = await fetch('/update-reactions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newReaction)
+            });
+
+            const result = await response.json();
+
+            if (result.userReaction === null) {
+                userReactions = userReactions.filter(r => r.postId !== postId);
+            } else {
+                const idx = userReactions.findIndex(r => r.postId === postId);
+                if (idx >= 0) userReactions[idx].isLike = result.userReaction;
+                else userReactions.push({ postId, userId, isLike: result.userReaction });
+            }
+
+            const likeBtn = document.getElementById(`like-${postId}`);
+            const dislikeBtn = document.getElementById(`dislike-${postId}`);
+
+            if (result.userReaction === true) {
+                likeBtn.classList.add("user-liked");
+                dislikeBtn.classList.remove("user-disliked");
+            } else if (result.userReaction === false) {
+                dislikeBtn.classList.add("user-disliked");
+                likeBtn.classList.remove("user-liked");
+            } else {
+                likeBtn.classList.remove("user-liked");
+                dislikeBtn.classList.remove("user-disliked");
+            }
+
+            // Обновляем числа лайков/дизлайков из результата
+            likeBtn.querySelector("span").textContent = result.likes ?? likeBtn.querySelector("span").textContent;
+            dislikeBtn.querySelector("span").textContent = result.dislikes ?? dislikeBtn.querySelector("span").textContent;
+
+        } catch (err) {
+            console.error("Ошибка обновления реакции:", err);
+        }
+    }
+
+    function openImageModal(src) {
+        const modal = document.getElementById('imageModalSimple');
+        const modalImg = document.getElementById('modalImageSimple');
+        modal.style.display = "block";
+        modalImg.src = src;
+    }
+
+    function closeImageModal() {
+        document.getElementById('imageModalSimple').style.display = "none";
+    }
+
+    // Обработка скролла для подгрузки постов
+    window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+            loadCommunityPosts(curPage);
+        }
+    });
+
+    // Инициализация
+    (async () => {
+        await loadUserReactions();
+        await loadCommunityPosts(1);
+    })();
+</script>
+}

@@ -7,4 +7,6 @@ public class ImageResponse
     public string ImageUrl { get; set; } = string.Empty;
 
     public string ImageType { get; set; } //Нужно ли?
+    public long EntityId { get; set; }
+    public string EntityTarget { get; set; }
 }

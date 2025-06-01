@@ -33,14 +33,36 @@ namespace Application.Services
 
         public async Task<ServiceResult<CommunityResponse>> GetByIdAsync(long id)
         {
-            var community = await _context.Communities.Where(c => c.Id == id).IncludeCommunityImages().FirstOrDefaultAsync(c => c.Id == id);
-            if (community == null)
-            {
-                return ServiceResult<CommunityResponse>.Failure("Сообщество не найдено");
-            }
+            var c = await _context.Communities
+                .Include(c => c.UserCommunities)
+                .Include(c => c.CommunityCategories)
+                .Select(c => new
+                {
+                    Community = c,
+                    CategoriesRu = c.CommunityCategories
+                        .Select(pc => pc.Category.Title)
+                        .ToList(),
+                    CategoriesEng = c.CommunityCategories
+                        .Select(pc => pc.Category.EngTitle)
+                        .ToList(),
+                    Avatar = _context.Images.FirstOrDefault(i => i.EntityTarget == "Community" && i.ImageType == "avatar" && i.EntityId == c.Id),
+                    Author = c.UserCommunities.FirstOrDefault(u => u.CommunityId == c.Id && u.UserRole == "creator")
+                }).FirstOrDefaultAsync(c => c.Community.Id == id);
 
-            var communityResponse = _mapper.Map<CommunityResponse>(community);
-            return ServiceResult<CommunityResponse>.Success(communityResponse);
+            var communitiesResponse = new CommunityResponse()
+            {
+                Id = c.Community.Id,
+                CommunityName = c.Community.Name,
+                Description = c.Community.Description,
+                AvatarUrl = c.Avatar.ImageUrl,
+                CategoriesRu = c.CategoriesRu,
+                CategoriesEng = c.CategoriesEng,
+                NumberOfMember = c.Community.UserCommunities.Count(),
+                Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == c.Author.Id)),
+                CreateAt = c.Community.CreateAt
+            };
+
+            return ServiceResult<CommunityResponse>.Success(communitiesResponse);
         }
 
         public async Task<ServiceResult<List<CommunityResponse>>> GetCommunityAsync(int page = 1, int pageSize = 10)

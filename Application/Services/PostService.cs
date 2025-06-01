@@ -227,25 +227,52 @@ public class PostService : IPostService
     }
 
 
-    public async Task<ServiceResult<List<PostResponse>>> GetByCommunityIdAsync(long communityId, int page, int pageSize)
+    public async Task<ServiceResult<List<PostResponse>>> GetByCommunityIdAsync(long communityId, PaginationRequest paginationRequest)
     {
-        var posts = await _context.Posts
-            .Where(p => p.CommunityId == communityId)
+        var postsByCommunity = await _context.Posts
             .Include(p => p.Author)
-            .IncludePostImages()
-            .OrderByDescending(p => p.CreateAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(p => new PostWithLikes
+            .Include(p => p.PostCategories)
+                .ThenInclude(pc => pc.Category)
+            .Include(p => p.Community).Where(p => p.CommunityId == communityId)
+            .Include(p => p.Reactions)
+            .IncludePostImages().OrderByDescending(p => p.CreateAt)
+            .Select(p => new
             {
+                CommunityName = p.Community.Name,
+                CommunityAvatar = _context.Images.Where(i => i.EntityTarget == "Community" && i.EntityId == p.CommunityId && i.ImageType == "avatar").FirstOrDefault(),
+                UserAvatar = _context.Images.Where(i => i.EntityTarget == "User" && i.EntityId == p.AuthorId && i.ImageType == "avatar").FirstOrDefault(),
                 Post = p,
-                CountLikes = _context.Likes.Count(l => l.PostId == p.Id && l.IsLike),
-                CountDislikes = _context.Likes.Count(l => l.PostId == p.Id && !l.IsLike)
-            })
-            .ToListAsync();
+                LikeCount = _context.Likes.Count(l => l.PostId == p.Id && l.IsLike),
+                DislikeCount = _context.Likes.Count(l => l.PostId == p.Id && !l.IsLike),
+                CommentsCount = _context.Comments.Count(c => c.PostId == p.Id),
+            }).ToListAsync();
 
-        var postResponses = _mapper.Map<List<PostResponse>>(posts);
-        return ServiceResult<List<PostResponse>>.Success(postResponses);
+        int page = paginationRequest.Page > 0 ? paginationRequest.Page : 1;
+        int pageSize = paginationRequest.PageSize > 0 ? paginationRequest.PageSize : 10;
+        int skip = (page - 1) * pageSize;
+
+        var postsByCommunityPag = postsByCommunity.Skip(skip).Take(pageSize);
+
+        var posts = postsByCommunityPag.Select(p => new PostWithLikes()
+        {
+            Post = p.Post,
+            CountLikes = p.LikeCount,
+            CountDislikes = p.DislikeCount,
+            CategoriesRu = p.Post.PostCategories
+                .Select(pc => pc.Category.Title)
+                .ToList(),
+            CategoriesEng = p.Post.PostCategories
+                .Select(pc => pc.Category.EngTitle)
+                .ToList(),
+            CommunityAvatar = p.CommunityAvatar?.ImageUrl,
+            UserAvatar = p.UserAvatar?.ImageUrl,
+            CountComments = p.CommentsCount,
+            PostImages = _context.Images.Where(i => i.EntityTarget == "Post" && i.EntityId == p.Post.Id && i.ImageType == "image").Select(p => p.ImageUrl).ToList()
+        });
+
+        var mappingPost = _mapper.Map<List<PostResponse>>(posts);
+
+        return ServiceResult<List<PostResponse>>.Success(mappingPost);
     }
 
     public async Task<ServiceResult<List<PostResponse>>> GetByUserIdAsync(long userId, int page, int pageSize)

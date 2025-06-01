@@ -19,68 +19,92 @@
 }
 
 @section Body {
-    <div class="app-wrapper">
-        <div class="main-content">
-            <div class="post" id="post-@postId">
-
-                <div class="card-body position-relative">
-                    <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
-                        @Model.CreateAt.ToString("dd.MM.yyyy HH:mm")
-                    </div>
-
-                    <div class="d-flex align-items-center mb-3">
-                        <a href="@(
-                            isCommunityPost ? $"/Community/{Model.CommunityId}" : $"/UserPage/{Model.Author.Id}"
-                        )" class="d-flex align-items-center text-decoration-none text-dark">
-                            @if (!string.IsNullOrEmpty(avatarUrl))
-                            {
-                                <img src="@avatarUrl" alt="avatar" class="rounded-circle me-2 @borderClass"
-                                     style="width: 45px; height: 45px; object-fit: cover;" />
-                            }
-                            else
-                            {
-                                <div class="rounded-circle me-2 @borderClass d-flex align-items-center justify-content-center"
-                                     style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
-                                    @name[0].ToString().ToUpper()
-                                </div>
-                            }
-                            <strong>@name</strong>
-                        </a>
-                    </div>
-
-                    <h5>@Model.Title</h5>
-                    <div class="post-images mb-3 d-flex flex-wrap gap-2">
-                        @foreach (var imgUrl in Model.PostImages)
-                        {
-                            <img src="@imgUrl" alt="post image" class="img-thumbnail post-img-thumb"
-                                 style="max-width: 200px; cursor: pointer;"
-                                 onclick="openImageModal('@imgUrl')" />
-                        }
-                    </div>
-                    <p>@Model.Content</p>
-                    <span class="badge bg-primary me-1">@Html.Raw(categoriesStr)</span>
-
-                    <p class="text-muted mt-2">
-                        <button onclick="handleReaction(@postId, true)" class="btn btn-sm text-decoration-none" id="like-@postId">💙 <span>@Model.Likes</button>
-                        /
-                        <button onclick="handleReaction(@postId, false)" class="btn btn-sm text-decoration-none" id="dislike-@postId">💧 <span>@Model.Dislikes</span></button>
-                        👀@Model.Views
-                        <a href="/Post/@postId" class="ms-4 text-muted text-decoration-none">
-                            @Model.Comments 💬 Комментарии
-                        </a>
-                    </p>
-                </div>
-                <div id="commentsSection">
-                    <!-- Здесь комментарии будут добавляться JS -->
-                </div>
+<div class="app-wrapper">
+    <div class="main-content">
+        <div class="card shadow-lg mb-4 p-4" style="border-radius: 1.5rem;" id="post-@postId">
+            
+            <div class="position-absolute text-muted" style="top: 16px; right: 20px; font-size: 0.9rem;">
+                @Model.CreateAt.ToString("dd.MM.yyyy HH:mm")
             </div>
-        </div>
 
-        <!-- Модальное окно -->
-        <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
-            <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
+            <div class="d-flex align-items-center mb-4">
+                <a href="@(
+                    isCommunityPost ? $"/Community/{Model.CommunityId}" : $"/UserPage/{Model.Author.Id}"
+                )" class="d-flex align-items-center text-decoration-none text-dark">
+                    @if (!string.IsNullOrEmpty(avatarUrl))
+                    {
+                        <img src="@avatarUrl" alt="avatar"
+                             class="rounded-circle me-3 @borderClass"
+                             style="width: 60px; height: 60px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div class="rounded-circle me-3 @borderClass d-flex align-items-center justify-content-center"
+                             style="width: 60px; height: 60px; background-color: #4D96FF; font-weight: bold; font-size: 2rem; color: white;">
+                            @name[0].ToString().ToUpper()
+                        </div>
+                    }
+                    <strong style="font-size: 1.25rem;">@name</strong>
+                </a>
+            </div>
+
+            <h3 class="mb-3">@Model.Title</h3>
+
+            @if (Model.PostImages != null && Model.PostImages.Any())
+            {
+                <div class="post-images mb-3 d-flex flex-wrap gap-3">
+                    @foreach (var imgUrl in Model.PostImages)
+                    {
+                        <img src="@imgUrl" alt="post image" class="img-thumbnail post-img-thumb shadow-sm"
+                             style="max-width: 220px; border-radius: 1rem; cursor: pointer;"
+                             onclick="openImageModal('@imgUrl')" />
+                    }
+                </div>
+            }
+
+            <p class="fs-5">@Model.Content</p>
+
+                <div class="mb-3">
+                    <span class="badge bg-primary me-2">@Html.Raw(categoriesStr)</span>
+            </div>
+
+            <div class="text-muted mt-3 fs-6">
+                <button onclick="handleReaction(@postId, true)" class="btn btn-sm text-decoration-none" id="like-@postId">
+                    💙 <span>@Model.Likes</span>
+                </button>
+                /
+                <button onclick="handleReaction(@postId, false)" class="btn btn-sm text-decoration-none" id="dislike-@postId">
+                    💧 <span>@Model.Dislikes</span>
+                </button>
+                👀 @Model.Views
+
+                <a href="/Post/@postId" class="ms-4 text-muted text-decoration-none">
+                    💬 @Model.Comments комментариев
+                </a>
+            </div>
+
+            <div id="commentsSection" class="mt-4">
+                <!-- Здесь комментарии будут добавляться JS -->
+            </div>
+
+                <!-- Форма отправки комментария -->
+                <div class="mt-3 w-100">
+                    <textarea id="commentInput"
+                              class="form-control mb-2 comment-input"
+                              rows="2"
+                              placeholder="Напишите комментарий..."></textarea>
+                    <button id="sendCommentBtn" class="btn btn-primary comment-submit-btn">Отправить</button>
+                </div>
+
         </div>
     </div>
+
+    <!-- Модальное окно -->
+    <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
+        <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
+    </div>
+</div>
+
 }
 
 @section Script {
@@ -182,7 +206,7 @@
             const div = document.createElement('div');
             div.className = 'card comment mb-3 position-relative';
 
-            const avatarUrl = comm.author.images.find(img => img.imageType === 'avatar')?.imageUrl || '';
+            const avatarUrl = comm.author.images.find(img => img.imageType === 'avatar' && img.entityId == comm.author.id)?.imageUrl || '';
 
             const avatarHtml = avatarUrl
                 ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 border-user" style="width: 45px; height: 45px; object-fit: cover;">`
@@ -227,6 +251,54 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadComments(postId, curPage);
         });
+
+                async function sendComment() {
+        const commentContent = document.getElementById('commentInput').value.trim();
+            if (!commentContent) {
+                alert('Комментарий не может быть пустым');
+                return;
+            }
+
+            const requestBody = {
+                postId: postId,        // из Razor
+                content: commentContent
+            };
+
+            try {
+                const response = await fetch('/comment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json();
+                    alert(errData.message || 'Ошибка при отправке комментария');
+                    return;
+                }
+
+                // Очистим поле
+                document.getElementById('commentInput').value = '';
+
+                // Перезагрузим комментарии (можно обновить количество в UI, если надо)
+                loadComments(postId, curPage);
+
+            } catch (err) {
+                console.error('Ошибка отправки комментария', err);
+                alert('Ошибка сети при отправке комментария');
+            }
+        }
+
+        // Назначим обработчик кнопке после загрузки DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserReactions();
+            loadComments(postId, curPage);
+
+            document.getElementById('sendCommentBtn').addEventListener('click', sendComment);
+        });
+
 
 
     </script>

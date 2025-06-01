@@ -275,5 +275,37 @@ body {
     border-color: transparent;
 }
 
+.community {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.comment-input {
+    width: 100%;
+    resize: none;
+    border: 2px solid #4D96FF;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(77, 150, 255, 0.3);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.comment-input:focus {
+    outline: none;
+    border-color: #346bcc;
+    box-shadow: 0 0 10px 3px rgba(77, 150, 255, 0.6);
+}
+
+.comment-submit-btn {
+    border-radius: 0.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
 
 

@@ -33,16 +33,18 @@ public class PostsController : CustomControllerBase
         return View("Post", result.Data);
     }
 
-    [HttpGet("byCommunity")]
-    public async Task<IActionResult> GetByCommunityIdAsync([FromQuery] long communityId, int page = 1, int pageSize = 10)
+    [HttpGet("/by-community/")]
+    public async Task<IActionResult> GetByCommunityIdAsync([FromQuery] long communityId, int curPage)
     {
-        if (page < 1 || pageSize < 1)
-            StatusCode(400, ApiResponse.CreateFailure("Ошибка параметров page или pageSize"));
+        var pagination = new PaginationRequest()
+        {
+            Page = curPage,
+            PageSize = 20
+        };
 
-        var result = await _postService.GetByCommunityIdAsync(communityId, page, pageSize);
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        var result = await _postService.GetByCommunityIdAsync(communityId, pagination);
+
+        return Json(result.Data);
     }
 
     [HttpGet("byUserId")]

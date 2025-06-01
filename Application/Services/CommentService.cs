@@ -110,10 +110,12 @@ public class CommentService : ICommentService
         var comment = await _context.Comments
             .Where(c => c.PostId == postId)
             .Include(c => c.Author)
+                .ThenInclude(a => a.Images)
             .OrderByDescending(c => c.CreateAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+
 
         var commentResponse = _mapper.Map<List<CommentResponse>>(comment);
         return ServiceResult<List<CommentResponse>>.Success(commentResponse);

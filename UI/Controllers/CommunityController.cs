@@ -32,13 +32,13 @@ public class CommunityController : CustomControllerBase
 
     [HttpGet("{id}")]
 
-    public async Task<IActionResult> GetByIdAsync([FromRoute] long id)
+    public async Task<IActionResult> GetByIdAsync(long id)
     {
         var result = await _communityService.GetByIdAsync(id);
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        ViewBag.userIdToken = UserId.Value;
+
+        return View("Community", result.Data);
     }
 
     [HttpGet("/subscribed-communities/")]

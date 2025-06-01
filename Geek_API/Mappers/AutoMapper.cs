@@ -55,7 +55,8 @@ public class AutoMapper : Profile
             .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.CountComments));
 
 
-        CreateMap<Community, CommunityResponse>();
+        CreateMap<Community, CommunityResponse>()
+            .ForMember(dest => dest.CommunityName, opt => opt.MapFrom(src => src.Name));
         CreateMap<CommunityAddRequest, Community>();
 
         CreateMap<Comment, CommentResponse>();

@@ -12,7 +12,7 @@ public interface IPostService
     Task<ServiceResult<PostReactionResult>> PostReactionsAsync(PostReaction reaction);
     Task<ServiceResult<List<PostResponse>>> GetUserLikesPost(PaginationRequest paginationRequest, long id);
     Task<ServiceResult<List<PostResponse>>> GetPostPublishUser(PaginationRequest paginationRequest, long id);
-    Task<ServiceResult<List<PostResponse>>> GetByCommunityIdAsync(long communityId, int page, int pageSize);
+    Task<ServiceResult<List<PostResponse>>> GetByCommunityIdAsync(long communityId, PaginationRequest paginationRequest);
     Task<ServiceResult<List<PostResponse>>> GetByUserIdAsync(long userId, int page, int pageSize);
     Task<ServiceResult<PostResponse>> AddAsync(PostAddRequest request, long userId);
     Task<ServiceResult<bool>> UpdateAsync(long id, PostUpdateRequest request, long userId);
