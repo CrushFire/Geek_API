@@ -1,0 +1,209 @@
+﻿@{
+    ViewData["Title"] = "Создание поста";
+    var language = ViewBag.Language as string ?? "ru";
+    var userId = ViewBag.UserId;
+}
+
+@section Head{
+
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="container">
+                <div class="card p-4 shadow" style="border-radius: 1rem;">
+                    <h2 class="mb-4">Создание поста</h2>
+
+                    <form id="postForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Заголовок</label>
+                            <input type="text" id="title" name="Title" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Содержание</label>
+                            <textarea id="content" name="Content" class="form-control" rows="5" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Публиковать от лица</label>
+                            <select id="communitySelect" name="CommunityId" class="form-select">
+                                <option value="0" selected>От себя (автора)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Выберите от 1 до 5 категорий</label>
+                            <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
+                            <div class="form-text text-danger" id="categoryError" style="display:none;">
+                                Выберите от 1 до 5 категорий.
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
+                            <button id="nextPage" type="button" class="btn btn-outline-secondary">Вперёд &rarr;</button>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Загрузите до 5 изображений</label>
+                            <input type="file" id="images" name="Images" accept="image/*" multiple class="form-control" />
+                            <div class="form-text text-danger" id="imageError" style="display:none;">
+                                Можно загрузить максимум 5 изображений.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3">Опубликовать</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Script {
+    <script>
+        const language = "@language";
+        const selectedCategories = new Set();
+        const categoryError = document.getElementById("categoryError");
+        const imageError = document.getElementById("imageError");
+
+        let userId = @userId;
+        let currentCategoryPage = 1;
+
+        async function loadCategories(page = 1) {
+            try {
+                const response = await fetch(`/Category?curPage=${page}`);
+                if (!response.ok) throw new Error("Ошибка при загрузке категорий");
+
+                const data = await response.json();
+
+                if (data.length === 0 && page > currentCategoryPage) return;
+
+                currentCategoryPage = page;
+
+                const container = document.getElementById("categoryList");
+                container.innerHTML = "";
+
+                data.forEach(cat => {
+                    const span = document.createElement("span");
+                    const isSelected = selectedCategories.has(cat.id);
+
+                    span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
+                    span.style.cursor = "pointer";
+                    span.dataset.id = cat.id;
+                    span.innerText = language === "ru" ? cat.title : cat.engTitle;
+
+                    span.onclick = () => {
+                        if (selectedCategories.has(cat.id)) {
+                            selectedCategories.delete(cat.id);
+                            span.classList.remove("bg-primary");
+                            span.classList.add("bg-secondary");
+                        } else if (selectedCategories.size < 5) {
+                            selectedCategories.add(cat.id);
+                            span.classList.remove("bg-secondary");
+                            span.classList.add("bg-primary");
+                        }
+                        categoryError.style.display = (selectedCategories.size === 0 || selectedCategories.size > 5) ? "block" : "none";
+                    };
+
+                    container.appendChild(span);
+                });
+
+                document.getElementById("prevPage").disabled = currentCategoryPage === 1;
+                document.getElementById("nextPage").disabled = data.length === 0;
+            } catch (error) {
+                console.error("Ошибка загрузки категорий:", error);
+                categoryError.style.display = "block";
+                categoryError.innerText = "Не удалось загрузить категории.";
+            }
+        }
+
+        document.getElementById("prevPage").addEventListener("click", () => {
+            if (currentCategoryPage > 1) {
+                loadCategories(currentCategoryPage - 1);
+            }
+        });
+
+        document.getElementById("nextPage").addEventListener("click", () => {
+            loadCategories(currentCategoryPage + 1);
+        });
+
+        async function loadUserCommunities() {
+            try {
+                const response = await fetch(`/created-communities/?userId=${userId}&curPage=1`);
+                if (!response.ok) throw new Error("Ошибка при загрузке сообществ");
+
+                const data = await response.json();
+                const select = document.getElementById("communitySelect");
+
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+
+                data.forEach(comm => {
+                    const option = document.createElement("option");
+                    option.value = comm.id;
+                    option.text = comm.communityName;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Ошибка загрузки сообществ:", error);
+            }
+        }
+
+        document.getElementById("postForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            categoryError.style.display = "none";
+            imageError.style.display = "none";
+
+            if (selectedCategories.size === 0 || selectedCategories.size > 5) {
+                categoryError.style.display = "block";
+                return;
+            }
+
+            const imagesInput = document.getElementById("images");
+            if (imagesInput.files.length > 5) {
+                imageError.style.display = "block";
+                return;
+            }
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            selectedCategories.forEach(id => formData.append("CategoriesIds", id));
+
+            if (!formData.has("CommunityId")) {
+                formData.append("CommunityId", "0");
+            }
+
+            try {
+                const response = await fetch('/create-post/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response;
+
+                if (response.ok) {
+                    alert("Пост успешно создан!");
+                    if (result.id) {
+                        window.location.href = `/Post/${result.id}`;
+                    } else {
+                        window.location.reload();
+                    }
+                } else {
+                    alert("Ошибка: " + (result.errorMessage || "Неизвестная ошибка"));
+                }
+            } catch (error) {
+                console.error("Ошибка отправки:", error);
+                alert("Произошла ошибка при создании поста.");
+            }
+        });
+
+        loadCategories();
+        loadUserCommunities();
+    </script>
+}

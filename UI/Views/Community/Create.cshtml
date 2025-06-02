@@ -1,0 +1,160 @@
+﻿@{
+    ViewData["Title"] = "Создание сообщества";
+    var language = ViewBag.Language as string ?? "ru";
+    Layout = "_Layout"; // Убедись, что у тебя есть layout
+}
+
+@section Head{
+
+}
+
+@section Body{
+    <div class="app-wrapper">
+        <div class="main-content">
+<div class="container">
+    <div class="card p-4 shadow" style="border-radius: 1rem;">
+        <h2 class="mb-4">Создание сообщества</h2>
+
+        <form id="communityForm" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="name" class="form-label">Название сообщества</label>
+                <input type="text" class="form-control" id="name" name="Name" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Описание</label>
+                <textarea class="form-control" id="description" name="Description" rows="4"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="avatar" class="form-label">Аватар (обязателен)</label>
+                <input type="file" class="form-control" id="avatar" name="Avatar" accept="image/*" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Выберите от 1 до 3 категорий</label>
+                <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
+                <div class="form-text text-danger" id="categoryError" style="display: none;">Выберите от 1 до 3 категорий.</div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
+                <button id="nextPage" type="button" class="btn btn-outline-secondary">Вперёд &rarr;</button>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary mt-3">Создать</button>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+}
+
+@section Script {
+    <script>
+        const language = "@language";
+        const selectedCategories = new Set();
+        const categoryError = document.getElementById("categoryError");
+
+        let currentPage = 1;
+        const prevBtn = document.getElementById("prevPage");
+        const nextBtn = document.getElementById("nextPage");
+
+        async function loadCategories(page = 1) {
+            try {
+                const response = await fetch(`/Category?curPage=${page}`);
+                if (!response.ok) throw new Error("Ошибка при загрузке категорий");
+
+                const data = await response.json();
+
+                // Если данных нет и нажали "вперёд" — ничего не делаем
+                if (data.length === 0 && page > currentPage) return;
+
+                currentPage = page;
+
+                const container = document.getElementById("categoryList");
+                container.innerHTML = "";
+
+                data.forEach(cat => {
+                    const span = document.createElement("span");
+                    const isSelected = selectedCategories.has(cat.id);
+
+                    span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
+                    span.style.cursor = "pointer";
+                    span.dataset.id = cat.id;
+                    span.innerText = language === "ru" ? cat.title : cat.engTitle;
+
+                    span.onclick = () => {
+                        if (selectedCategories.has(cat.id)) {
+                            selectedCategories.delete(cat.id);
+                            span.classList.remove("bg-primary");
+                            span.classList.add("bg-secondary");
+                        } else if (selectedCategories.size < 3) {
+                            selectedCategories.add(cat.id);
+                            span.classList.remove("bg-secondary");
+                            span.classList.add("bg-primary");
+                        }
+                        categoryError.style.display = (selectedCategories.size === 0 || selectedCategories.size > 3) ? "block" : "none";
+                    };
+
+                    container.appendChild(span);
+                });
+
+                // Управление доступностью кнопок
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = data.length === 0;
+            } catch (error) {
+                console.error("Ошибка загрузки категорий:", error);
+                categoryError.style.display = "block";
+                categoryError.innerText = "Не удалось загрузить категории.";
+            }
+        }
+
+        // Назад / Вперёд
+        prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                loadCategories(currentPage - 1);
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            loadCategories(currentPage + 1);
+        });
+
+        document.getElementById("communityForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            if (selectedCategories.size === 0 || selectedCategories.size > 3) {
+                categoryError.style.display = "block";
+                return;
+            }
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            selectedCategories.forEach(id => formData.append("CategoriesIds", id));
+
+            try {
+                const response = await fetch('/create-community', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("Сообщество успешно создано!");
+                    window.location.href = `/Community/${result.id}`;
+                } else {
+                    alert("Ошибка: " + (result.errorMessage || "Неизвестная ошибка"));
+                }
+            } catch (error) {
+                console.error("Ошибка отправки:", error);
+                alert("Произошла ошибка при создании сообщества.");
+            }
+        });
+
+        loadCategories();
+    </script>
+}   

@@ -30,6 +30,15 @@ public class CommunityController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
+    [HttpGet("Create")]
+
+    public IActionResult Create()
+    {
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+
+        return View();
+    }
+
     [HttpGet("{id}")]
 
     public async Task<IActionResult> GetByIdAsync(long id)
@@ -80,15 +89,13 @@ public class CommunityController : CustomControllerBase
         return Json(result.Data);
     }
 
-    [HttpPost]
+    [HttpPost("/create-community")]
 
-    public async Task<IActionResult> AddCommunityAsync([FromBody] CommunityAddRequest communityAddRequest)
+    public async Task<IActionResult> AddCommunityAsync([FromForm] CommunityAddRequest communityAddRequest)
     {
-        var result = await _communityService.AddCommunityAsync(communityAddRequest);
+        var result = await _communityService.AddCommunityAsync(communityAddRequest, UserId.Value);
 
-        return result.IsSuccess
-                ? Ok(ApiResponse.CreateSuccess(result.Data))
-                : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        return Json(result.Data);
     }
 
     [HttpPost("/sub")]

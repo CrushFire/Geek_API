@@ -6,7 +6,7 @@ namespace Core.Interfaces.Services;
 
 public interface ICommunityService
 {
-    Task<ServiceResult<CommunityResponse>> AddCommunityAsync(CommunityAddRequest communityAddRequest);
+    Task<ServiceResult<CommunityResponse>> AddCommunityAsync(CommunityAddRequest communityAddRequest, long authorId);
     Task<ServiceResult<bool>> DeleteCommunityAsync(long id);
     Task<ServiceResult<CommunityResponse>> GetByIdAsync(long id);
     Task<ServiceResult<List<CommunityResponse>>> GetCommunitiesSubscribeUser(PaginationRequest paginationRequest, long userId);

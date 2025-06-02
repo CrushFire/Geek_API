@@ -159,6 +159,16 @@ public class PostsController : CustomControllerBase
         return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
     }
 
+    [HttpGet("Create")]
+
+    public IActionResult Create()
+    {
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.UserId = UserId.Value;
+
+        return View();
+    }
+
     [HttpGet("/published-posts/")]
     public async Task<IActionResult> TakePostPublishUser([FromQuery] long userId, int curPage = 1)
     {
@@ -177,16 +187,15 @@ public class PostsController : CustomControllerBase
     }
 
 
-    [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] PostAddRequest request)
+    [HttpPost("/create-post/")]
+    public async Task<IActionResult> AddAsync([FromForm] PostAddRequest request)
     {
         if (UserId == null)
             return StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
 
         var result = await _postService.AddAsync(request, UserId.Value);
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+
+        return Json(result.Data);
     }
 
     [HttpPut("{id}")]

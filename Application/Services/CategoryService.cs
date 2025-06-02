@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.Services;
+using Core.Models;
 using Core.Models.Category;
 using Core.Results;
 using DataAccess;
@@ -32,9 +33,9 @@ namespace Application.Services
             return ServiceResult<CategoryResponse>.Success(categoryResponse);
         }
 
-        public async Task<ServiceResult<List<CategoryResponse>>> GetCategoryAsync(int page = 1, int pageSize = 10)
+        public async Task<ServiceResult<List<CategoryResponse>>> GetCategoryAsync(PaginationRequest pagination)
         {
-            var categories = await _context.Categories.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var categories = await _context.Categories.Skip((pagination.Page - 1) * pagination.PageSize).Take(pagination.PageSize).ToListAsync();
 
             var categoriesResponse = _mapper.Map<List<CategoryResponse>>(categories);
             return ServiceResult<List<CategoryResponse>>.Success(categoriesResponse);

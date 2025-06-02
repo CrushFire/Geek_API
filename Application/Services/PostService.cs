@@ -55,6 +55,7 @@ public class PostService : IPostService
                 .Select(pc => pc.Category.EngTitle)
                 .ToList(),
             CommunityAvatar = p.CommunityAvatar?.ImageUrl,
+            CommunityName = p.CommunityName,
             UserAvatar = p.UserAvatar?.ImageUrl,
             CountComments = _context.Comments.Where(c => c.PostId == id).Count(),
             PostImages = _context.Images.Where(i => i.EntityTarget == "Post" && i.EntityId == p.Post.Id && i.ImageType == "image").Select(p => p.ImageUrl).ToList()
@@ -296,15 +297,15 @@ public class PostService : IPostService
         return ServiceResult<List<PostResponse>>.Success(postResponses);
     }
 
-    public async Task<ServiceResult<PostResponse>> AddAsync(PostAddRequest request, long userId)
+    public async Task<ServiceResult<PostAddRequest>> AddAsync(PostAddRequest request, long userId)
     {
         var userExist = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (userExist == null)
-            ServiceResult<PostResponse>.Failure("Пользователь не найден");
+            return ServiceResult<PostAddRequest>.Failure("Пользователь не найден");
 
         var communityExist = await _context.Posts.FirstOrDefaultAsync(c => c.Id == request.CommunityId);
         if (communityExist == null)
-            ServiceResult<PostResponse>.Failure("Комьюнити не найдено");
+            return ServiceResult<PostAddRequest>.Failure("Комьюнити не найдено");
 
         var post = _mapper.Map<Post>(request);
         post.AuthorId = userId;
@@ -312,11 +313,22 @@ public class PostService : IPostService
         await _context.Posts.AddAsync(post);
         await _context.SaveChangesAsync();
 
-        var postImages = await _imageService.AddUploadedImagesAsync(nameof(Post), post.Id, "banner", request.Images);
-        post.Images = postImages;
+        var postCategories = request.CategoriesIds.Select(catId => new PostCategory
+        {
+            PostId = post.Id,
+            CategoryId = catId
+        });
 
-        var postResponse = _mapper.Map<PostResponse>(post);
-        return ServiceResult<PostResponse>.Success(postResponse);
+        if (request.Images != null && request.Images.Any())
+        {
+            var postImages = await _imageService.AddUploadedImagesAsync("Post", post.Id, "image", request.Images);
+            post.Images = postImages;
+        }
+
+        await _context.PostCategories.AddRangeAsync(postCategories);
+        await _context.SaveChangesAsync();
+
+        return ServiceResult<PostAddRequest>.Success(request);
     }
 
     public async Task<ServiceResult<bool>> UpdateAsync(long id, PostUpdateRequest request, long userId)

@@ -9,6 +9,7 @@ using Core.Models.Community;
 using Core.Results;
 using DataAccess;
 using FluentNHibernate.Conventions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NHibernate.Util;
 using System;
@@ -24,11 +25,13 @@ namespace Application.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IImageService _imageService;
 
-        public CommunityService(ApplicationDbContext context, IMapper mapper)
+        public CommunityService(ApplicationDbContext context, IMapper mapper, IImageService image)
         {
             _context = context;
             _mapper = mapper;
+            _imageService = image;
         }
 
         public async Task<ServiceResult<CommunityResponse>> GetByIdAsync(long id)
@@ -156,14 +159,36 @@ namespace Application.Services
             return ServiceResult<List<CommunityResponse>>.Success(communitiesResponse.ToList());
         }
 
-        public async Task<ServiceResult<CommunityResponse>> AddCommunityAsync(CommunityAddRequest communityAddRequest)
+        public async Task<ServiceResult<CommunityResponse>> AddCommunityAsync(CommunityAddRequest communityAddRequest, long authorId)
         {
-            var community = _mapper.Map<Community>(communityAddRequest);
+                // Сначала создать сущность и сохранить, чтобы появился ID
+                var community = _mapper.Map<Community>(communityAddRequest);
+                await _context.Communities.AddAsync(community);
+                await _context.SaveChangesAsync(); // <- после этого у community.Id есть значение!
 
-            await _context.Communities.AddAsync(community);
-            var communityResponse = _mapper.Map<CommunityResponse>(community);
+                // Сохраняем изображение (если зависит от ID)
+                var newImage = await _imageService.AddUploadedImageAsync("Community", community.Id, "avatar", communityAddRequest.Avatar);
 
-            return ServiceResult<CommunityResponse>.Success(communityResponse);
+                // Теперь можно добавлять зависимости
+                var communityCategories = communityAddRequest.CategoriesIds.Select(catId => new CommunityCategory
+                {
+                    CommunityId = community.Id,
+                    CategoryId = catId
+                }).ToList();
+
+                var userCommunity = new UserCommunity
+                {
+                    CommunityId = community.Id,
+                    UserId = authorId,
+                    UserRole = "creator"
+                };
+
+                await _context.CommunityCategories.AddRangeAsync(communityCategories);
+                await _context.UsersCommunities.AddAsync(userCommunity);
+                await _context.SaveChangesAsync();
+
+                var communityResponse = _mapper.Map<CommunityResponse>(community);
+                return ServiceResult<CommunityResponse>.Success(communityResponse);
         }
 
         public async Task<ServiceResult<string>> SubOrNo (long userId, long communityId)

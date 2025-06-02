@@ -92,7 +92,7 @@ public class AutoMapper : Profile
                 CreateMap<Category, CategoryResponse>();
 
                 CreateMap<DataPage, DataPageResponse>();
-                CreateMap<DataPageRequest, DataPage>();
+        CreateMap<DataPageRequest, DataPage>();
 
     }
 }

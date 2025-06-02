@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Core.Interfaces.Services;
+using Core.Models;
 using Core.Models.Category;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +34,16 @@ public class CategoryController : CustomControllerBase
 
     [HttpGet]
 
-    public async Task<IActionResult> GetCategoryAsync([FromQuery] int page = 1, int pageSize = 10)
+    public async Task<IActionResult> GetCategoryAsync([FromQuery] int curPage)
     {
-        var result = await _categoryService.GetCategoryAsync(page, pageSize);
-        return result.IsSuccess
-        ? Ok(ApiResponse.CreateSuccess(result.Data))
-        : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        var pagination = new PaginationRequest
+        {
+            Page = curPage,
+            PageSize = 20
+        };
+        var result = await _categoryService.GetCategoryAsync(pagination);
+
+        return Json(result.Data);
     }
 
     [HttpPost]
