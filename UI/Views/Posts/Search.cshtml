@@ -1,0 +1,249 @@
+﻿@using Core.Models
+@using System.Web
+
+@{
+    var language = ViewBag.Language;
+    var query = Context.Request.Query["name"].ToString();
+    var userId = ViewBag.userId;
+}
+
+@section Head {
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="container">
+                <div class="card p-4">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+               <a class="btn btn-lg btn-primary text-white rounded-pill ms-auto" href="/Posts/Search?name=@HttpUtility.UrlEncode(query)">Posts</a>
+               <a class="btn btn-lg btn-primary text-white rounded-pill" href="/Community/Search?name=@HttpUtility.UrlEncode(query)">Communities</a>
+               <a class="btn btn-lg btn-primary text-white rounded-pill" href="/User/Search?name=@HttpUtility.UrlEncode(query)">Users</a>
+                <button id="post-filter" class="btn btn-lg btn-secondary ms-auto">Фильтр</button>
+            </div>
+
+            <div class="post" id="posts">
+            </div>
+
+        <!-- Модальное окно фильтра -->
+        <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filterModalLabel">Фильтрация постов</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Тут будут параметры фильтрации (категории, дата, сортировка и т.п.)</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="button" class="btn btn-primary">Применить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Простое модальное окно для увеличенного изображения -->
+        <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:1050;">
+            <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" style="max-width:90%;max-height:90%;border-radius:8px;" />
+        </div>
+        </div>
+        </div>
+        </div>
+    </div>
+}
+
+@section Script {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let curPage = 1;
+        let loading = false;
+        let reachedEnd = false;
+        const language = "@language";
+        const userId = @userId;
+        const nameQuery = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(query));
+        let userReactions = [];
+
+        async function loadUserReactions() {
+            try {
+                const response = await fetch(`/take-reactions/${userId}`);
+                userReactions = await response.json();
+            } catch (err) {
+                console.error("Ошибка загрузки реакций", err);
+            }
+        }
+
+        async function loadPosts() {
+            if (loading || reachedEnd) return;
+
+            loading = true;
+            try {
+                const response = await fetch(`/post-filter/?name=${encodeURIComponent(nameQuery)}&curPage=${curPage}`);
+
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const posts = await response.json();
+
+                if (!posts || posts.length === 0) {
+                    reachedEnd = true;
+                    const endMsg = document.createElement("p");
+                    endMsg.className = "text-center text-muted";
+                    document.getElementById("posts").appendChild(endMsg);
+                    return;
+                }
+
+                const postsDiv = document.getElementById("posts");
+                if (curPage === 1) {
+                    postsDiv.innerHTML = "";
+                }
+
+                posts.forEach(post => {
+                    const categoriesStr = language === "ru"
+                        ? (Array.isArray(post.categoriesRu) ? post.categoriesRu.map(cat => `#${cat}`).join(" ") : "")
+                        : (Array.isArray(post.categoriesEng) ? post.categoriesEng.map(cat => `#${cat}`).join(" ") : "");
+
+                    const isCommunityPost = !!post.communityName;
+                    const name = isCommunityPost ? post.communityName : post.author.userName;
+                    const avatarUrl = isCommunityPost ? post.communityAvatar : post.userAvatar;
+                    const borderClass = isCommunityPost ? "border-community" : "border-user";
+
+                    const reaction = userReactions.find(r => Number(r.postId) === Number(post.id));
+                    const isUserLiked = reaction?.isLike === true;
+                    const isUserDisliked = reaction?.isLike === false;
+
+                    const div = document.createElement("div");
+                    div.className = "card mb-3";
+
+                    const avatarHtml = avatarUrl
+                        ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 ${borderClass}" style="width: 45px; height: 45px; object-fit: cover;">`
+                        : `<div class="rounded-circle me-2 ${borderClass} d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #4D96FF; font-weight: bold; font-size: 1.5rem; color: white;">
+                                    ${name.charAt(0).toUpperCase()}
+                                  </div>`;
+
+                    div.innerHTML = `
+                                <div class="card-body position-relative">
+                                    <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
+                                        ${new Date(post.createAt).toLocaleDateString()} ${new Date(post.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+
+                                    <div class="d-flex align-items-center mb-3">
+                                        <a href="${isCommunityPost ? `/Community/${post.communityId}` : `/UserPage/${post.author.id}`}" class="d-flex align-items-center text-decoration-none text-dark">
+                                            ${avatarHtml}
+                                            <strong>${name}</strong>
+                                        </a>
+                                    </div>
+
+                                    <h5>${post.title}</h5>
+                                    <div class="post-images mb-3 d-flex flex-wrap gap-2">
+                                        ${post.postImages.map((imgUrl) => `
+                                            <img src="${imgUrl}" alt="post image" class="img-thumbnail post-img-thumb"
+                                                style="max-width: 200px; cursor: pointer;"
+                                                onclick="openImageModal('${imgUrl}')">
+                                        `).join("")}
+                                    </div>
+                                    <p>${post.content}</p>
+                                    <span class="badge bg-primary me-1">${categoriesStr}</span>
+                                    <p class="text-muted mt-2">
+                                        <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''}" id="like-${post.id}">💙 <span>${post.likes}</span></button>
+                                        /
+                                        <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>
+                                        👀${post.views}
+                                        <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
+                                            ${post.comments} 💬 Комментарии
+                                        </a>
+                                    </p>
+                                </div>
+                            `;
+
+                    observeViews(post.id, div);
+                    postsDiv.appendChild(div);
+                });
+
+                curPage++;
+            } catch (error) {
+                document.getElementById("posts").innerHTML = "<p>Не удалось загрузить посты.</p>";
+                console.error("Ошибка загрузки постов:", error);
+            } finally {
+                loading = false;
+            }
+        }
+
+        async function handleReaction(postId, isLike) {
+            try {
+                const response = await fetch('/update-reactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ postId, userId, isLike })
+                });
+
+                const result = await response.json();
+
+                if (result.userReaction === null) {
+                    userReactions = userReactions.filter(r => r.postId !== postId);
+                } else {
+                    const index = userReactions.findIndex(r => r.postId === postId);
+                    if (index >= 0) {
+                        userReactions[index].isLike = result.userReaction;
+                    } else {
+                        userReactions.push({ postId, userId, isLike: result.userReaction });
+                    }
+                }
+
+                const likeBtn = document.getElementById(`like-${postId}`);
+                const dislikeBtn = document.getElementById(`dislike-${postId}`);
+
+                likeBtn.classList.toggle("user-liked", result.userReaction === true);
+                dislikeBtn.classList.toggle("user-disliked", result.userReaction === false);
+
+                likeBtn.querySelector("span").innerText = result.likes;
+                dislikeBtn.querySelector("span").innerText = result.dislikes;
+
+            } catch (err) {
+                console.error("Ошибка обновления реакции", err);
+            }
+        }
+
+        function observeViews(postId, div) {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        fetch(`/increment-view/${postId}`, { method: 'POST' });
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.5 });
+            observer.observe(div);
+        }
+
+        function openImageModal(url) {
+            const modal = document.getElementById("imageModalSimple");
+            const modalImg = document.getElementById("modalImageSimple");
+            modalImg.src = url;
+            modal.style.display = "flex";
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById("imageModalSimple");
+            modal.style.display = "none";
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadUserReactions();
+            await loadPosts();
+
+            window.addEventListener("scroll", () => {
+                const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+                if (nearBottom) {
+                    loadPosts();
+                }
+            });
+
+            document.getElementById("post-filter").addEventListener("click", () => {
+                const modal = new bootstrap.Modal(document.getElementById("filterModal"));
+                modal.show();
+            });
+        });
+    </script>
+}

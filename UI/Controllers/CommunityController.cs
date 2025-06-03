@@ -80,6 +80,29 @@ public class CommunityController : CustomControllerBase
         return Json(result.Data);
     }
 
+    [HttpGet("Explore")]
+    public async Task<IActionResult> Explore([FromQuery] int categoryId)
+    {
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.UserId = UserId.Value;
+
+        return View();
+    }
+
+    [HttpGet("/community-explore/")]
+    public async Task<IActionResult> CommunityExplore([FromQuery] int categoryId)
+    {
+        var pagination = new PaginationRequest()
+        {
+            Page = 1,
+            PageSize = 10,
+        };
+
+        var result = await _communityService.CommunityExplore(categoryId, pagination);
+
+        return Json(result.Data);
+    }
+
     [HttpGet("/check-role-community/")]
 
     public async Task<IActionResult> SubOrNo([FromQuery] long userId, [FromQuery] long communityId)

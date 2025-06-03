@@ -169,6 +169,42 @@ public class PostsController : CustomControllerBase
         return View();
     }
 
+    [HttpGet("Search")]
+    public IActionResult Search()
+    {
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.UserId = UserId.Value;
+
+        return View();
+    }
+
+    [HttpGet("/post-filter/")]
+    public async Task<IActionResult> GetByFilterToPopular([FromQuery] string name, int curPage = 1)
+    {
+        var filter = new ParametersFilter()
+        {
+            DirectionSort = "desk",
+            DateCreateAt = DateCreateRange.Week,
+            SortBy = "likes",
+            Name = name,
+            Pagination = new PaginationRequest() { Page = curPage, PageSize = 20 },
+            PostFilter = new PostFilter()
+        };
+        var result = await _filterService.GetPostsByFilter(filter);
+
+        //Штука для смены языка, как раз таки мой мидлвеар
+        //ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
+
+        if (result == null)
+            return StatusCode(500, "Ошибка: результат фильтрации — null");
+
+        if (result.Data == null)
+            return StatusCode(500, "Ошибка: Data в результате — null");
+
+        return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
+    }
+
     [HttpGet("/published-posts/")]
     public async Task<IActionResult> TakePostPublishUser([FromQuery] long userId, int curPage = 1)
     {

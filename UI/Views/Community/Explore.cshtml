@@ -1,0 +1,191 @@
+﻿@{
+    ViewData["Title"] = "Explore Communities";
+    var userId = ViewBag.UserId ?? "null";
+    var language = ViewBag.Language ?? "ru";
+}
+
+@section Head {
+    
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="container">
+                <div class="card p-4 shadow" style="border-radius: 1rem;">
+            <h2 class="mb-4">Explore Communities</h2>
+                    <div id="categoryList" class="d-flex flex-wrap mb-2"></div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">← Назад</button>
+                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд →</button>
+                    </div>
+
+                    <div id="communityContainer"></div>
+
+            </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Script {
+    <script>
+        const userId = @Html.Raw(userId ?? "null");
+        const language = "@language";
+
+        let activeCategoryId = null;
+        let currentPage = 1;
+
+        async function loadCategories(page = 1) {
+            try {
+                const response = await fetch(`/Category?curPage=${page}`);
+                if (!response.ok) throw new Error("Ошибка загрузки категорий");
+
+                const categories = await response.json();
+
+                const container = document.getElementById("categoryList");
+                container.innerHTML = "";
+
+                categories.forEach(cat => {
+                    const btn = document.createElement("button");
+                    btn.className = "category-btn";
+                    btn.textContent = language === "ru" ? cat.title : cat.engTitle;
+                    btn.dataset.id = cat.id;
+
+                    btn.addEventListener("click", () => {
+                        document.querySelectorAll(".category-btn").forEach(b => b.classList.remove("active"));
+                        btn.classList.add("active");
+                        activeCategoryId = cat.id;
+                        loadTopCommunities(cat.id);
+                    });
+
+                    container.appendChild(btn);
+                });
+
+                if (categories.length > 0) {
+                    activeCategoryId = categories[0].id;
+                    container.querySelector("button").classList.add("active");
+                    loadTopCommunities(activeCategoryId);
+                }
+
+                // Обновляем доступность кнопок
+                document.getElementById("prevPageBtn").disabled = currentPage <= 1;
+                document.getElementById("nextPageBtn").disabled = categories.length < 20;
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById("categoryList").innerHTML = "<p class='text-danger'>Не удалось загрузить категории.</p>";
+            }
+        }
+
+        async function loadTopCommunities(categoryId) {
+            const container = document.getElementById("communityContainer");
+            container.innerHTML = "<p>Загрузка...</p>";
+
+            try {
+                const response = await fetch(`/community-explore?categoryId=${categoryId}`);
+                if (!response.ok) throw new Error("Ошибка загрузки сообществ");
+
+                const communities = await response.json();
+                container.innerHTML = "";
+
+                for (let i = 0; i < communities.length; i++) {
+                    const comm = communities[i];
+                    const roleRes = await fetch(`/check-role-community/?userId=${userId}&communityId=${comm.id}`);
+                    const role = await roleRes.json();
+
+                    const isJoined = role === "sub";
+                    const isCreator = role === "creator";
+
+                    const card = document.createElement("div");
+                    card.className = "community-card";
+
+                    const avatarHtml = comm.avatarUrl
+                        ? `<img src="${comm.avatarUrl}" alt="Avatar" class="community-avatar" />`
+                        : `<div class="community-avatar">${comm.name?.charAt(0).toUpperCase() || '?'}</div>`;
+
+                    let buttonHtml = "";
+                    if (!isCreator) {
+                        buttonHtml = `<button class="btn ${isJoined ? 'btn-light' : 'btn-primary'} join-btn" data-community-id="${comm.id}">
+                                    ${isJoined ? 'Unjoin' : 'Join'}
+                                </button>`;
+                    }
+
+                    card.innerHTML = `
+                                ${avatarHtml}
+                                <div>
+                                    <h5 class="mb-1">${comm.name || 'No Name'}</h5>
+                                    <p class="mb-0 text-muted">${comm.numberOfMember} members</p>
+                                    <small class="text-muted">${comm.description || ''}</small>
+                                </div>
+                                ${buttonHtml}
+                            `;
+
+                    if (i === 0 || i === 1 || i === 2) {
+                        const medal = document.createElement("div");
+                        medal.classList.add("medal");
+                        if (i === 0) medal.classList.add("gold");
+                        else if (i === 1) medal.classList.add("silver");
+                        else medal.classList.add("bronze");
+                        medal.textContent = `#${i + 1}`;
+                        card.appendChild(medal);
+                    }
+
+                    container.appendChild(card);
+                }
+            } catch (err) {
+                container.innerHTML = "<p class='text-danger'>Не удалось загрузить сообщества.</p>";
+                console.error(err);
+            }
+        }
+
+        document.addEventListener("click", async (e) => {
+            if (!e.target.classList.contains("join-btn")) return;
+
+            const btn = e.target;
+            const communityId = btn.dataset.communityId;
+            const isJoined = btn.classList.contains("btn-light");
+
+            try {
+                const url = isJoined ? "/unsub" : "/sub";
+                const method = isJoined ? "DELETE" : "POST";
+
+                const res = await fetch(`${url}?userId=${userId}`, {
+                    method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(communityId)
+                });
+
+                const success = await res.json();
+
+                if (success) {
+                    btn.classList.toggle("btn-light");
+                    btn.classList.toggle("btn-primary");
+                    btn.textContent = isJoined ? "Join" : "Unjoin";
+                } else {
+                    alert("Ошибка при выполнении действия");
+                }
+            } catch (error) {
+                alert("Произошла ошибка при выполнении действия");
+                console.error(error);
+            }
+        });
+
+        // Навигация по страницам категорий
+        document.getElementById("prevPageBtn").addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                loadCategories(currentPage);
+            }
+        });
+
+        document.getElementById("nextPageBtn").addEventListener("click", () => {
+            currentPage++;
+            loadCategories(currentPage);
+        });
+
+        // Первая загрузка
+        loadCategories(currentPage);
+    </script>
+}

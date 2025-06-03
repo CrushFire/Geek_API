@@ -16,4 +16,5 @@ public interface ICommunityService
     Task<ServiceResult<bool>> SubsribeAsync(long userId, long communityId);
     Task<ServiceResult<bool>> UnSubscribeAsync(long userId, long communityId);
     Task<ServiceResult<bool>> UpdateCommunityAsync(CommunityAddRequest communityAddRequest, long id);
+    Task<ServiceResult<List<CommunityExploreResponse>>> CommunityExplore(long categoryId, PaginationRequest pagination);
 }

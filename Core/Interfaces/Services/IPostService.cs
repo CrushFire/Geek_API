@@ -14,7 +14,7 @@ public interface IPostService
     Task<ServiceResult<List<PostResponse>>> GetPostPublishUser(PaginationRequest paginationRequest, long id);
     Task<ServiceResult<List<PostResponse>>> GetByCommunityIdAsync(long communityId, PaginationRequest paginationRequest);
     Task<ServiceResult<List<PostResponse>>> GetByUserIdAsync(long userId, int page, int pageSize);
-    Task<ServiceResult<PostAddRequest>> AddAsync(PostAddRequest request, long userId);
+    Task<ServiceResult<long>> AddAsync(PostAddRequest request, long userId);
     Task<ServiceResult<bool>> UpdateAsync(long id, PostUpdateRequest request, long userId);
     Task<ServiceResult<bool>> DeleteAsync(long id, long userId);
 }

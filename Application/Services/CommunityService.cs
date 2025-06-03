@@ -118,7 +118,7 @@ namespace Application.Services
             });
 
             return ServiceResult<List<CommunityResponse>>.Success(communitiesResponse.ToList());
-    }
+        }
 
         public async Task<ServiceResult<List<CommunityResponse>>> GetCommunitiesCreatedUser(PaginationRequest paginationRequest, long userId)
         {
@@ -161,45 +161,45 @@ namespace Application.Services
 
         public async Task<ServiceResult<CommunityResponse>> AddCommunityAsync(CommunityAddRequest communityAddRequest, long authorId)
         {
-                // Сначала создать сущность и сохранить, чтобы появился ID
-                var community = _mapper.Map<Community>(communityAddRequest);
-                await _context.Communities.AddAsync(community);
-                await _context.SaveChangesAsync(); // <- после этого у community.Id есть значение!
+            // Сначала создать сущность и сохранить, чтобы появился ID
+            var community = _mapper.Map<Community>(communityAddRequest);
+            await _context.Communities.AddAsync(community);
+            await _context.SaveChangesAsync(); // <- после этого у community.Id есть значение!
 
-                // Сохраняем изображение (если зависит от ID)
-                var newImage = await _imageService.AddUploadedImageAsync("Community", community.Id, "avatar", communityAddRequest.Avatar);
+            // Сохраняем изображение (если зависит от ID)
+            var newImage = await _imageService.AddUploadedImageAsync("Community", community.Id, "avatar", communityAddRequest.Avatar);
 
-                // Теперь можно добавлять зависимости
-                var communityCategories = communityAddRequest.CategoriesIds.Select(catId => new CommunityCategory
-                {
-                    CommunityId = community.Id,
-                    CategoryId = catId
-                }).ToList();
+            // Теперь можно добавлять зависимости
+            var communityCategories = communityAddRequest.CategoriesIds.Select(catId => new CommunityCategory
+            {
+                CommunityId = community.Id,
+                CategoryId = catId
+            }).ToList();
 
-                var userCommunity = new UserCommunity
-                {
-                    CommunityId = community.Id,
-                    UserId = authorId,
-                    UserRole = "creator"
-                };
+            var userCommunity = new UserCommunity
+            {
+                CommunityId = community.Id,
+                UserId = authorId,
+                UserRole = "creator"
+            };
 
-                await _context.CommunityCategories.AddRangeAsync(communityCategories);
-                await _context.UsersCommunities.AddAsync(userCommunity);
-                await _context.SaveChangesAsync();
+            await _context.CommunityCategories.AddRangeAsync(communityCategories);
+            await _context.UsersCommunities.AddAsync(userCommunity);
+            await _context.SaveChangesAsync();
 
-                var communityResponse = _mapper.Map<CommunityResponse>(community);
-                return ServiceResult<CommunityResponse>.Success(communityResponse);
+            var communityResponse = _mapper.Map<CommunityResponse>(community);
+            return ServiceResult<CommunityResponse>.Success(communityResponse);
         }
 
-        public async Task<ServiceResult<string>> SubOrNo (long userId, long communityId)
+        public async Task<ServiceResult<string>> SubOrNo(long userId, long communityId)
         {
             var isSub = _context.UsersCommunities.FirstOrDefault(uc => uc.UserId == userId && uc.CommunityId == communityId);
 
-            if(isSub == null)
+            if (isSub == null)
             {
                 return ServiceResult<string>.Success("unSub");
             }
-            else if(isSub.UserRole == "creator")
+            else if (isSub.UserRole == "creator")
             {
                 return ServiceResult<string>.Success("creator");
             }
@@ -276,6 +276,34 @@ namespace Application.Services
             await _context.SaveChangesAsync();
 
             return ServiceResult<bool>.Success(true);
+        }
+
+        public async Task<ServiceResult<List<CommunityExploreResponse>>> CommunityExplore(long categoryId, PaginationRequest pagination)
+        {
+            var communitiesQuery = _context.Communities
+                .Include(c => c.CommunityCategories)
+                .Where(c => c.CommunityCategories.Any(cc => cc.CategoryId == categoryId))
+                .Select(c => new CommunityExploreResponse
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Description = c.Description,
+                    NumberOfMember = _context.UsersCommunities
+                        .Count(x => x.CommunityId == c.Id && x.UserRole == "subscriber"),
+                    AvatarUrl = _context.Images
+                        .Where(i => i.ImageType == "avatar" && i.EntityTarget == "Community" && i.EntityId == c.Id)
+                        .Select(i => i.ImageUrl)
+                        .FirstOrDefault()
+                })
+                .OrderByDescending(c => c.NumberOfMember);
+
+            var communities = await communitiesQuery
+                .Skip((pagination.Page - 1) * pagination.PageSize)
+                .Take(pagination.PageSize)
+                .ToListAsync();
+
+
+            return ServiceResult<List<CommunityExploreResponse>>.Success(communities);
         }
     }
 }

@@ -185,15 +185,11 @@
                     body: formData
                 });
 
-                const result = await response;
+                const result = await response.json();
 
                 if (response.ok) {
                     alert("Пост успешно создан!");
-                    if (result.id) {
-                        window.location.href = `/Post/${result.id}`;
-                    } else {
-                        window.location.reload();
-                    }
+                    window.location.href = `/Post/${result}`;
                 } else {
                     alert("Ошибка: " + (result.errorMessage || "Неизвестная ошибка"));
                 }

@@ -58,14 +58,13 @@ namespace Application.Services
             if (!string.IsNullOrWhiteSpace(filter.Name))
             {
                 var parts = filter.Name
-                    .ToLower()
-                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Select(part => $"%{part}%")  // подготовить шаблон с % здесь
+                    .ToList();
 
-                query = query
-                    .Where(p =>  parts.Any(part => p.Post.Title.Contains(part,StringComparison.OrdinalIgnoreCase)))
-                    .OrderByDescending(p => parts.Count(part => p.Post.Title.ToLower().Contains(part)))
-                    .ThenBy(p => p.Post.Title);
+                query = query.Where(p => parts.Any(part => EF.Functions.Like(p.Post.Title, part)));
             }
+
 
             // Фильтрация по минимальному количеству просмотров
             if (filter.PostFilter?.MinViews > 0)

@@ -297,15 +297,15 @@ public class PostService : IPostService
         return ServiceResult<List<PostResponse>>.Success(postResponses);
     }
 
-    public async Task<ServiceResult<PostAddRequest>> AddAsync(PostAddRequest request, long userId)
+    public async Task<ServiceResult<long>> AddAsync(PostAddRequest request, long userId)
     {
         var userExist = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (userExist == null)
-            return ServiceResult<PostAddRequest>.Failure("Пользователь не найден");
+            return ServiceResult<long>.Failure("Пользователь не найден");
 
-        var communityExist = await _context.Posts.FirstOrDefaultAsync(c => c.Id == request.CommunityId);
+        var communityExist = await _context.Communities.FirstOrDefaultAsync(c => c.Id == request.CommunityId);
         if (communityExist == null)
-            return ServiceResult<PostAddRequest>.Failure("Комьюнити не найдено");
+            return ServiceResult<long>.Failure("Комьюнити не найдено");
 
         var post = _mapper.Map<Post>(request);
         post.AuthorId = userId;
@@ -328,7 +328,7 @@ public class PostService : IPostService
         await _context.PostCategories.AddRangeAsync(postCategories);
         await _context.SaveChangesAsync();
 
-        return ServiceResult<PostAddRequest>.Success(request);
+        return ServiceResult<long>.Success(post.Id);
     }
 
     public async Task<ServiceResult<bool>> UpdateAsync(long id, PostUpdateRequest request, long userId)
