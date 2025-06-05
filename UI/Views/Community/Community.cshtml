@@ -6,7 +6,88 @@
 }
 
 @section Head {
+<style>
+    .community-header {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
 
+    .community-avatar {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .community-info {
+        flex: 1;
+        padding-left: 2rem;
+    }
+
+    .community-name {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .community-stats {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .community-description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin: 1.5rem 0;
+        color: #444;
+    }
+
+    .community-categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+
+    .category-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    .posts-container {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    @@media (max-width: 768px) {
+        .community-header {
+            padding: 1rem;
+        }
+
+        .community-avatar {
+            width: 80px;
+            height: 80px;
+        }
+
+        .community-info {
+            padding-left: 1rem;
+        }
+
+        .community-name {
+            font-size: 1.5rem;
+        }
+
+        .community-description {
+            font-size: 1rem;
+        }
+    }
+</style>
 }
 
 @section Body {
@@ -20,7 +101,7 @@
                     @if (!string.IsNullOrEmpty(Model.AvatarUrl))
                     {
                         <img src="@Model.AvatarUrl" alt="community avatar"
-                             class="rounded-circle border-community me-4"
+                             class="rounded-circle border-community me-4 community-avatar"
                              style="width: 100px; height: 100px; object-fit: cover;" />
                     }
                     else
@@ -32,23 +113,23 @@
                     }
 
                     <div>
-                        <h2 class="mb-1">@Model.CommunityName</h2>
-                        <p class="text-muted mb-0">
+                        <h2 class="mb-1 community-name">@Model.CommunityName</h2>
+                        <p class="text-muted mb-0 community-stats">
                             Создано: @Model.CreateAt.ToString("dd.MM.yyyy HH:mm") • 👥 @Model.NumberOfMember участников
                         </p>
                     </div>
                 </div>
 
-                <p class="fs-5">@Html.Raw(Model.Description)</p>
+                <p class="fs-5 community-description">@Html.Raw(Model.Description)</p>
 
-                <div class="mb-3">
+                <div class="mb-3 community-categories">
                     @{
                         var lang = ViewBag.Language as string ?? "ru";
                         var categories = lang == "ru" ? Model.CategoriesRu : Model.CategoriesEng;
                     }
                     @foreach (var cat in categories)
                     {
-                        <span class="badge bg-primary me-2">#@cat</span>
+                        <span class="badge bg-primary me-2 category-badge">#@cat</span>
                     }
                 </div>
                 <div id="dotsWrapper" class="position-relative d-inline-block" style="user-select:none;">

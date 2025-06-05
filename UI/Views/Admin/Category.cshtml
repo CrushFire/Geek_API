@@ -2,181 +2,51 @@
     ViewData["Title"] = "Управление категориями";
 }
 
-@section Head {
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .app-wrapper {
-            width: 100vw;
-            min-height: 100vh;
-            background: #f6f8fa;
-            overflow-x: auto;
-        }
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2vw;
-            box-sizing: border-box;
-        }
-        .container.py-4 {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-        }
-        .admin-nav-top {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.08);
-            padding: 1rem 1rem;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .admin-nav-top .nav-link {
-            font-size: 1rem;
-            color: #333;
-            font-weight: 500;
-            border-radius: 6px;
-            margin: 0 0.1rem;
-            transition: background 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.4rem 0.8rem;
-        }
-        .admin-nav-top .nav-link.active, .admin-nav-top .nav-link:hover {
-            background: #f3f7fa;
-            color: #0d6efd;
-            text-decoration: none;
-        }
-        .admin-panel-title {
-            font-weight: bold;
-            margin-right: 1rem;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        .filter-panel {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.08);
-            padding: 1rem 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .categories-table {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        .table-header {
-            background-color: #f8f9fa;
-        }
-        .action-buttons .btn {
-            padding: 0.18rem 0.35rem;
-            font-size: 0.82rem;
-        }
-        .add-category-form {
-            background: white;
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            margin-bottom: 18px;
-        }
-        .edit-backdrop {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 1040;
-        }
-        .table-editing {
-            position: relative;
-            z-index: 1050;
-        }
-        .table-editing input {
-            min-width: 100px;
-        }
-        .table-editing .btn {
-            min-width: 70px;
-        }
-        .table-editing-row {
-            background: #f3f7fa !important;
-        }
-        .table-editing-row td {
-            vertical-align: middle;
-        }
-        .pagination-controls {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.3rem;
-            margin-top: 1rem;
-        }
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-        .table {
-            min-width: 700px;
-            width: 100%;
-        }
-        .table td, .table th {
-            padding: 0.4rem 0.3rem;
-            font-size: 0.95rem;
-            word-break: break-word;
-        }
-    </style>
-}
-
 @section Body {
-    <div class="app-wrapper">
-        <div class="main-content">
-            <div class="container py-4">
-                @await Html.PartialAsync("_AdminNav")
-                <div class="row mb-4">
-                    <div class="col">
-                        <h2 class="fw-bold">Управление категориями</h2>
+    <div class="admin-page-container">
+        <div class="admin-header">
+            <h1 class="admin-title">Управление категориями</h1>
+            @await Html.PartialAsync("_AdminNav")
+        </div>
+
+        <div class="admin-content-box admin-form">
+            <h4 class="mb-3">Добавить категорию</h4>
+            <form id="addCategoryForm">
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <input type="text" class="form-control" id="ruTitle" placeholder="Название на русском" required>
+                    </div>
+                    <div class="admin-form-group">
+                        <input type="text" class="form-control" id="engTitle" placeholder="Название на английском" required>
+                    </div>
+                    <div style="flex: 0 0 auto;">
+                        <button type="submit" class="btn btn-primary">Добавить</button>
                     </div>
                 </div>
+            </form>
+        </div>
 
-                <!-- Форма добавления категории -->
-                <div class="add-category-form mb-4">
-                    <h4 class="mb-3">Добавить новую категорию</h4>
-                    <form id="addCategoryForm" class="row g-3">
-                        <div class="col-md-5">
-                            <input type="text" class="form-control" id="ruTitle" placeholder="Название на русском" required>
-                        </div>
-                        <div class="col-md-5">
-                            <input type="text" class="form-control" id="engTitle" placeholder="Название на английском" required>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary w-100">Добавить</button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Таблица категорий -->
-                <div class="categories-table position-relative">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0" id="categoryTable">
-                            <thead class="table-header">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Русское название</th>
-                                    <th>Английское название</th>
-                                    <th>Действия</th>
-                                </tr>
-                            </thead>
-                            <tbody id="categoriesTableBody">
-                                <!-- Данные будут загружены через JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination-controls">
-                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
-                        <span id="pageInfo" class="align-self-center"></span>
-                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
-                    </div>
-                    <div id="editBackdrop" class="edit-backdrop" style="display:none;"></div>
+        <div class="admin-content-box">
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px">ID</th>
+                            <th>Русское название</th>
+                            <th>Английское название</th>
+                            <th style="width: 100px">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriesTableBody">
+                        <!-- Данные загружаются через JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-3 border-top d-flex justify-content-between align-items-center">
+                <span id="pageInfo"></span>
+                <div class="admin-actions">
+                    <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
+                    <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
                 </div>
             </div>
         </div>
@@ -188,6 +58,20 @@
         let editingRowId = null;
         let currentPage = 1;
         let lastPage = false;
+
+        // Проверяем был ли ранее сохранен фильтр в localStorage
+        let filter = {
+            title: localStorage.getItem('categoryFilter') || ''
+        };
+        
+        // Восстанавливаем значение фильтра при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterInput = document.getElementById('ruTitle');
+            if (filterInput && filter.title) {
+                filterInput.value = filter.title;
+            }
+            loadCategories();
+        });
 
         // Загрузка категорий
         async function loadCategories(page = 1) {
@@ -213,9 +97,13 @@
                                 <td>
                                     <input type="text" class="form-control" id="editEngTitle" value="${escapeHtml(category.engTitle)}" />
                                 </td>
-                                <td class="action-buttons">
-                                    <button class="btn btn-success btn-sm me-2" onclick="saveEditCategory(${catId})">Сохранить</button>
-                                    <button class="btn btn-secondary btn-sm" onclick="cancelEditCategory()">Отмена</button>
+                                <td class="action-buttons d-flex gap-2">
+                                    <button class="btn btn-success btn-sm" onclick="saveEditCategory(${catId})">
+                                        <i class="bi bi-check"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="cancelEditCategory()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
                                 </td>
                             </tr>
                         `;
@@ -349,9 +237,13 @@
             }
         });
 
-        // Загрузка категорий при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
-            loadCategories();
+        // Добавляем обработчик события для кнопки фильтрации
+        document.getElementById('addCategoryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            filter.title = document.getElementById('ruTitle').value;
+            // Сохраняем фильтр в localStorage
+            localStorage.setItem('categoryFilter', filter.title);
+            await loadCategories(1);
         });
     </script>
 }

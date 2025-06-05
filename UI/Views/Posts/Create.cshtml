@@ -9,58 +9,138 @@
 }
 
 @section Body {
-    <div class="app-wrapper">
-        <div class="main-content">
-            <div class="container">
-                <div class="card p-4 shadow" style="border-radius: 1rem;">
-                    <h2 class="mb-4">Создание поста</h2>
+    <div class="admin-page-container">
+        <div class="create-form-container">
+            <div class="create-form-box">
+                <h2 class="form-title">Создание поста</h2>
 
-                    <form id="postForm" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Заголовок</label>
-                            <input type="text" id="title" name="Title" class="form-control" required />
+                <form id="postForm" enctype="multipart/form-data">
+                    <div class="mb-3 form-group">
+                        <label for="title" class="form-label">Заголовок</label>
+                        <input type="text" id="title" name="Title" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="content" class="form-label">Содержание</label>
+                        <textarea id="content" name="Content" class="form-control" rows="5" required></textarea>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label class="form-label">Публиковать от лица</label>
+                        <select id="communitySelect" name="CommunityId" class="form-select">
+                            <option value="0" selected>От себя (автора)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label class="form-label">Выберите от 1 до 5 категорий</label>
+                        <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
+                        <div class="form-text text-danger" id="categoryError" style="display:none;">
+                            Выберите от 1 до 5 категорий.
                         </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="content" class="form-label">Содержание</label>
-                            <textarea id="content" name="Content" class="form-control" rows="5" required></textarea>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
+                        <button id="nextPage" type="button" class="btn btn-outline-secondary">Вперёд &rarr;</button>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="images" class="form-label">Загрузите до 5 изображений</label>
+                        <input type="file" id="images" name="Images" accept="image/*" multiple class="form-control" />
+                        <div class="form-text text-danger" id="imageError" style="display:none;">
+                            Можно загрузить максимум 5 изображений.
                         </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Публиковать от лица</label>
-                            <select id="communitySelect" name="CommunityId" class="form-select">
-                                <option value="0" selected>От себя (автора)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Выберите от 1 до 5 категорий</label>
-                            <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
-                            <div class="form-text text-danger" id="categoryError" style="display:none;">
-                                Выберите от 1 до 5 категорий.
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
-                            <button id="nextPage" type="button" class="btn btn-outline-secondary">Вперёд &rarr;</button>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="images" class="form-label">Загрузите до 5 изображений</label>
-                            <input type="file" id="images" name="Images" accept="image/*" multiple class="form-control" />
-                            <div class="form-text text-danger" id="imageError" style="display:none;">
-                                Можно загрузить максимум 5 изображений.
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mt-3">Опубликовать</button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-primary mt-3">Опубликовать</button>
+                </form>
             </div>
         </div>
     </div>
 }
+
+<style>
+    .create-form-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 1.5rem;
+    }
+
+    .create-form-box {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        padding: 2rem;
+    }
+
+    .form-title {
+        color: #333;
+        margin-bottom: 2rem;
+        font-weight: 600;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e0e0e0;
+        transition: all 0.2s;
+    }
+
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    }
+
+    #categoryList {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .category-pill {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        user-select: none;
+    }
+
+    .category-pill:hover {
+        transform: translateY(-2px);
+    }
+
+    @@media (max-width: 768px) {
+        .create-form-box {
+            padding: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        #categoryList {
+            padding: 0.5rem;
+        }
+
+        .category-pill {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>
 
 @section Script {
     <script>

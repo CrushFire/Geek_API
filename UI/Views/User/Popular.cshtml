@@ -11,27 +11,23 @@
 }
 
 @section Body {
-    <div class="app-wrapper">
-
-        <div class="main-content">
-            <div class="post" id="posts">
+    <div class="admin-page-container">
+        <div class="content-box">
+            <div class="posts-container" id="posts">
+                <!-- Данные загружаются через JavaScript -->
             </div>
         </div>
-        <!-- Простое модальное окно для увеличенного изображения -->
+
+        <!-- Модальное окно для изображений -->
         <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
             <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
         </div>
-
     </div>
-
-        <script>
-            function revealSpoiler() {
-                const spoiler = document.getElementById('spoilerContent');
-                spoiler.classList.add('revealed');
-                spoiler.innerHTML = '<p>This is the spoiler content revealed.</p>';
-            }
-        </script>
 }
+
+<style>
+    // ...те же стили, что и в New.cshtml...
+</style>
 
 @section Script {
     <script>

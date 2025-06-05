@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="..." crossorigin="anonymous"></script>
     <link href="@Url.Content("~/css/site.css")" rel="stylesheet">
     @if(ViewBag.Language == "ru")
@@ -32,87 +33,470 @@
     }
 
     @RenderSection("Head", required: false)
-</head>
+    <style>
+        body {
+            min-width: 300px;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background: #f6f8fa;
+            overflow-x: auto;
+            position: relative; /* Добавлено */
+        }
+        
+        .app-container {
+            display: flex;
+            flex: 1;
+            position: relative;
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .my-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.98);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            gap: 1rem;
+        }
+        
+        .header-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+            transition: color 0.2s;
+        }
+        
+        .header-brand:hover {
+            color: #0d6efd;
+        }
+        
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background: #f8f9fa;
+            transition: all 0.2s;
+        }
+        
+        .search-bar input:focus {
+            background: #fff;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            width: 240px;
+            background: #fff;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
 
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            min-height: fit-content;
+            height: 100%;
+        }
+
+        /* Стили для экранов высотой 700px и больше */
+        @@media (min-height: 800px) {
+            .sidebar {
+                padding: 0.8rem;
+                overflow-y: auto;
+            }
+
+            .sidebar nav {
+                gap: 0.2rem;
+            }
+
+            .sidebar h6 {
+                margin: 0.5rem 0 0.2rem;
+            }
+
+            .sidebar .nav-link {
+                padding: 0.4rem 0.6rem;
+                margin: 0.05rem 0;
+            }
+
+            hr {
+                margin: 0.5rem 0;
+            }
+        }
+
+        /* Стили для экранов ниже 700px */
+        @@media (max-height: 799px) {
+            .sidebar {
+                padding: 0.8rem;
+                overflow-y: auto;
+            }
+
+            .sidebar nav {
+                gap: 0.2rem;
+            }
+
+            .sidebar h6 {
+                margin: 0.5rem 0 0.2rem;
+            }
+
+            .sidebar .nav-link {
+                padding: 0.4rem 0.6rem;
+                margin: 0.05rem 0;
+            }
+
+            hr {
+                margin: 0.5rem 0;
+            }
+        }
+        
+        .main-content {
+            margin-left: 240px;
+            padding: 2rem;
+            width: calc(100% - 240px);
+            min-height: calc(100vh - 60px);
+            box-sizing: border-box;
+            position: relative; /* Добавлено */
+            overflow: visible; /* Изменено с auto */
+        }
+        
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative; /* Добавлено */
+        }
+
+        /* Общие стили для админ-панели */
+    .admin-page-container {
+        min-width: 300px;
+        width: 100%;
+        padding: 1.5rem;
+        box-sizing: border-box;
+        position: relative; /* Добавлено */
+    }
+    
+    .admin-content-box {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+    }
+    
+    .admin-table-wrapper {
+        overflow-x: auto;
+        min-width: 300px; /* Изменено с 800px */
+    }
+    
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .admin-table th {
+        background: #f8f9fa;
+        padding: 1rem;
+        font-weight: 500;
+        text-align: left;
+        white-space: nowrap;
+    }
+    
+    .admin-table td {
+        padding: 1rem;
+        border-top: 1px solid #eee;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .admin-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .admin-filter-item {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .admin-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+    }
+    
+    .admin-form {
+        padding: 1.5rem;
+    }
+    
+    .admin-form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .admin-form-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    /* Стили для страниц авторизации */
+    .auth-content {
+            width: 100%;
+            min-height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto; /* Добавлено */
+            max-width: 1200px; /* Добавлено */
+            padding: 0 1rem; /* Добавлено */
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .auth-form {
+            width: 100%;
+            max-width: 450px; /* Изменено с min-width на max-width */
+            background: #fff;
+            padding: 3.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            margin: 0 auto; /* Добавлено */
+        }
+    
+    .auth-form .form-control {
+        padding: 0.875rem 1.25rem; /* Увеличили отступы в полях */
+        font-size: 1rem;
+        height: auto;
+    }
+    
+    .auth-form .button-group {
+        margin-top: 3rem; /* Увеличили отступ сверху */
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .auth-form .button-group .btn {
+        padding: 0.875rem; /* Увеличили высоту кнопок */
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    
+    .auth-form .text-danger {
+        font-size: 0.875rem;
+        display: block;
+        margin-top: 0.25rem;
+    }
+
+    /* Стили для модальных окон */
+    .modal-backdrop-custom {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+    }
+
+    [class^="modal-confirm-"] {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1051;
+        background: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        min-width: 320px;
+        max-width: 90vw;
+    }
+
+    [class^="modal-confirm-"] .modal-title {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    [class^="modal-confirm-"] .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+    }
+
+    /* Анимация появления модального окна */
+    [class^="modal-confirm-"] {
+        animation: modalShow 0.2s ease-out;
+    }
+
+    /* Стили для скроллбара */
+    .sidebar::-webkit-scrollbar,
+    .main-content::-webkit-scrollbar,
+    .admin-page-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track,
+    .main-content::-webkit-scrollbar-track,
+    .admin-page-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb,
+    .main-content::-webkit-scrollbar-thumb,
+    .admin-page-container::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover,
+    .main-content::-webkit-scrollbar-thumb:hover,
+    .admin-page-container::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+    </style>
+</head>
 <body>
-        @if (IsSectionDefined("Header"))
+    <header class="my-header">
+        <div class="header-content">
+            <a class="header-brand" href="/">CFork</a>
+            <form class="search-bar" method="get" action="/Post/Search">
+                <input type="text" class="form-control" name="name" placeholder="@ViewBag.Search" />
+            </form>
+            <div class="ms-auto language-switcher">
+                <button type="button" class="btn btn-sm @(ViewBag.Language == "ru" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('ru')">RU</button>
+                <button type="button" class="btn btn-sm @(ViewBag.Language == "eng" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('eng')">EN</button>
+            </div>
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <button type="button" class="btn btn-sm btn-outline-danger header-action-btn" onclick="logout()">
+                    Выйти
+                </button>
+            }
+        </div>
+    </header>
+
+    <div class="app-container">
+        @if (!ViewBag.isAuthPage)
         {
-            <header>
-        @RenderSection("Header", required: false)
-        </header>
+            <aside class="sidebar">
+                <nav>
+                    <a href="/Home/@ViewBag.userIdToken" class="nav-link @(Context.Request.Path.StartsWithSegments("/Home") ? "active" : "")">
+                        <i class="bi bi-house-heart"></i> Home
+                    </a>
+                    <a href="/Popular/@ViewBag.userIdToken" class="nav-link @(Context.Request.Path.StartsWithSegments("/Popular") ? "active" : "")">
+                        <i class="bi bi-graph-up"></i> Popular
+                    </a>
+                    <a href="/Community/Explore" class="nav-link @(Context.Request.Path.StartsWithSegments("/Community/Explore") ? "active" : "")">
+                        <i class="bi bi-compass"></i> Explore
+                    </a>
+                    <a href="/New/@ViewBag.userIdToken" class="nav-link @(Context.Request.Path.StartsWithSegments("/New") ? "active" : "")">
+                        <i class="bi bi-lightning"></i> New
+                    </a>
+
+                    <hr>
+
+                    <h6>TO LIGHT FIRE</h6>
+                    <a href="/Post/Create" class="nav-link @(Context.Request.Path.StartsWithSegments("/Post/Create") ? "active" : "")">
+                        <i class="bi bi-file-earmark-plus"></i> Create a custom post
+                    </a>
+
+                    <hr>
+
+                    <h6>CREATE CAMPFIRE</h6>
+                    <a href="/Community/Create" class="nav-link @(Context.Request.Path.StartsWithSegments("/Community/Create") ? "active" : "")">
+                        <i class="bi bi-people-fill"></i> Create a community
+                    </a>
+
+                    <hr>
+
+                    <h6>RESOURCES</h6>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-info-circle"></i> About
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-question-circle"></i> Help
+                    </a>
+
+                    <hr>
+
+                    <h6>THE BESTS</h6>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-collection"></i> Communities
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-award"></i> Fires
+                    </a>
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <hr>
+                        <a href="/Admin/Panel" class="nav-link @(Context.Request.Path.StartsWithSegments("/Admin") ? "active" : "")">
+                            <i class="bi bi-shield-lock"></i> Админ-панель
+                        </a>
+                    }
+                </nav>
+            </aside>
+            <main class="main-content">
+                <div class="content-wrapper">
+                    @RenderSection("Body", required: false)
+                </div>
+            </main>
         }
         else
         {
-            <header>
-            <div class="my-header navbar-expand-lg navbar-light">
-                <div class="container">
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <!-- Логотип -->
-                        <a class="header-brand" href="#">CFork</a>
-                        <!-- Иконка профиля -->
-                        <div class="header-item">
-                            <a class="header-link" href="#">
-                                <img src="~/images/fire (1).svg" alt="Profile" class="profile-icon">
-                            </a>
-                        </div>
-                        <!-- Поиск -->
-                        <form class="search-bar ms-auto d-flex align-items-center" method="get" action="/Post/Search">
-                            <input type="text" class="form-control" name="name" placeholder="@ViewBag.Search" />
-                        </form>
-
-                        <div class="ms-auto d-flex align-items-center gap-2">
-                            <button type="button" class="btn btn-sm @(ViewBag.Language == "ru" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('ru')">ru</button>
-                            <button type="button" class="btn btn-sm @(ViewBag.Language == "eng" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('eng')">eng</button>
-                        </div>
-
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="logout()">Выйти</button>
-                        }
-                    </div>
-                </div>
-            </div>
-            </header>
-
+            <main class="auth-content">
+                @RenderSection("Body", required: false)
+            </main>
         }
-    @if (!ViewBag.isAuthPage)
-    {
-        <div class="sidebar">
-            <a href="/Home/@ViewBag.userIdToken" class="nav-link">Home</a>
-            <a href="/Popular/@ViewBag.userIdToken" class="nav-link">Popular</a>
-            <a href="/Community/Explore" class="nav-link">Explore</a>
-            <a href="/New/@ViewBag.userIdToken" class="nav-link">New</a>
+    </div>
 
-            <hr>
-
-            <h6>TO LIGHT FIRE</h6>
-            <a href="/Post/Create" class="nav-link">- Create a custom post</a>
-
-            <hr>
-
-            <h6>CREATE CAMPFIRE</h6>
-            <a href="/Community/Create" class="nav-link">- Create a community</a>
-
-            <hr>
-
-            <h6>RESOURCES</h6>
-            <a href="#" class="nav-link">About</a>
-            <a href="#" class="nav-link">Help</a>
-
-            <hr>
-
-            <h6>THE BESTS</h6>
-            <a href="#" class="nav-link">Communities</a>
-            <a href="#" class="nav-link">Fires</a>
-
-            @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-            {
-                <a href="/Admin/Panel" class="btn btn-warning ms-2">Админ-панель</a>
-            }
-        </div>
-    }
-        @RenderSection("Body", required: false)
-        @RenderSection("Script", required: false);
+    @RenderSection("Script", required: false);
             <script>
         function setLanguage(language) {
             // Сохраняем куку
@@ -135,8 +519,4 @@
         }
     </script>
 </body>
-<footer>
-
-</footer>
 </html>
-.

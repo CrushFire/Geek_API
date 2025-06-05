@@ -12,94 +12,197 @@
 }
 
 @section Body {
-    <div class="app-wrapper">
-        <div class="main-content">
-            <div class="main-box">
-                <div class="row">
-                    <!-- Аватар и Инфо -->
-                    <div class="col-md-4 text-center" style="align-items: center; margin-top: 40px;">
-                        @if (avatarImage != null && !string.IsNullOrEmpty(avatarImage.ImageUrl))
-                        {
-                            <a onclick="openImageModal('@avatarImage.ImageUrl')" style="cursor: pointer;">
-                                <img src="@avatarImage.ImageUrl" class="rounded-circle mx-auto"
-                                     style="width: 200px; height: 200px; object-fit: cover;" alt="Avatar" />
-                            </a>
-                        }
-                        else
-                        {
-                            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto"
-                                 style="width: 200px; height: 200px; font-size: 48px; font-weight: bold; color: white; background-color: #4D96FF;">
-                                @Model.UserName.Substring(0, 1).ToUpper()
-                            </div>
-                        }
+    <div class="admin-page-container">
+        <div class="content-box">
+            <div class="row">
+                <!-- Аватар и Инфо -->
+                <div class="col-md-4 text-center" style="align-items: center; margin-top: 40px;">
+                    @if (avatarImage != null && !string.IsNullOrEmpty(avatarImage.ImageUrl))
+                    {
+                        <a onclick="openImageModal('@avatarImage.ImageUrl')" style="cursor: pointer;">
+                            <img src="@avatarImage.ImageUrl" class="rounded-circle mx-auto"
+                                 style="width: 200px; height: 200px; object-fit: cover;" alt="Avatar" />
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                             style="width: 200px; height: 200px; font-size: 48px; font-weight: bold; color: white; background-color: #4D96FF;">
+                            @Model.UserName.Substring(0, 1).ToUpper()
+                        </div>
+                    }
 
-                        <div style="margin-top: 45px">
-                            <div class="d-flex justify-content-around text-center">
-                                <div>
-                                    <h5>@Model.NumberOfLikes</h5>
-                                    <p>Likes 💙</p>
-                                </div>
-                                <div>
-                                    <h5>@Model.NumberOfPosts</h5>
-                                    <p>Posts 📚</p>
-                                </div>
-                                <div>
-                                    <h5>@Model.NumberOfComments</h5>
-                                    <p>Comments 💬</p>
-                                </div>
-                                <div>
-                                    <h5>@Model.NumberOfCommunities</h5>
-                                    <p>Subscribes 👥</p>
-                                </div>
+                    <div style="margin-top: 45px">
+                        <div class="d-flex justify-content-around text-center">
+                            <div>
+                                <h5>@Model.NumberOfLikes</h5>
+                                <p>Likes 💙</p>
+                            </div>
+                            <div>
+                                <h5>@Model.NumberOfPosts</h5>
+                                <p>Posts 📚</p>
+                            </div>
+                            <div>
+                                <h5>@Model.NumberOfComments</h5>
+                                <p>Comments 💬</p>
+                            </div>
+                            <div>
+                                <h5>@Model.NumberOfCommunities</h5>
+                                <p>Subscribes 👥</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Форма редактирования -->
-                    <div class="col-md-8">
-                        <form id="profileForm" asp-action="UpdateProfile" asp-controller="Home" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="Id" value="@Model.Id" />
-
-                            <div class="mb-3">
-                                <label for="Username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="Username" name="UserName" value="@Model.UserName" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="Description" class="form-label">Description</label>
-                                <textarea class="form-control" id="Description" name="Description" rows="3">@Model.Description</textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="Avatar" class="form-label">Avatar (optional)</label>
-                                <input type="file" class="form-control" id="Avatar" name="Avatar" />
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </form>
-                    </div>
                 </div>
 
-                <hr class="my-4" />
+                <!-- Форма редактирования -->
+                <div class="col-md-8">
+                    <form id="profileForm" asp-action="UpdateProfile" asp-controller="Home" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="Id" value="@Model.Id" />
 
-                <div class="d-flex justify-content-around mb-4">
-                    <button class="btn btn-outline-secondary" onclick="loadLikedPosts()">Liked Posts</button>
-                    <button class="btn btn-outline-secondary" onclick="loadPublishedPosts()">My Posts</button>
-                    <button class="btn btn-outline-secondary" onclick="loadSubscribedCommunities()"> Subscriptions</button>
-                    <button class="btn btn-outline-secondary" onclick="loadOwnedCommunities()">My Communities</button>
-                </div>
+                        <div class="mb-3">
+                            <label for="Username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="Username" name="UserName" value="@Model.UserName" />
+                        </div>
 
-                <div class="post" id="posts">
-                    
-                </div>
+                        <div class="mb-3">
+                            <label for="Description" class="form-label">Description</label>
+                            <textarea class="form-control" id="Description" name="Description" rows="3">@Model.Description</textarea>
+                        </div>
 
-                <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
-                    <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
+                        <div class="mb-3">
+                            <label for="Avatar" class="form-label">Avatar (optional)</label>
+                            <input type="file" class="form-control" id="Avatar" name="Avatar" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
                 </div>
             </div>
+
+            <hr class="my-4" />
+
+            <div class="d-flex justify-content-around mb-4">
+                <button class="btn btn-outline-secondary" onclick="loadLikedPosts()">Liked Posts</button>
+                <button class="btn btn-outline-secondary" onclick="loadPublishedPosts()">My Posts</button>
+                <button class="btn btn-outline-secondary" onclick="loadSubscribedCommunities()"> Subscriptions</button>
+                <button class="btn btn-outline-secondary" onclick="loadOwnedCommunities()">My Communities</button>
+            </div>
+
+            <div class="posts-container" id="posts">
+                
+            </div>
+        </div>
+
+        <!-- Модальное окно для изображений -->
+        <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
+            <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
         </div>
     </div>
 }
+
+<style>
+    .content-box {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 1rem;
+        min-width: 300px;
+    }
+
+    .posts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .post-card {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .post-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .post-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .post-content {
+        padding: 1rem;
+    }
+
+    .post-images {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+
+    .post-img-thumb {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .post-img-thumb:hover {
+        transform: scale(1.02);
+    }
+
+    .post-footer {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .post-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        padding: 0.25rem 0.5rem;
+        border: none;
+        background: none;
+        color: #666;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        color: #0d6efd;
+    }
+
+    .user-liked { color: #0d6efd; }
+    .user-disliked { color: #dc3545; }
+
+    @@media (max-width: 768px) {
+        .content-box {
+            padding: 0.5rem;
+        }
+
+        .post-images {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+
+        .post-img-thumb {
+            height: 120px;
+        }
+    }
+</style>
+
 @section Script {
     <script>
         const errorMessage = "@language" == "ru" ? "Пользователь с таким ником уже существует" : "User with name yet exists"
@@ -188,7 +291,7 @@
                     const isUserDisliked = reaction?.isLike === false;
 
                     const div = document.createElement("div");
-                    div.className = "card mb-3";
+                    div.className = "card mb-3 post-card";
 
                     const avatarHtml = avatarUrl
                         ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 ${borderClass}" style="width: 45px; height: 45px; object-fit: cover;">`
@@ -197,12 +300,12 @@
                            </div>`;
 
                     div.innerHTML = `
-                        <div class="card-body position-relative">
+                        <div class="card-body position-relative post-content">
                             <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
                                 ${new Date(post.createAt).toLocaleDateString()} ${new Date(post.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </div>
 
-                            <div class="d-flex align-items-center mb-3">
+                            <div class="d-flex align-items-center mb-3 post-header">
                                 <a href="${isCommunityPost ? `/Community/${post.communityId}` : `/UserPage/${post.author.id}`}" class="d-flex align-items-center text-decoration-none text-dark">
                                     ${avatarHtml}
                                     <strong>${name}</strong>
@@ -218,10 +321,10 @@
                             </div>
                             <p>${post.content}</p>
                             <span class="badge bg-primary me-1">${categoriesStr}</span>
-                            <p class="text-muted mt-2">
-                                <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''}" id="like-${post.id}">💙 <span>${post.likes}</span></button>
+                            <p class="text-muted mt-2 post-footer">
+                                <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''} action-btn" id="like-${post.id}">💙 <span>${post.likes}</span></button>
                                 /
-                                <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>
+                                <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''} action-btn" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>
                                 👀${post.views}
                                 <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
                                     ${post.comments} 💬 ${language === "ru" ? "Комментарии" : "Comments"}
@@ -282,7 +385,7 @@
                     const isUserDisliked = reaction?.isLike === false;
 
                     const div = document.createElement("div");
-                    div.className = "card mb-3";
+                    div.className = "card mb-3 post-card";
 
                     const avatarHtml = avatarUrl
                         ? `<img src="${avatarUrl}" alt="avatar" class="rounded-circle me-2 ${borderClass}" style="width: 45px; height: 45px; object-fit: cover;">`
@@ -291,12 +394,12 @@
                                    </div>`;
 
                     div.innerHTML = `
-                                <div class="card-body position-relative">
+                                <div class="card-body position-relative post-content">
                                     <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
                                         ${new Date(post.createAt).toLocaleDateString()} ${new Date(post.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </div>
 
-                                    <div class="d-flex align-items-center mb-3">
+                                    <div class="d-flex align-items-center mb-3 post-header">
                                         <a href="${isCommunityPost ? `/Community/${post.communityId}` : `/UserPage/${post.author.id}`}" class="d-flex align-items-center text-decoration-none text-dark">
                                             ${avatarHtml}
                                             <strong>${name}</strong>
@@ -312,10 +415,10 @@
                                     </div>
                                     <p>${post.content}</p>
                                     <span class="badge bg-primary me-1">${categoriesStr}</span>
-                                    <p class="text-muted mt-2">
-                                        <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''}" id="like-${post.id}">💙 <span>${post.likes}</span></button>
+                                    <p class="text-muted mt-2 post-footer">
+                                        <button onclick="handleReaction(${post.id}, true)" class="btn btn-sm text-decoration-none ${isUserLiked ? 'user-liked' : ''} action-btn" id="like-${post.id}">💙 <span>${post.likes}</span></button>
                                         /
-                                        <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>
+                                        <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''} action-btn" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>
                                         👀${post.views}
                                         <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
                                             ${post.comments} 💬 ${language === "ru" ? "Комментарии" : "Comments"}
@@ -465,14 +568,14 @@
                    </button>`;
 
                     const div = document.createElement("div");
-                    div.className = "card mb-3";
+                    div.className = "card mb-3 post-card";
 
                     div.innerHTML = `
-                <div class="card-body position-relative">
+                <div class="card-body position-relative post-content">
                     <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
                         ${new Date(comm.createAt).toLocaleDateString()} ${new Date(comm.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
-                    <div class="d-flex align-items-center position-relative">
+                    <div class="d-flex align-items-center position-relative post-header">
                         <a href="/Community/${comm.id}" class="d-flex align-items-center text-decoration-none text-dark">
                             ${avatarHtml}
                             <strong>${comm.communityName}</strong>
@@ -577,7 +680,7 @@
                         : (Array.isArray(comm.categoriesEng) ? comm.categoriesEng.map(c => `#${c}`).join(" ") : "");
 
                     const div = document.createElement("div");
-                    div.className = "card mb-3";
+                    div.className = "card mb-3 post-card";
 
                     const avatarHtml = comm.avatarUrl
                         ? `<img src="${comm.avatarUrl}" alt="avatar" class="rounded-circle me-2 border-community" style="width: 45px; height: 45px; object-fit: cover;">`
@@ -586,7 +689,7 @@
                            </div>`;
 
                     div.innerHTML = `
-                        <div class="card-body">
+                        <div class="card-body post-content">
                            <div style="position: absolute; top: 8px; right: 12px; color: #aaa; font-size: 0.85em;">
                             ${new Date(comm.createAt).toLocaleDateString()} ${new Date(comm.createAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </div>

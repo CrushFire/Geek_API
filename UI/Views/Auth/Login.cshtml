@@ -11,59 +11,36 @@
     ViewBag.RedirectButton = ViewBag.pageData.From("RedirectButton");
 }
 
-@section Head {
-    
-}
-
-@section Header {
-    <div class="my-header navbar-expand-lg navbar-light shadow-header">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <a class="header-brand" href="#">CFork</a>
-                <div class="header-item">
-                    <a class="header-link" href="#">
-                        <img src="~/images/fire (1).svg" alt="Profile" class="profile-icon">
-                    </a>
-                </div>
-                <div class="ms-auto d-flex align-items-center gap-2">
-                    <button type="button" class="btn btn-sm @(ViewBag.Language == "ru" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('ru')">ru</button>
-                    <button type="button" class="btn btn-sm @(ViewBag.Language == "eng" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('eng')">eng</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
 @section Body {
-<div class="login-wrapper">
-    <form asp-action="Login" method="post" class="login-form" novalidate>
-        <h2>@ViewBag.Title</h2>
+    <div class="auth-wrapper">
+        <form asp-action="Login" method="post" class="auth-form" novalidate>
+            <h2>@ViewBag.Title</h2>
 
-            <div class="form-group text-initial">
-                <label asp-for="UserEmail">@ViewBag.ElFormEmail:</label>
-                <input asp-for="UserEmail" class="form-control" />
+            <div class="form-group">
+                <label asp-for="UserEmail">@ViewBag.ElFormEmail</label>
+                <input asp-for="UserEmail" class="form-control" placeholder="name@example.com" />
                 <span class="text-danger">@((ViewBag.Errors != null && ViewBag.Errors.ContainsKey("UserEmail")) ? ViewBag.Errors["UserEmail"] : "")</span>
             </div>
 
-            <div class="form-group text-initial">
-                <label asp-for="UserName">@ViewBag.ElFormUsername:</label>
-                <input asp-for="UserName" class="form-control" />
+            <div class="form-group">
+                <label asp-for="UserName">@ViewBag.ElFormUsername</label>
+                <input asp-for="UserName" class="form-control" placeholder="Username" />
                 <span class="text-danger">@((ViewBag.Errors != null && ViewBag.Errors.ContainsKey("UserName")) ? ViewBag.Errors["UserName"] : "")</span>
             </div>
 
-            <div class="form-group text-initial">
-                <label asp-for="Password">@ViewBag.ElFormPassword:</label>
-                <input asp-for="Password" class="form-control" type="password" />
+            <div class="form-group">
+                <label asp-for="Password">@ViewBag.ElFormPassword</label>
+                <input asp-for="Password" class="form-control" type="password" placeholder="••••••••" />
                 <span class="text-danger">@((ViewBag.Errors != null && ViewBag.Errors.ContainsKey("Password")) ? ViewBag.Errors["Password"] : "")</span>
                 <span class="text-danger">@((ViewBag.Errors != null && ViewBag.Errors.ContainsKey("UserNotExists")) ? ViewBag.Errors["UserNotExists"] : "")</span>
             </div>
 
             <div class="button-group">
-                <button type="submit" class="btn btn-primary submit-button">@ViewBag.SendButton</button>
-                <button type="button" class="btn btn-success submit-button" onclick="window.location.href='/Auth/Registration'">@ViewBag.RedirectButton</button>
+                <button type="submit" class="btn btn-primary">@ViewBag.SendButton</button>
+                <a href="/Auth/Registration" class="btn btn-outline-secondary">@ViewBag.RedirectButton</a>
             </div>
-    </form>
-</div>
+        </form>
+    </div>
 }
 
 @section Script {

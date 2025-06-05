@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace UI.Controllers;
 
 [Route("Auth")]
-
 public class AuthController : CustomControllerBase
 {
     private readonly IAuthService _authService;
@@ -31,7 +30,6 @@ public class AuthController : CustomControllerBase
     {
         var auth = await _dataPage.GetByPageAsync("Authorization");
 
-        //Штука для смены языка, как раз таки мой мидлвеар
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
         ViewBag.pageData = new SelectData(auth, ViewBag.Language);
 
@@ -104,32 +102,28 @@ public class AuthController : CustomControllerBase
     public async Task<IActionResult> Registration( RegisterRequest registerRequest)
     {
         var regs = await _dataPage.GetByPageAsync("Registration");
-
-        //Штука для смены языка, как раз таки мой мидлвеар
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
         ViewBag.pageData = new SelectData(regs, ViewBag.Language);
 
-        if (ModelState.IsValid == false)
+        if (!ModelState.IsValid)
         {
             ViewBag.Errors = ModelState
                 .Where(ms => ms.Value.Errors.Count > 0)
                 .ToDictionary(
-                    kvp => kvp.Key, // имя поля модели
+                    kvp => kvp.Key,
                     kvp => _errorMessages.GetMessage(kvp.Value.Errors.First().ErrorMessage, ViewBag.Language)
                 );
-
             return View(registerRequest);
         }
 
         var result = await _authService.RegisterAsync(registerRequest);
-
         if (!result.IsSuccess)
         {
             ModelState.AddModelError("Duplicate", "Duplicate");
             ViewBag.Errors = ModelState
                 .Where(ms => ms.Value.Errors.Count > 0)
                 .ToDictionary(
-                    kvp => kvp.Key, // имя поля модели
+                    kvp => kvp.Key,
                     kvp => _errorMessages.GetMessage(kvp.Value.Errors.First().ErrorMessage, ViewBag.Language)
                 );
             return View(registerRequest);
@@ -138,7 +132,7 @@ public class AuthController : CustomControllerBase
         Response.Cookies.Append("jwt_token", result.Data, new CookieOptions
         {
             HttpOnly = true,
-            Secure = true, // включи только если HTTPS
+            Secure = true,
             SameSite = SameSiteMode.Strict,
             Expires = DateTimeOffset.UtcNow.AddHours(1)
         });

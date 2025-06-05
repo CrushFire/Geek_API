@@ -1,9 +1,86 @@
-<div class="admin-nav-top mb-4" style="width:100%;box-sizing:border-box;">
-    <div style="display:flex;flex:1;gap:0.5rem;flex-wrap:wrap;">
-        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")" href="/Admin/Users"><i class="bi bi-people"></i> Пользователи</a>
-        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Posts" ? "active" : "")" href="/Admin/Posts"><i class="bi bi-file-earmark-text"></i> Посты</a>
-        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Communities" ? "active" : "")" href="/Admin/Communities"><i class="bi bi-collection"></i> Сообщества</a>
-        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Categories" ? "active" : "")" href="/Admin/Categories"><i class="bi bi-tags"></i> Категории</a>
-        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Comments" ? "active" : "")" href="/Admin/Comments"><i class="bi bi-chat-left-text"></i> Комментарии</a>
+<nav class="admin-nav-top">
+    <div class="admin-nav-container">
+        <a href="/Admin/Users" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")">
+            <i class="bi bi-people"></i> Пользователи
+        </a>
+        <a href="/Admin/Posts" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Posts" ? "active" : "")">
+            <i class="bi bi-file-text"></i> Посты
+        </a>
+        <a href="/Admin/Communities" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Communities" ? "active" : "")">
+            <i class="bi bi-people-fill"></i> Сообщества
+        </a>
+        <a href="/Admin/Categories" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Categories" ? "active" : "")">
+            <i class="bi bi-bookmark"></i> Категории
+        </a>
+        <a href="/Admin/Comments" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Comments" ? "active" : "")">
+            <i class="bi bi-chat-text"></i> Комментарии
+        </a>
     </div>
-</div>
+</nav>
+
+<style>
+    .admin-nav-top {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 0.8rem;
+        margin-bottom: 1.5rem;
+        min-width: 300px; /* Изменено с 800px */
+        min-height: 58px;
+        display: flex;
+        align-items: center;
+        overflow-x: auto; /* Добавлено для горизонтальной прокрутки */
+    }
+
+    .admin-nav-container {
+        display: flex;
+        flex-wrap: nowrap; /* Изменено с wrap для предотвращения переноса */
+        gap: 0.5rem;
+        min-width: min-content; /* Добавлено для корректного отображения при сужении */
+        padding: 0.2rem; /* Добавлено отступ для скролбара */
+    }
+
+    .admin-nav-top .nav-link {
+        flex-shrink: 0; /* Добавлено для предотвращения сжатия ссылок */
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1rem;
+        color: #555;
+        text-decoration: none;
+        font-size: 0.95rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+    .admin-nav-top .nav-link:hover {
+        background: #f3f7fa;
+        color: #0d6efd;
+    }
+
+    .admin-nav-top .nav-link.active {
+        background: #e7f0ff;
+        color: #0d6efd;
+        font-weight: 500;
+    }
+
+    /* Стилизация скроллбара */
+    .admin-nav-top::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .admin-nav-top::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+    }
+
+    .admin-nav-top::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 2px;
+    }
+
+    .admin-nav-top::-webkit-scrollbar-thumb:hover {
+        background: #999;
+    }
+</style>

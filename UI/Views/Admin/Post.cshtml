@@ -2,192 +2,62 @@
     ViewData["Title"] = "Управление постами";
 }
 
-@section Head {
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .app-wrapper {
-            width: 100vw;
-            min-height: 100vh;
-            background: #f6f8fa;
-            overflow-x: auto;
-        }
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2vw;
-            box-sizing: border-box;
-        }
-        .container.py-4 {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-        }
-        .admin-nav-top {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.08);
-            padding: 1rem 1rem;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .admin-nav-top .nav-link {
-            font-size: 1rem;
-            color: #333;
-            font-weight: 500;
-            border-radius: 6px;
-            margin: 0 0.1rem;
-            transition: background 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.4rem 0.8rem;
-        }
-        .admin-nav-top .nav-link.active, .admin-nav-top .nav-link:hover {
-            background: #f3f7fa;
-            color: #0d6efd;
-            text-decoration: none;
-        }
-        .admin-panel-title {
-            font-weight: bold;
-            margin-right: 1rem;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        .filter-panel {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.08);
-            padding: 1rem 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .posts-table {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        .table-header {
-            background-color: #f8f9fa;
-        }
-        .action-buttons .btn {
-            padding: 0.2rem 0.4rem;
-            font-size: 0.85rem;
-        }
-        .pagination-controls {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.4rem;
-            margin-top: 1rem;
-        }
-        .modal-backdrop-custom {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 2000;
-        }
-        .modal-confirm-post {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.15);
-            z-index: 2100;
-            padding: 1.1rem 0.8rem;
-            min-width: 220px;
-            max-width: 99vw;
-        }
-        .modal-confirm-post .modal-title {
-            font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        .modal-confirm-post .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem;
-            margin-top: 0.7rem;
-        }
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-        .table {
-            min-width: 700px;
-            width: 100%;
-        }
-        .table td, .table th {
-            padding: 0.4rem 0.3rem;
-            font-size: 0.95rem;
-            word-break: break-word;
-        }
-    </style>
-}
-
 @section Body {
-    <div class="app-wrapper">
-        <div class="main-content">
-            <div class="container py-4">
-                @await Html.PartialAsync("_AdminNav")
-                <div class="row mb-4">
-                    <div class="col">
-                        <h2 class="fw-bold">Управление постами</h2>
-                    </div>
-                    <!-- Удалена кнопка добавления поста -->
-                </div>
+    <div class="admin-page-container">
+        <div class="admin-header">
+            <h1 class="admin-title">Управление постами</h1>
+            @await Html.PartialAsync("_AdminNav")
+        </div>
 
-                <!-- Фильтр только по названию -->
-                <div class="filter-panel mb-4">
-                    <form id="postFilterForm" class="row g-2 align-items-end">
-                        <div class="col-md-4">
-                            <label class="form-label mb-1">Название поста</label>
-                            <input type="text" class="form-control" id="filterTitle" placeholder="Название поста">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Фильтровать</button>
-                        </div>
-                    </form>
+        <div class="admin-content-box">
+            <div class="admin-filters">
+                <div class="admin-filter-item">
+                    <label class="form-label">Название поста</label>
+                    <input type="text" class="form-control" id="filterTitle" placeholder="Название поста">
                 </div>
-
-                <!-- Таблица постов -->
-                <div class="posts-table position-relative">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0" id="postsTable">
-                            <thead class="table-header">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Заголовок</th>
-                                    <th>Автор</th>
-                                    <th>Дата</th>
-                                    <th>Действия</th>
-                                </tr>
-                            </thead>
-                            <tbody id="postsTableBody">
-                                <!-- Данные будут загружены через JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination-controls">
-                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
-                        <span id="pageInfo" class="align-self-center"></span>
-                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
-                    </div>
-                </div>
-
-                <!-- Модальное окно подтверждения удаления -->
-                <div id="postModalBackdrop" class="modal-backdrop-custom" style="display:none;"></div>
-                <div id="postModal" class="modal-confirm-post" style="display:none;">
-                    <div class="modal-title" id="postModalTitle">Подтвердите удаление</div>
-                    <div id="postModalText" class="mb-3"></div>
-                    <div class="modal-footer">
-                        <button id="postModalCancel" class="btn btn-secondary">Отмена</button>
-                        <button id="postModalConfirm" class="btn btn-danger">Удалить</button>
-                    </div>
+                <div style="flex: 0 0 auto; align-self: flex-end;">
+                    <button type="button" class="btn btn-primary" id="filterButton">
+                        <i class="bi bi-funnel"></i> Фильтровать
+                    </button>
                 </div>
             </div>
+        </div>
+
+        <div class="admin-content-box">
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px">ID</th>
+                            <th>Заголовок</th>
+                            <th style="width: 150px">Автор</th>
+                            <th style="width: 120px">Дата</th>
+                            <th style="width: 100px">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postsTableBody">
+                        <!-- Данные загружаются через JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-3 border-top d-flex justify-content-between align-items-center">
+                <span id="pageInfo"></span>
+                <div class="admin-actions">
+                    <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
+                    <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div id="postModalBackdrop" class="modal-backdrop-custom" style="display:none;"></div>
+    <div id="postModal" class="modal-confirm-post" style="display:none;">
+        <div class="modal-title" id="postModalTitle">Подтвердите удаление</div>
+        <div id="postModalText" class="mb-3"></div>
+        <div class="modal-footer">
+            <button id="postModalCancel" class="btn btn-secondary">Отмена</button>
+            <button id="postModalConfirm" class="btn btn-danger">Удалить</button>
         </div>
     </div>
 }
@@ -288,8 +158,7 @@
         };
 
         // Фильтрация
-        document.getElementById("postFilterForm").addEventListener("submit", function (e) {
-            e.preventDefault();
+        document.getElementById("filterButton").addEventListener("click", function () {
             filter.title = document.getElementById("filterTitle").value;
             loadPosts(1);
         });
