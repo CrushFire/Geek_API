@@ -35,7 +35,10 @@ namespace Application.Services
 
         public async Task<ServiceResult<List<CategoryResponse>>> GetCategoryAsync(PaginationRequest pagination)
         {
-            var categories = await _context.Categories.Skip((pagination.Page - 1) * pagination.PageSize).Take(pagination.PageSize).ToListAsync();
+            var categories = await _context.Categories
+                .OrderBy(i => i.Id)
+                .Skip((pagination.Page - 1) * pagination.PageSize)
+                .Take(pagination.PageSize).ToListAsync();
 
             var categoriesResponse = _mapper.Map<List<CategoryResponse>>(categories);
             return ServiceResult<List<CategoryResponse>>.Success(categoriesResponse);

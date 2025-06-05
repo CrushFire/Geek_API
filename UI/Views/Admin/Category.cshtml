@@ -87,6 +87,12 @@
         .table-editing-row td {
             vertical-align: middle;
         }
+        .pagination-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
     </style>
 }
 
@@ -132,6 +138,11 @@
                     </tbody>
                 </table>
             </div>
+            <div class="pagination-controls">
+                <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
+                <span id="pageInfo" class="align-self-center"></span>
+                <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
+            </div>
             <div id="editBackdrop" class="edit-backdrop" style="display:none;"></div>
         </div>
     </div>
@@ -140,14 +151,22 @@
 @section Script {
     <script>
         let editingRowId = null;
+        let currentPage = 1;
+        let totalPages = 1;
+        const pageSize = 20;
 
         // Загрузка категорий
         async function loadCategories(page = 1) {
             try {
                 const response = await fetch(`/Category?curPage=${page}`);
-                const data = await response.json();
+                const result = await response.json();
+                const data = result.items || [];
+                const totalCount = result.totalCount || 0;
                 const tbody = document.getElementById('categoriesTableBody');
                 tbody.innerHTML = '';
+
+                totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+                currentPage = page;
 
                 data.forEach(category => {
                     if (editingRowId === category.id) {
@@ -188,6 +207,11 @@
 
                 // Показать/скрыть затемнение
                 document.getElementById('editBackdrop').style.display = editingRowId !== null ? 'block' : 'none';
+
+                // Пагинация
+                document.getElementById('prevPageBtn').disabled = currentPage === 1 || editingRowId !== null;
+                document.getElementById('nextPageBtn').disabled = currentPage >= totalPages || editingRowId !== null;
+                document.getElementById('pageInfo').textContent = `Страница ${currentPage} из ${totalPages}`;
             } catch (error) {
                 console.error('Ошибка при загрузке категорий:', error);
             }
@@ -276,6 +300,18 @@
 
         // Затемнение кликабельно только для отмены редактирования
         document.getElementById('editBackdrop').addEventListener('click', cancelEditCategory);
+
+        document.getElementById('prevPageBtn').addEventListener('click', function() {
+            if (currentPage > 1 && editingRowId === null) {
+                loadCategories(currentPage - 1);
+            }
+        });
+
+        document.getElementById('nextPageBtn').addEventListener('click', function() {
+            if (currentPage < totalPages && editingRowId === null) {
+                loadCategories(currentPage + 1);
+            }
+        });
 
         // Загрузка категорий при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
