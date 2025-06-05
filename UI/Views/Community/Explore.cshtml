@@ -113,14 +113,16 @@
                     }
 
                     card.innerHTML = `
-                                ${avatarHtml}
-                                <div>
-                                    <h5 class="mb-1">${comm.name || 'No Name'}</h5>
-                                    <p class="mb-0 text-muted">${comm.numberOfMember} members</p>
-                                    <small class="text-muted">${comm.description || ''}</small>
-                                </div>
-                                ${buttonHtml}
-                            `;
+            <a href="/Community/${comm.id}" class="d-inline-block me-3" style="text-decoration: none;">
+                ${avatarHtml}
+            </a>
+            <div>
+                <h5 class="mb-1">${comm.name || 'No Name'}</h5>
+                <p class="mb-0 text-muted">${comm.numberOfMember} members</p>
+                <small class="text-muted">${comm.description || ''}</small>
+            </div>
+            ${buttonHtml}
+        `;
 
                     if (i === 0 || i === 1 || i === 2) {
                         const medal = document.createElement("div");

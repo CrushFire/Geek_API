@@ -60,7 +60,7 @@ namespace Application.Services
                 AvatarUrl = c.Avatar.ImageUrl,
                 CategoriesRu = c.CategoriesRu,
                 CategoriesEng = c.CategoriesEng,
-                NumberOfMember = c.Community.UserCommunities.Count(),
+                NumberOfMember = c.Community.UserCommunities.Count() - 1,
                 Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == c.Author.Id)),
                 CreateAt = c.Community.CreateAt
             };
@@ -112,7 +112,7 @@ namespace Application.Services
                 AvatarUrl = s.Avatar.ImageUrl,
                 CategoriesRu = s.CategoriesRu,
                 CategoriesEng = s.CategoriesEng,
-                NumberOfMember = s.Community.UserCommunities.Count(),
+                NumberOfMember = s.Community.UserCommunities.Count() - 1,
                 Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == s.Author.Id)),
                 CreateAt = s.Community.CreateAt
             });
@@ -151,7 +151,7 @@ namespace Application.Services
                 AvatarUrl = s.Avatar.ImageUrl,
                 CategoriesRu = s.CategoriesRu,
                 CategoriesEng = s.CategoriesEng,
-                NumberOfMember = s.Community.UserCommunities.Count(),
+                NumberOfMember = s.Community.UserCommunities.Count() - 1,
                 Author = _mapper.Map<UserResponse>(s.Author),
                 CreateAt = s.Community.CreateAt
             });
@@ -272,6 +272,13 @@ namespace Application.Services
                 return ServiceResult<bool>.Failure("Такого сообщества не существует");
             }
 
+            var imageIds = await _context.Images
+            .Where(im => im.EntityId == community.Id && im.EntityTarget == nameof(Community))
+            .Select(im => im.Id)
+            .ToListAsync();
+
+            await _imageService.RemoveImages(imageIds);
+
             _context.Communities.Remove(community);
             await _context.SaveChangesAsync();
 
@@ -282,14 +289,14 @@ namespace Application.Services
         {
             var communitiesQuery = _context.Communities
                 .Include(c => c.CommunityCategories)
+                .Include(c => c.UserCommunities)
                 .Where(c => c.CommunityCategories.Any(cc => cc.CategoryId == categoryId))
                 .Select(c => new CommunityExploreResponse
                 {
                     Id = c.Id,
                     Name = c.Name,
                     Description = c.Description,
-                    NumberOfMember = _context.UsersCommunities
-                        .Count(x => x.CommunityId == c.Id && x.UserRole == "subscriber"),
+                    NumberOfMember = c.UserCommunities.Count() - 1,
                     AvatarUrl = _context.Images
                         .Where(i => i.ImageType == "avatar" && i.EntityTarget == "Community" && i.EntityId == c.Id)
                         .Select(i => i.ImageUrl)

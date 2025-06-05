@@ -6,6 +6,7 @@ using Core.Models;
 using Core.Models.Comment;
 using Core.Models.Community;
 using Core.Models.Filter;
+using Core.Models.Image;
 using Core.Models.Post;
 using Core.Results;
 using DataAccess;
@@ -36,7 +37,7 @@ public class PostService : IPostService
             .IncludePostImages()
             .Select(p => new
             {
-                CommunityName = p.Community.Name,
+                CommunityName = p.Community != null ? p.Community.Name : null,
                 CommunityAvatar = _context.Images.Where(i => i.EntityTarget == "Community" && i.EntityId == p.CommunityId && i.ImageType == "avatar").FirstOrDefault(),
                 UserAvatar = _context.Images.Where(i => i.EntityTarget == "User" && i.EntityId == p.AuthorId && i.ImageType == "avatar").FirstOrDefault(),
                 Post = p,
@@ -64,6 +65,36 @@ public class PostService : IPostService
         var postResponse = _mapper.Map<PostResponse>(post);
 
         return ServiceResult<PostResponse>.Success(postResponse);
+    }
+
+    public async Task<ServiceResult<PostWithCategoriesResponse>> GetByIdWithCategoriesAsync(long id)
+    {
+        var p = await _context.Posts
+            .Include(p => p.PostCategories)
+                .ThenInclude(pc => pc.Category)
+            .Include(p => p.Community)
+            .Include(p => p.Author)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        var postImages = await _context.Images
+            .Where(i => i.EntityTarget == "Post" && i.EntityId == id && i.ImageType == "image")
+            .Select(i => new ImageIdResponse
+            {
+                Id = i.Id,
+                Url = i.ImageUrl
+            })
+            .ToListAsync();
+
+        var response = new PostWithCategoriesResponse
+        {
+            Title = p.Title,
+            Content = p.Content,
+            CommunityId = p.Community?.Id,
+            CategoriesIds = p.PostCategories.Select(pc => pc.CategoryId).ToList(),
+            PostImages = postImages
+        };
+
+        return ServiceResult<PostWithCategoriesResponse>.Success(response);
     }
 
     public async Task<ServiceResult<bool>> HasBeenSeen(long id)
@@ -303,10 +334,6 @@ public class PostService : IPostService
         if (userExist == null)
             return ServiceResult<long>.Failure("Пользователь не найден");
 
-        var communityExist = await _context.Communities.FirstOrDefaultAsync(c => c.Id == request.CommunityId);
-        if (communityExist == null)
-            return ServiceResult<long>.Failure("Комьюнити не найдено");
-
         var post = _mapper.Map<Post>(request);
         post.AuthorId = userId;
 
@@ -376,6 +403,6 @@ public class PostService : IPostService
         _context.Posts.Remove(post);
         await _context.SaveChangesAsync();
 
-        return ServiceResult<bool>.Success();
+        return ServiceResult<bool>.Success(true);
     }
 }

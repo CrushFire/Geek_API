@@ -2,7 +2,7 @@
 @model CommunityResponse
 
 @{
-    var language = ViewBag.Language as string ?? "ru";
+    var language = ViewBag.Language;
 }
 
 @section Head {
@@ -51,6 +51,21 @@
                         <span class="badge bg-primary me-2">#@cat</span>
                     }
                 </div>
+                <div id="dotsWrapper" class="position-relative d-inline-block" style="user-select:none;">
+                    <div id="dotsButton" title="@((language == "ru") ? "Меню" : "Menu")"
+                         style="position: absolute; right: 0; bottom: 0; cursor: pointer; font-size: 1.5rem; color: #444; user-select:none;">
+                        &#8230; <!-- три точки -->
+                    </div>
+                    <div id="dotsMenu" class="bg-white border rounded shadow-sm"
+                         style="display:none; position: absolute; right: 0; bottom: 24px; width: 100px; z-index: 1000; font-size: 0.9rem;">
+                        <div id="deleteCommunity" style="padding: 8px 12px; cursor: pointer; color: #666; border-bottom: 1px solid #eee;">
+                            @(language == "ru" ? "Удалить" : "Delete")
+                        </div>
+                        <div id="editCommunity" style="padding: 8px 12px; cursor: pointer; color: #666;">
+                            @(language == "ru" ? "Изменить" : "Edit")
+                        </div>
+                    </div>
+                </div>
 
                 <hr />
 
@@ -62,6 +77,25 @@
                 <div id="imageModalSimple" class="image-modal" onclick="closeImageModal()">
                     <img id="modalImageSimple" class="image-modal-content" onclick="event.stopPropagation()" />
                 </div>
+
+                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmDeleteLabel">@((language == "ru") ? "Подтверждение удаления" : "Delete Confirmation")</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="confirmDeleteText">
+                                @((language == "ru") ? "Вы уверены, что хотите удалить сообщество?" : "Are you sure you want to delete the community?")
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@((language == "ru") ? "Отмена" : "Cancel")</button>
+                                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">@((language == "ru") ? "Да, удалить" : "Yes, delete")</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -69,14 +103,16 @@
 
 @section Script {
 <script>
-    const communityId = @Model.Id;
+    const communityId = @Model.Id; // id сообщества
     const userId = "@ViewBag.userIdToken";
     const language = "@(ViewBag.Language ?? "ru")";
 
+    let userReactions = [];
+
+    // Пагинация и состояния загрузки
     let curPage = 1;
     let loading = false;
     let reachedEnd = false;
-    let userReactions = [];
 
     async function loadUserReactions() {
         try {
@@ -143,23 +179,29 @@
         return div;
     }
 
-    async function loadCommunityPosts(page = 1) {
+    async function loadCommunityPosts(page) {
         if (loading || reachedEnd) return;
         loading = true;
 
+        const postSection = document.getElementById("postSection");
+        if (page === 1) {
+            postSection.innerHTML = "Загрузка постов...";
+        }
+
         try {
-            const res = await fetch(`/by-community/?communityId=${communityId}&curPage=${page}`);
+            // Предполагаю, что у тебя есть API для постов по сообществу с пагинацией, например:
+            // /posts/by-community?communityId=...&page=...
+            const res = await fetch(`/by-community?communityId=${communityId}&page=${page}`);
+            if (!res.ok) throw new Error("Ошибка загрузки постов");
+
             const posts = await res.json();
 
-            if (!Array.isArray(posts) || posts.length === 0) {
-                if (page === 1) {
-                    document.getElementById("postSection").innerHTML = "<p>Постов нет.</p>";
-                }
+            if (posts.length === 0) {
                 reachedEnd = true;
+                if (page === 1) postSection.innerHTML = "<p>Постов нет.</p>";
                 return;
             }
 
-            const postSection = document.getElementById('postSection');
             if (page === 1) {
                 postSection.innerHTML = "";
             }
@@ -172,13 +214,22 @@
             curPage++;
         } catch (err) {
             console.error("Ошибка загрузки постов:", err);
-            if (curPage === 1) {
+            if (page === 1) {
                 document.getElementById("postSection").innerHTML = "<p>Не удалось загрузить посты.</p>";
             }
         } finally {
             loading = false;
         }
     }
+
+    // Автозагрузка при прокрутке страницы вниз
+    window.addEventListener('scroll', () => {
+        if (loading || reachedEnd) return;
+
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
+            loadCommunityPosts(curPage);
+        }
+    });
 
     function observeViews(postId, div) {
         const observer = new IntersectionObserver(entries => {
@@ -197,14 +248,11 @@
         const reaction = userReactions.find(r => Number(r.postId) === postId);
         let newReaction;
 
-        // Логика снятия/смены реакции аналогична первой странице
         if (!reaction) {
             newReaction = { postId, userId, isLike };
         } else if (reaction.isLike === isLike) {
-            // Снимаем реакцию (тут зависит от API, можно отправить null или повторить)
             newReaction = { postId, userId, isLike };
         } else {
-            // Смена реакции
             newReaction = { postId, userId, isLike };
         }
 
@@ -239,7 +287,6 @@
                 dislikeBtn.classList.remove("user-disliked");
             }
 
-            // Обновляем числа лайков/дизлайков из результата
             likeBtn.querySelector("span").textContent = result.likes ?? likeBtn.querySelector("span").textContent;
             dislikeBtn.querySelector("span").textContent = result.dislikes ?? dislikeBtn.querySelector("span").textContent;
 
@@ -248,28 +295,156 @@
         }
     }
 
-    function openImageModal(src) {
-        const modal = document.getElementById('imageModalSimple');
-        const modalImg = document.getElementById('modalImageSimple');
-        modal.style.display = "block";
-        modalImg.src = src;
-    }
+    // --- Кнопка подписки/отписки ---
+    async function loadSubscriptionButton() {
+        const container = document.getElementById("subscribeBtnWrapper");
+        container.innerHTML = "Загрузка...";
 
-    function closeImageModal() {
-        document.getElementById('imageModalSimple').style.display = "none";
-    }
+        try {
+            const roleResp = await fetch(`/check-role-community?userId=${userId}&communityId=${communityId}`);
+            let role = "unSub";
+            if (roleResp.ok) {
+                const json = await roleResp.json();
+                if (typeof json === "string") role = json;
+                else if (json.role) role = json.role;
+            }
 
-    // Обработка скролла для подгрузки постов
-    window.addEventListener('scroll', () => {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-            loadCommunityPosts(curPage);
+            const dotsWrapper = document.getElementById("dotsWrapper");
+            if (role === "creator") {
+                    dotsWrapper.style.display = "inline-block";
+                    container.innerHTML = `<p>${language === "ru" ? "Вы создатель сообщества" : "You are the community creator"}</p>`;
+                    return;
+            } else {
+                    dotsWrapper.style.display = "none";
+            }
+
+            const isSubscribed = (role === "sub");
+
+            container.innerHTML = `
+                <button id="subscribe-btn" class="btn ${isSubscribed ? "btn-light" : "btn-primary"}"
+                    style="min-width: 140px; font-size: 1rem; padding: 8px 16px; ${isSubscribed ? "color: #888; border-color: #ccc;" : "color: white;" }">
+                    ${isSubscribed ? (language === "ru" ? "Отписаться" : "Unjoin") : (language === "ru" ? "Подписаться" : "Join")}
+                </button>
+            `;
+
+            document.getElementById("subscribe-btn").addEventListener("click", async () => {
+                const btn = document.getElementById("subscribe-btn");
+                const currentlySubscribed = btn.classList.contains("btn-light");
+                const url = currentlySubscribed ? `/unsub?userId=${userId}` : `/sub?userId=${userId}`;
+                const method = currentlySubscribed ? "DELETE" : "POST";
+
+                try {
+                    const res = await fetch(url, {
+                        method: method,
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(communityId)
+                    });
+                    const success = await res.json();
+
+                    if (success === true) {
+                        if (currentlySubscribed) {
+                            btn.classList.remove("btn-light");
+                            btn.classList.add("btn-primary");
+                            btn.style.color = "white";
+                            btn.textContent = language === "ru" ? "Подписаться" : "Join";
+                        } else {
+                            btn.classList.remove("btn-primary");
+                            btn.classList.add("btn-light");
+                            btn.style.color = "#888";
+                            btn.style.borderColor = "#ccc";
+                            btn.textContent = language === "ru" ? "Отписаться" : "Unjoin";
+                        }
+                    } else {
+                        alert(language === "ru" ? "Ошибка при смене подписки" : "Subscription change error");
+                    }
+                } catch (e) {
+                    console.error(e);
+                    alert(language === "ru" ? "Ошибка сети" : "Network error");
+                }
+            });
+        } catch (e) {
+            console.error(e);
+            container.innerHTML = `<p>${language === "ru" ? "Не удалось загрузить статус подписки" : "Failed to load subscription status"}</p>`;
         }
-    });
+    }
 
-    // Инициализация
-    (async () => {
+    // --- Инициализация ---
+    async function init() {
         await loadUserReactions();
-        await loadCommunityPosts(1);
-    })();
+        await loadCommunityPosts(curPage);
+        await loadSubscriptionButton();
+    }
+
+    init();
+
+    // --- Модальное окно для показа изображения поста ---
+    window.openImageModal = function(imgUrl) {
+        const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+        const imgTag = document.getElementById('modalImage');
+        imgTag.src = imgUrl;
+        modal.show();
+    };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const dotsButton = document.getElementById("dotsButton");
+            const dotsMenu = document.getElementById("dotsMenu");
+            const deleteBtn = document.getElementById("deleteCommunity");
+            const editBtn = document.getElementById("editCommunity");
+            const confirmModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+            // Показывать/скрывать меню при клике по точкам
+            dotsButton.addEventListener("click", (e) => {
+                e.stopPropagation();
+                dotsMenu.style.display = (dotsMenu.style.display === "block") ? "none" : "block";
+            });
+
+            // Скрывать меню при клике вне
+            document.addEventListener("click", () => {
+                dotsMenu.style.display = "none";
+            });
+
+            // Кнопка "Изменить" - редирект
+            editBtn.addEventListener("click", () => {
+                window.location.href = `/Community/Edit/${communityId}`;
+            });
+
+            // Кнопка "Удалить" - показать модалку
+            deleteBtn.addEventListener("click", () => {
+                dotsMenu.style.display = "none";
+                confirmModal.show();
+            });
+
+            // Подтверждение удаления
+            confirmDeleteBtn.addEventListener("click", async () => {
+                confirmDeleteBtn.disabled = true;
+                try {
+                    const response = await fetch(`/Community/Delete/?communityId=${communityId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result === true || result === "true") {
+                            // Успешно удалено, редирект
+                            window.location.href = `/Popular/${userId}`;
+                        } else {
+                            alert(language === "ru" ? "Ошибка при удалении сообщества" : "Failed to delete community");
+                            confirmDeleteBtn.disabled = false;
+                        }
+                    } else {
+                        alert(language === "ru" ? "Ошибка сети при удалении" : "Network error while deleting");
+                        confirmDeleteBtn.disabled = false;
+                    }
+                } catch (e) {
+                    alert(language === "ru" ? "Ошибка при удалении сообщества" : "Error deleting community");
+                    confirmDeleteBtn.disabled = false;
+                    console.error(e);
+                }
+            });
+        });
 </script>
 }
+

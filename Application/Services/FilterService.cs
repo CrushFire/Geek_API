@@ -7,6 +7,7 @@ using Core.Models;
 using Core.Models.Community;
 using Core.Models.Filter;
 using Core.Models.Post;
+using Core.Models.User;
 using Core.Results;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -152,6 +153,7 @@ namespace Application.Services
 
         public async Task<ServiceResult<List<CommunityResponse>>> GetCommunitiesByFilter(ParametersFilter filter)
         {
+
             var query = _context.Communities
                 .Include(c => c.UserCommunities)
                 .Include(c => c.CommunityCategories)
@@ -165,24 +167,18 @@ namespace Application.Services
                     CategoriesEng = c.CommunityCategories
                         .Select(pc => pc.Category.EngTitle)
                         .ToList(),
-                    Avatar = _context.Images.FirstOrDefault(i => i.EntityTarget == "Community" && i.ImageType == "avatar" && i.EntityId == c.Id)
+                    Avatar = _context.Images.FirstOrDefault(i => i.EntityTarget == "Community" && i.ImageType == "avatar" && i.EntityId == c.Id),
+                    Author = c.UserCommunities.FirstOrDefault(u => u.CommunityId == c.Id && u.UserRole == "creator")
                 }).AsQueryable();
 
-
-            if (!string.IsNullOrEmpty(filter.Name))
+            if (!string.IsNullOrWhiteSpace(filter.Name))
             {
-                string[] parts = filter.Name.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var parts = filter.Name
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Select(part => $"%{part}%")  // подготовить шаблон с % здесь
+                    .ToList();
 
-                query = query
-                    .Where(c => parts.Any(part => c.Community.Name.ToLower().Contains(part)))
-                    .Select(c => new
-                    {
-                        Community = c,
-                        MatchCount = parts.Count(part => c.Community.Name.ToLower().Contains(part))
-                    })
-                    .OrderByDescending(x => x.MatchCount)
-                    .ThenBy(x => x.Community.Community.Name)
-                    .Select(x => x.Community);
+                query = query.Where(p => parts.Any(part => EF.Functions.Like(p.Community.Name, part)));
             }
 
             if (filter.CommunityFilter.MinFollowers > 0)
@@ -208,24 +204,6 @@ namespace Application.Services
                 query = query.Where(p => p.Community.CreateAt >= dateThreshold);
             }
 
-            //if (!string.IsNullOrEmpty(filter.CommunityFilter.Categories))
-            //{
-            //    query = query.Where(p => p.Categories.Contains(filter.CommunityFilter.Categories));
-            //}
-
-            if (!string.IsNullOrEmpty(filter.SortBy))
-            {
-                bool ascending = filter.DirectionSort?.ToLower() == "ask";
-
-                query = filter.SortBy.ToLower() switch
-                {
-                    "followers" => ascending ? query.OrderBy(p => p.Community.UserCommunities.Count()) : query.OrderByDescending(p => p.Community.UserCommunities.Count()),
-                    "title" => ascending ? query.OrderBy(p => p.Community.Name) : query.OrderByDescending(p => p.Community.Name),
-                    "created" => ascending ? query.OrderBy(p => p.Community.CreateAt) : query.OrderByDescending(p => p.Community.CreateAt),
-                    _ => ascending ? query.OrderBy(p => p.Community.UserCommunities.Count()) : query.OrderByDescending(p => p.Community.UserCommunities.Count())
-                };
-            }
-
             var skip = (filter.Pagination.Page - 1) * filter.Pagination.PageSize;
             query = query.Skip(skip).Take(filter.Pagination.PageSize);
 
@@ -237,34 +215,42 @@ namespace Application.Services
                 AvatarUrl = s.Avatar.ImageUrl,
                 CategoriesRu = s.CategoriesRu,
                 CategoriesEng = s.CategoriesEng,
-                NumberOfMember = s.Community.UserCommunities.Count(),
+                NumberOfMember = s.Community.UserCommunities.Count() - 1,
+                Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == s.Author.Id)),
                 CreateAt = s.Community.CreateAt
             });
 
-            var result = communitiesResponse.ToList();
+            if (!string.IsNullOrEmpty(filter.SortBy))
+            {
+                bool ascending = filter.DirectionSort?.ToLower() == "ask";
+
+                communitiesResponse = filter.SortBy.ToLower() switch
+                {
+                    "subscribers" => ascending ? communitiesResponse.OrderBy(p => p.NumberOfMember) : communitiesResponse.OrderByDescending(p => p.NumberOfMember),
+                    "title" => ascending ? communitiesResponse.OrderBy(p => p.CommunityName) : communitiesResponse.OrderByDescending(p => p.CommunityName),
+                    "created" => ascending ? communitiesResponse.OrderBy(p => p.CreateAt) : communitiesResponse.OrderByDescending(p => p.CreateAt),
+                    _ => ascending ? communitiesResponse.OrderBy(p => p.NumberOfMember) : communitiesResponse.OrderByDescending(p => p.NumberOfMember)
+                };
+            }
+
+            var result = await communitiesResponse.ToListAsync();
 
             return ServiceResult<List<CommunityResponse>>.Success(result);
         }
 
-        public async Task<ServiceResult<List<UserResponse>>> GetUsersByFilter(ParametersFilter filter)
+        public async Task<ServiceResult<List<UserSearchResponse>>> GetUsersByFilter(ParametersFilter filter)
         {
-            var query = _context.Users.Include(u => u.Reactions).AsQueryable();
+            var query = _context.Users.AsQueryable();
 
 
-            if (!string.IsNullOrEmpty(filter.Name))
+            if (!string.IsNullOrWhiteSpace(filter.Name))
             {
-                string[] parts = filter.Name.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var parts = filter.Name
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Select(part => $"%{part}%")  // подготовить шаблон с % здесь
+                    .ToList();
 
-                query = query
-                    .Where(u => parts.Any(part => u.UserName.ToLower().Contains(part)))
-                    .Select(u => new
-                    {
-                        User = u,
-                        MatchCount = parts.Count(part => u.UserName.ToLower().Contains(part))
-                    })
-                    .OrderByDescending(x => x.MatchCount)
-                    .ThenBy(x => x.User.UserName)
-                    .Select(x => x.User);
+                query = query.Where(p => parts.Any(part => EF.Functions.Like(p.UserName, part)));
             }
 
             if (filter.UserFilter.MinLikes > 0)
@@ -307,9 +293,6 @@ namespace Application.Services
                 query = filter.SortBy.ToLower() switch
                 {
                     "names" => ascending ? query.OrderBy(p => p.UserName) : query.OrderByDescending(p => p.UserName),
-                    "likes" => ascending ? query.OrderBy(p => p.Reactions.Count(x => x.IsLike == true)) : query.OrderByDescending(p => p.Reactions.Count(x => x.IsLike == true)),
-                    "comments" => ascending ? query.OrderBy(p => p.Comments.Count()) : query.OrderByDescending(p => p.Comments.Count()),
-                    "posts" => ascending ? query.OrderBy(p => p.Posts.Count()) : query.OrderByDescending(p => p.Posts.Count()),
                     "created" => ascending ? query.OrderBy(p => p.CreateAt) : query.OrderByDescending(p => p.CreateAt),
                     _ => ascending ? query.OrderBy(p => p.UserCommunities.Count()) : query.OrderByDescending(p => p.UserCommunities.Count())
                 };
@@ -318,10 +301,20 @@ namespace Application.Services
             var skip = (filter.Pagination.Page - 1) * filter.Pagination.PageSize;
             query = query.Skip(skip).Take(filter.Pagination.PageSize);
 
-            var users = await query.ToListAsync();
-            var result = _mapper.Map<List<UserResponse>>(users);
+            var users = query.Select(u => new UserSearchResponse
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                Description = u.Description,
+                Avatar = _context.Images
+                    .Where(i => i.EntityTarget == "User" && i.ImageType == "avatar" && i.EntityId == u.Id)
+                    .Select(i => i.ImageUrl)
+                    .FirstOrDefault()
+            });
 
-            return ServiceResult<List<UserResponse>>.Success(result);
+            var result = await users.ToListAsync();
+
+            return ServiceResult<List<UserSearchResponse>>.Success(result);
         }
     }
 }

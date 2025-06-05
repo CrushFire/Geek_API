@@ -13,6 +13,7 @@ public interface IImageService
 
     //Task<List<Image>> AddImageUrlsAsync(string entityType, long entityId, string imageType, List<string> imageUrls);
 
-    Task RemoveImages(List<long> imageIds);
-    Task RemoveImage(long imageId);
+    Task<bool> RemoveImages(List<long> imageIds);
+    Task<bool> RemoveImage(long imageId);
+    Task<bool> RemoveImageFromServer(long imageId);
 }

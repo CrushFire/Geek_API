@@ -8,7 +8,7 @@ public class PostAddRequest
 
     public string Content { get; set; } = string.Empty;
 
-    public long CommunityId { get; set; }
+    public long? CommunityId { get; set; }
 
     public List<int> CategoriesIds { get; set; }
 

@@ -1,8 +1,11 @@
-﻿using Application.Utils;
+﻿using Application.Services;
+using Application.Utils;
 using Core.Entities;
+using Core.Enums;
 using Core.Interfaces;
 using Core.Interfaces.Services;
 using Core.Models;
+using Core.Models.Filter;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +17,13 @@ public class UserController : CustomControllerBase
 {
     private readonly IUserService _userService;
     private readonly IErrorMessages _errorMessages;
+    private readonly IFilterService _filterService;
 
-    public UserController(IUserService userService, IErrorMessages errorMessages)
+    public UserController(IUserService userService, IErrorMessages errorMessages, IFilterService filterService)
     {
         _userService = userService;
         _errorMessages = errorMessages;
+        _filterService = filterService;
     }
 
     [HttpGet("/Popular/{UserId}")]
@@ -131,6 +136,38 @@ public class UserController : CustomControllerBase
         }
 
         return Json(result.Data);
+    }
+
+    [HttpGet("Search")]
+
+    public IActionResult Search()
+    {
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+
+        return View();
+    }
+
+    [HttpGet("/user-filter/")]
+    public async Task<IActionResult> GetByFilterToPopular([FromQuery] string name, int curPage = 1)
+    {
+        var filter = new ParametersFilter()
+        {
+            DirectionSort = "desk",
+            DateCreateAt = DateCreateRange.None,
+            SortBy = "names",
+            Name = name,
+            Pagination = new PaginationRequest() { Page = curPage, PageSize = 20 },
+            UserFilter = new UserFilter()
+        };
+        var result = await _filterService.GetUsersByFilter(filter);
+
+        if (result == null)
+            return StatusCode(500, "Ошибка: результат фильтрации — null");
+
+        if (result.Data == null)
+            return StatusCode(500, "Ошибка: Data в результате — null");
+
+        return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
     }
 
     [HttpDelete("{id}")]

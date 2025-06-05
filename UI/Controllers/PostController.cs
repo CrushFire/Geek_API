@@ -18,16 +18,19 @@ public class PostsController : CustomControllerBase
 {
     private readonly IPostService _postService;
     private readonly IFilterService _filterService;
+    private readonly IImageService _imageService;
 
-    public PostsController(IPostService postService, IFilterService filterService)
+    public PostsController(IPostService postService, IFilterService filterService, IImageService imageService)
     {
         _filterService = filterService;
         _postService = postService;
+        _imageService = imageService;
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(long id)
     {
+        ViewBag.userTokenId = UserId.Value;
         var result = await _postService.GetByIdAsync(id);
 
         return View("Post", result.Data);
@@ -184,7 +187,7 @@ public class PostsController : CustomControllerBase
         var filter = new ParametersFilter()
         {
             DirectionSort = "desk",
-            DateCreateAt = DateCreateRange.Week,
+            DateCreateAt = DateCreateRange.None,
             SortBy = "likes",
             Name = name,
             Pagination = new PaginationRequest() { Page = curPage, PageSize = 20 },
@@ -234,27 +237,51 @@ public class PostsController : CustomControllerBase
         return Json(result.Data);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] PostUpdateRequest request)
+    [HttpGet("Edit/{id}")]
+    public async Task<IActionResult> Edit(long id)
+    {
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.UserId = UserId.Value;
+        
+        return View();
+    }
+
+    [HttpPost("/edit-post/")]
+    public async Task<IActionResult> Edit([FromQuery] long id, [FromForm] PostUpdateRequest request)
     {
         if (UserId == null)
             return StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
 
         var result = await _postService.UpdateAsync(id, request, UserId.Value);
-        return result.IsSuccess
-            ? NoContent()
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+
+        return Json(result.Data);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute] long id)
+    [HttpGet("/get-post/")]
+    public async Task<IActionResult> GetPost([FromQuery] long postId)
+    {
+        ViewBag.userTokenId = UserId.Value;
+        var result = await _postService.GetByIdWithCategoriesAsync(postId);
+
+        return Json(result.Data);
+    }
+
+    [HttpDelete("/remove-post-image/")]
+    public async Task<IActionResult> RemoveImageFromPost([FromQuery] long imgId)
+    {
+        var result = await _imageService.RemoveImageFromServer(imgId);
+
+        return Json(result);
+    }
+
+    [HttpDelete("Delete")]
+    public async Task<IActionResult> Delete([FromQuery] long postId)
     {
         if (UserId == null)
             return StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
 
-        var result = await _postService.DeleteAsync(id, UserId.Value);
-        return result.IsSuccess
-            ? NoContent()
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        var result = await _postService.DeleteAsync(postId, UserId.Value);
+
+        return Json(result.Data);
     }
 }

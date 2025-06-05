@@ -8,6 +8,7 @@ namespace Core.Interfaces.Services;
 public interface IPostService
 {
     Task<ServiceResult<PostResponse>> GetByIdAsync(long id);
+    Task<ServiceResult<PostWithCategoriesResponse>> GetByIdWithCategoriesAsync(long id);
     Task<ServiceResult<bool>> HasBeenSeen(long id);
     Task<ServiceResult<PostReactionResult>> PostReactionsAsync(PostReaction reaction);
     Task<ServiceResult<List<PostResponse>>> GetUserLikesPost(PaginationRequest paginationRequest, long id);

@@ -38,7 +38,8 @@ public class AutoMapper : Profile
         CreateMap<Image, ImageResponse>();
 
         CreateMap<PostAddRequest, Post>()
-            .ForMember(dest => dest.Images, opt => opt.Ignore());
+            .ForMember(dest => dest.Images, opt => opt.Ignore())
+            .ForMember(dest => dest.CommunityId, opt => opt.Ignore());
         CreateMap<Post, PostResponse>();
         CreateMap<PostWithLikes, PostResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Post.Id))

@@ -127,7 +127,7 @@ public class ImageService : IImageService
     //}
 
 
-    public async Task RemoveImages(List<long> imageIds)
+    public async Task<bool> RemoveImages(List<long> imageIds)
     {
         var images = await _context.Images
             .Where(im => imageIds.Contains(im.Id))
@@ -144,9 +144,11 @@ public class ImageService : IImageService
         }
 
         await _context.SaveChangesAsync();
+
+        return true;
     }
 
-    public async Task RemoveImage(long imageId)
+    public async Task<bool> RemoveImage(long imageId)
     {
         var image = await _context.Images
             .Where(im => im.Id == imageId)
@@ -160,5 +162,26 @@ public class ImageService : IImageService
             if (File.Exists(filePath)) File.Delete(filePath);
 
         await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> RemoveImageFromServer(long imageId)
+    {
+        var image = await _context.Images
+            .Where(im => im.Id == imageId)
+            .FirstOrDefaultAsync();
+
+        var imageUrl = image.ImageUrl;
+        var startIndex = imageUrl.IndexOf("images/") + "images/".Length;
+        var fileName = imageUrl.Substring(startIndex);
+
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+        if (File.Exists(filePath)) File.Delete(filePath);
+
+        _context.Images.Remove(image);
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 }

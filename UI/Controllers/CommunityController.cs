@@ -1,7 +1,9 @@
 ﻿using Application.Services;
+using Core.Enums;
 using Core.Interfaces.Services;
 using Core.Models;
 using Core.Models.Community;
+using Core.Models.Filter;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -13,10 +15,12 @@ namespace UI.Controllers;
 public class CommunityController : CustomControllerBase
 {
     private readonly ICommunityService _communityService;
+    private readonly IFilterService _filterService;
 
-    public CommunityController(ICommunityService communityService)
+    public CommunityController(ICommunityService communityService, IFilterService filterService)
     {
         _communityService = communityService;
+        _filterService = filterService;
     }
 
     [HttpGet]
@@ -37,6 +41,39 @@ public class CommunityController : CustomControllerBase
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
 
         return View();
+    }
+
+    [HttpGet("Search")]
+
+    public IActionResult Search()
+    {
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.UserId = UserId.Value;
+
+        return View();
+    }
+
+    [HttpGet("/community-filter/")]
+    public async Task<IActionResult> GetByFilterToPopular([FromQuery] string name, int curPage = 1)
+    {
+        var filter = new ParametersFilter()
+        {
+            DirectionSort = "desk",
+            DateCreateAt = DateCreateRange.None,
+            SortBy = "subscribers",
+            Name = name,
+            Pagination = new PaginationRequest() { Page = curPage, PageSize = 20 },
+            CommunityFilter = new CommunityFilter()
+        };
+        var result = await _filterService.GetCommunitiesByFilter(filter);
+
+        if (result == null)
+            return StatusCode(500, "Ошибка: результат фильтрации — null");
+
+        if (result.Data == null)
+            return StatusCode(500, "Ошибка: Data в результате — null");
+
+        return Json(result.Data); // или return Ok(myFilter); если хочешь явно HTTP 200
     }
 
     [HttpGet("{id}")]
@@ -150,14 +187,12 @@ public class CommunityController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpDelete]
+    [HttpDelete("Delete")]
 
-    public async Task<IActionResult> DeleteCommunityAsync([FromRoute] long id)
+    public async Task<IActionResult> Delete([FromQuery] long communityId)
     {
-        var result = await _communityService.DeleteCommunityAsync(id);
+        var result = await _communityService.DeleteCommunityAsync(communityId);
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        return Json(result.Data);
     }
 }
