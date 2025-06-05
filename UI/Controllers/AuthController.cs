@@ -39,7 +39,7 @@ public class AuthController : CustomControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login( LoginRequest loginRequest)//не делать асинк!
+    public async Task<IActionResult> Login(LoginRequest loginRequest)
     {
         var auth = _dataPage.GetByPageAsync("Authorization");
 
@@ -74,7 +74,7 @@ public class AuthController : CustomControllerBase
             return View();
         }
 
-        Response.Cookies.Append("jwt_token", result.Data, new CookieOptions
+        Response.Cookies.Append("jwt_token", result.Data.token, new CookieOptions
         {
             HttpOnly = true,
             Secure = true, // включи только если HTTPS
@@ -82,8 +82,7 @@ public class AuthController : CustomControllerBase
             Expires = DateTimeOffset.UtcNow.AddHours(1)
         });
 
-        return Redirect($"/Popular/{UserId}");//страница на которую перейти
-        
+        return Redirect($"/Popular/{result.Data.id}"); // переход на страницу популярного контента
     }
 
     [HttpGet("registration")]

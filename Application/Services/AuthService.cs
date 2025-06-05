@@ -47,21 +47,21 @@ public class AuthService : IAuthService
         return ServiceResult<string>.Success(token);
     }
 
-    public async Task<ServiceResult<string>> AuthenticateAsync(LoginRequest userData)
+    public async Task<ServiceResult<(string token, long id)>> AuthenticateAsync(LoginRequest userData)
     {
         var user = await _context.Users
             .Where(u => u.UserEmail == userData.UserEmail)
             .FirstOrDefaultAsync();
 
         if (user == null)
-            return ServiceResult<string>.Failure("Пользователь не найден");
+            return ServiceResult<(string token, long id)>.Failure("Пользователь не найден");
 
         if (!_passwordHasher.VerifyPassword(userData.Password, user.PasswordHash))
-            return ServiceResult<string>.Failure("Неверный пароль", 401);
+            return ServiceResult<(string token, long id)>.Failure("Неверный пароль", 401);
 
         var token = _jwtGenerator.GenerateToken(user.Id.ToString(), user.UserName, user.UserEmail, user.Role);
 
-        return ServiceResult<string>.Success(token);
+        return ServiceResult<(string, long)>.Success((token, user.Id));
     }
 
     public async Task<ServiceResult<bool>> ChangePasswordAsync(long userId, string oldPassword, string newPassword)

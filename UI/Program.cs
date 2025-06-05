@@ -126,6 +126,26 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Добавлено: редирект неавторизованных пользователей на /auth/login
+app.Use(async (context, next) =>
+{
+    // Пропускаем запросы к /auth/login и статическим файлам
+    var path = context.Request.Path.Value?.ToLower();
+    if (path != null && (path.StartsWith("/auth/login") || path.StartsWith("/css") || path.StartsWith("/js") || path.StartsWith("/images")))
+    {
+        await next();
+        return;
+    }
+
+    if (!context.User.Identity.IsAuthenticated)
+    {
+        context.Response.Redirect("/auth/login");
+        return;
+    }
+
+    await next();
+});
+
 app.MapControllers();
 
 app.Run();
