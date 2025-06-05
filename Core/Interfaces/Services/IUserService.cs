@@ -16,4 +16,6 @@ public interface IUserService
     Task<ServiceResult<bool>> UpdateUserInfoAsync(UserUpdateRequest user, long id);
     Task<ServiceResult<Image>> UploadAvatarAsync(IFormFile image, long userId);
     Task<ServiceResult<Image>> UploadBannerAsync(List<IFormFile> images, long userId);
+    Task<ServiceResult<bool>> ChangeUserRoleAsync(long userId, string newRole);
+    Task<List<Core.Models.User.UserAdminResponse>> GetUsersAdminAsync(string name, int curPage, int pageSize = 20);
 }

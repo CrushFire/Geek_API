@@ -407,7 +407,8 @@ public class PostService : IPostService
         if (post == null)
             return ServiceResult<bool>.Failure("Пост не найден");
 
-        if (post.AuthorId != userId)
+        var isAdmin = await _context.Users.AnyAsync(u => u.Id == userId);
+        if (post.AuthorId != userId && !isAdmin)
             return ServiceResult<bool>.Failure("У вас нет прав на удаление");
 
         var imageIds = await _context.Images

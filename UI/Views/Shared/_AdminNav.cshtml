@@ -1,10 +1,9 @@
-<div class="admin-nav-top mb-4">
-    <span class="admin-panel-title">
-        <i class="bi bi-shield-lock"></i> Панель администратора
-    </span>
-    <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")" href="/Admin/Users"><i class="bi bi-people"></i> Пользователи</a>
-    <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Posts" ? "active" : "")" href="/Admin/Posts"><i class="bi bi-file-earmark-text"></i> Посты</a>
-    <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Communities" ? "active" : "")" href="/Admin/Communities"><i class="bi bi-collection"></i> Сообщества</a>
-    <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Categories" ? "active" : "")" href="/Admin/Categories"><i class="bi bi-tags"></i> Категории</a>
-    <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Comments" ? "active" : "")" href="/Admin/Comments"><i class="bi bi-chat-left-text"></i> Комментарии</a>
+<div class="admin-nav-top mb-4" style="width:100%;box-sizing:border-box;">
+    <div style="display:flex;flex:1;gap:0.5rem;flex-wrap:wrap;">
+        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")" href="/Admin/Users"><i class="bi bi-people"></i> Пользователи</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Posts" ? "active" : "")" href="/Admin/Posts"><i class="bi bi-file-earmark-text"></i> Посты</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Communities" ? "active" : "")" href="/Admin/Communities"><i class="bi bi-collection"></i> Сообщества</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Categories" ? "active" : "")" href="/Admin/Categories"><i class="bi bi-tags"></i> Категории</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Comments" ? "active" : "")" href="/Admin/Comments"><i class="bi bi-chat-left-text"></i> Комментарии</a>
+    </div>
 </div>

@@ -87,4 +87,11 @@ public class CommentController : CustomControllerBase
             ? NoContent()
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
+
+    [HttpGet("/comment-admin-list/")]
+    public async Task<IActionResult> GetCommentsAdmin([FromQuery] string content, [FromQuery] string userName, [FromQuery] int curPage = 1)
+    {
+        var comments = await _commentService.GetCommentsAdminAsync(content, userName, curPage);
+        return Json(comments);
+    }
 }

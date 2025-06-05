@@ -11,4 +11,5 @@ public interface ICommentService
     Task<ServiceResult<CommentResponse>> AddAsync(CommentAddRequest request, long userId);
     Task<ServiceResult<bool>> UpdateAsync(long id, string content, long userId);
     Task<ServiceResult<bool>> DeleteAsync(long id, long userId);
+    Task<List<CommentResponse>> GetCommentsAdminAsync(string content, string userName, int curPage, int pageSize = 20);
 }
