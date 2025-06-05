@@ -1,4 +1,327 @@
-﻿@page
-@model UI.Views.Admin.UserModel
-@{
+﻿@{
+    ViewData["Title"] = "Управление пользователями";
+}
+
+@section Head {
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .admin-nav-top {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.08);
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .admin-nav-top .nav-link {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+            border-radius: 6px;
+            margin: 0 0.2rem;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+        }
+        .admin-nav-top .nav-link.active, .admin-nav-top .nav-link:hover {
+            background: #f3f7fa;
+            color: #0d6efd;
+            text-decoration: none;
+        }
+        .admin-panel-title {
+            font-weight: bold;
+            margin-right: 2rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .filter-panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.08);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .users-table {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .table-header {
+            background-color: #f8f9fa;
+        }
+        .action-buttons .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        .pagination-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .role-select {
+            min-width: 120px;
+        }
+        .modal-backdrop-custom {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 2000;
+        }
+        .modal-confirm-role {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            z-index: 2100;
+            padding: 2rem 2.5rem;
+            min-width: 320px;
+            max-width: 95vw;
+        }
+        .modal-confirm-role .modal-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .modal-confirm-role .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+}
+
+@section Body {
+    <div class="container py-4">
+        @await Html.PartialAsync("_AdminNav")
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="fw-bold">Управление пользователями</h2>
+            </div>
+        </div>
+
+        <!-- Фильтр только по имени -->
+        <div class="filter-panel mb-4">
+            <form id="userFilterForm" class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label mb-1">Имя пользователя</label>
+                    <input type="text" class="form-control" id="filterName" placeholder="Имя пользователя">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Фильтровать</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Таблица пользователей -->
+        <div class="users-table position-relative">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="usersTable">
+                    <thead class="table-header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>Email</th>
+                            <th>Роль</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Данные будут загружены через JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-controls">
+                <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
+                <span id="pageInfo" class="align-self-center"></span>
+                <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно подтверждения смены роли/удаления -->
+        <div id="roleModalBackdrop" class="modal-backdrop-custom" style="display:none;"></div>
+        <div id="roleModal" class="modal-confirm-role" style="display:none;">
+            <div class="modal-title" id="roleModalTitle">Подтвердите действие</div>
+            <div id="roleModalText" class="mb-3"></div>
+            <div class="modal-footer">
+                <button id="roleModalCancel" class="btn btn-secondary">Отмена</button>
+                <button id="roleModalConfirm" class="btn btn-primary">Подтвердить</button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Script {
+    <script>
+        let currentPage = 1;
+        let totalPages = 1;
+        const pageSize = 20;
+        let filter = {
+            name: ""
+        };
+
+        // Для модального окна смены роли/удаления
+        let pendingRoleChange = { userId: null, newRole: null, selectElem: null, oldRole: null };
+        let pendingDelete = { userId: null, rowElem: null };
+
+        async function loadUsers(page = 1) {
+            try {
+                const params = new URLSearchParams();
+                params.append("name", filter.name);
+                params.append("curPage", page);
+
+                const response = await fetch(`/user-filter/?${params.toString()}`);
+                const data = await response.json();
+
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = '';
+
+                totalPages = data.length < pageSize && page === 1 ? 1 : (data.length === pageSize ? page + 1 : page);
+
+                currentPage = page;
+
+                data.forEach(user => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.userName}</td>
+                        <td>${user.email || ""}</td>
+                        <td>
+                            <select class="form-select form-select-sm role-select" data-user-id="${user.id}" data-current-role="${user.role}">
+                                <option value="User" ${user.role === "User" ? "selected" : ""}>User</option>
+                                <option value="Admin" ${user.role === "Admin" ? "selected" : ""}>Admin</option>
+                                <option value="Moderator" ${user.role === "Moderator" ? "selected" : ""}>Moderator</option>
+                            </select>
+                        </td>
+                        <td class="action-buttons">
+                            <button class="btn btn-sm btn-outline-danger" data-user-id="${user.id}" title="Удалить">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                // Назначаем обработчик на все select после рендера
+                document.querySelectorAll('.role-select').forEach(select => {
+                    select.addEventListener('change', function (e) {
+                        const userId = this.getAttribute('data-user-id');
+                        const oldRole = this.getAttribute('data-current-role');
+                        const newRole = this.value;
+                        showRoleModal(userId, newRole, this, oldRole);
+                    });
+                });
+
+                // Обработчик для удаления
+                document.querySelectorAll('.action-buttons .btn-outline-danger').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const userId = this.getAttribute('data-user-id');
+                        showDeleteModal(userId, this.closest('tr'));
+                    });
+                });
+
+                document.getElementById('prevPageBtn').disabled = currentPage === 1;
+                document.getElementById('nextPageBtn').disabled = data.length < pageSize;
+                document.getElementById('pageInfo').textContent = `Страница ${currentPage}`;
+            } catch (error) {
+                console.error('Ошибка при загрузке пользователей:', error);
+            }
+        }
+
+        // Модальное окно подтверждения смены роли
+        function showRoleModal(userId, newRole, selectElem, oldRole) {
+            pendingRoleChange = { userId, newRole, selectElem, oldRole };
+            pendingDelete = { userId: null, rowElem: null };
+            document.getElementById('roleModalTitle').innerText = "Подтвердите смену роли";
+            document.getElementById('roleModalText').innerText = `Вы уверены, что хотите сменить роль пользователя #${userId} с "${oldRole}" на "${newRole}"?`;
+            document.getElementById('roleModalBackdrop').style.display = 'block';
+            document.getElementById('roleModal').style.display = 'block';
+        }
+
+        // Модальное окно подтверждения удаления
+        function showDeleteModal(userId, rowElem) {
+            pendingDelete = { userId, rowElem };
+            pendingRoleChange = { userId: null, newRole: null, selectElem: null, oldRole: null };
+            document.getElementById('roleModalTitle').innerText = "Подтвердите удаление";
+            document.getElementById('roleModalText').innerText = `Вы уверены, что хотите удалить пользователя #${userId}?`;
+            document.getElementById('roleModalBackdrop').style.display = 'block';
+            document.getElementById('roleModal').style.display = 'block';
+        }
+
+        function hideRoleModal() {
+            document.getElementById('roleModalBackdrop').style.display = 'none';
+            document.getElementById('roleModal').style.display = 'none';
+            // Вернуть select в исходное положение, если отменили смену роли
+            if (pendingRoleChange.selectElem && pendingRoleChange.oldRole) {
+                pendingRoleChange.selectElem.value = pendingRoleChange.oldRole;
+            }
+            pendingRoleChange = { userId: null, newRole: null, selectElem: null, oldRole: null };
+            pendingDelete = { userId: null, rowElem: null };
+        }
+
+        document.getElementById('roleModalCancel').onclick = hideRoleModal;
+        document.getElementById('roleModalBackdrop').onclick = hideRoleModal;
+
+        document.getElementById('roleModalConfirm').onclick = async function () {
+            // Смена роли
+            if (pendingRoleChange.userId && pendingRoleChange.newRole) {
+                try {
+                    // Здесь должен быть вызов API для смены роли пользователя
+                    // Например: await fetch(`/User/${pendingRoleChange.userId}/role`, { method: "PUT", body: JSON.stringify({ role: pendingRoleChange.newRole }), headers: { "Content-Type": "application/json" } });
+                    alert(`Роль пользователя ${pendingRoleChange.userId} изменена на ${pendingRoleChange.newRole} (реализуйте API на сервере)`);
+                    hideRoleModal();
+                    // Можно обновить таблицу, если нужно
+                    // loadUsers(currentPage);
+                } catch (error) {
+                    alert("Ошибка при изменении роли");
+                    hideRoleModal();
+                }
+                return;
+            }
+            // Удаление пользователя
+            if (pendingDelete.userId) {
+                try {
+                    const response = await fetch(`/User/${pendingDelete.userId}`, { method: "DELETE" });
+                    if (response.ok) {
+                        if (pendingDelete.rowElem) pendingDelete.rowElem.remove();
+                        hideRoleModal();
+                    } else {
+                        alert("Ошибка при удалении пользователя");
+                        hideRoleModal();
+                    }
+                } catch (error) {
+                    alert("Ошибка при удалении пользователя");
+                    hideRoleModal();
+                }
+            }
+        };
+
+        // Фильтрация
+        document.getElementById("userFilterForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            filter.name = document.getElementById("filterName").value;
+            loadUsers(1);
+        });
+
+        document.getElementById('prevPageBtn').addEventListener('click', function () {
+            if (currentPage > 1) loadUsers(currentPage - 1);
+        });
+
+        document.getElementById('nextPageBtn').addEventListener('click', function () {
+            loadUsers(currentPage + 1);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsers();
+        });
+    </script>
 }
