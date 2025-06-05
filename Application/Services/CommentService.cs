@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.Services;
+using Core.Models;
 using Core.Models.Comment;
 using Core.Results;
 using DataAccess;
@@ -96,7 +97,8 @@ public class CommentService : ICommentService
         if (comment == null)
             return ServiceResult<bool>.Failure("Комментарий не найден");
 
-        if (comment.AuthorId != userId)
+        var isAdmin = await _context.Users.AnyAsync(p => p.Id == userId);
+        if (comment.AuthorId != userId && !isAdmin)
             return ServiceResult<bool>.Failure("У вас нет прав на изменение");
 
         _context.Comments.Remove(comment);
@@ -119,5 +121,32 @@ public class CommentService : ICommentService
 
         var commentResponse = _mapper.Map<List<CommentResponse>>(comment);
         return ServiceResult<List<CommentResponse>>.Success(commentResponse);
+    }
+
+    public async Task<List<CommentResponse>> GetCommentsAdminAsync(string content, string userName, int curPage, int pageSize = 20)
+    {
+        var query = _context.Comments
+            .Include(c => c.Author)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(content))
+            query = query.Where(c => c.Content.Contains(content));
+        if (!string.IsNullOrWhiteSpace(userName))
+            query = query.Where(c => c.Author.UserName.Contains(userName));
+
+        var comments = await query
+            .OrderByDescending(c => c.CreateAt)
+            .Skip((curPage - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return comments.Select(c => new CommentResponse
+        {
+            Id = c.Id,
+            Content = c.Content,
+            Author = _mapper.Map<UserResponse>(c.Author),
+            PostId = c.PostId,
+            CreateAt = c.CreateAt
+        }).ToList();
     }
 }

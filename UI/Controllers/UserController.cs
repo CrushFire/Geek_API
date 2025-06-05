@@ -202,4 +202,26 @@ public class UserController : CustomControllerBase
             ? Ok(ApiResponse.CreateSuccess(result.Data))
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
+
+    [HttpPut("{id}/role")]
+    public async Task<IActionResult> ChangeUserRole([FromRoute] long id, [FromBody] string newRole)
+    {
+        var allowedRoles = new[] { "User", "Admin" };
+        if (string.IsNullOrWhiteSpace(newRole) || !allowedRoles.Contains(newRole, StringComparer.OrdinalIgnoreCase))
+        {
+            return BadRequest(ApiResponse.CreateFailure("Недопустимая роль"));
+        }
+
+        var result = await _userService.ChangeUserRoleAsync(id, newRole);
+        return result.IsSuccess
+            ? Ok(ApiResponse.CreateSuccess(true))
+            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    }
+
+    [HttpGet("/user-admin-list/")]
+    public async Task<IActionResult> GetUsersAdmin([FromQuery] string name, [FromQuery] int curPage = 1)
+    {
+        var users = await _userService.GetUsersAdminAsync(name, curPage);
+        return Json(users);
+    }
 }

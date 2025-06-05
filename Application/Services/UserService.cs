@@ -184,4 +184,46 @@ public class UserService : IUserService
 
         return ServiceResult<Image>.Success();
     }
+
+    public async Task<ServiceResult<bool>> ChangeUserRoleAsync(long userId, string newRole)
+    {
+        var allowedRoles = new[] { "User", "Admin" };
+        if (string.IsNullOrWhiteSpace(newRole) || !allowedRoles.Contains(newRole, StringComparer.OrdinalIgnoreCase))
+        {
+            return ServiceResult<bool>.Failure("Недопустимая роль");
+        }
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+            return ServiceResult<bool>.Failure("Пользователь не найден");
+
+        user.Role = allowedRoles.First(r => r.Equals(newRole, StringComparison.OrdinalIgnoreCase));
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+
+        return ServiceResult<bool>.Success(true);
+    }
+
+    public async Task<List<Core.Models.User.UserAdminResponse>> GetUsersAdminAsync(string name, int curPage, int pageSize = 20)
+    {
+        var query = _context.Users.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(name))
+            query = query.Where(u => u.UserName.Contains(name));
+
+        var users = await query
+            .OrderBy(u => u.UserName)
+            .Skip((curPage - 1) * pageSize)
+            .Take(pageSize)
+            .Select(u => new Core.Models.User.UserAdminResponse
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                Email = u.UserEmail,
+                Role = u.Role
+            })
+            .ToListAsync();
+
+        return users;
+    }
 }
