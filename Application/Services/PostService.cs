@@ -371,7 +371,7 @@ public class PostService : IPostService
 
         post.Title = request.Title;
         post.Content = request.Content;
-        if(request.ImagesToRemove != null && request.NewImages.Any())
+        if(request.ImagesToRemove != null && request.ImagesToRemove.Any())
         {
             await _imageService.RemoveImagesFromServer(request.ImagesToRemove);
         }

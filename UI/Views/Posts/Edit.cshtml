@@ -22,13 +22,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Публиковать от лица</label>
-                            <select id="communitySelect" name="CommunityId" class="form-select">
-                                <option value="0" selected>От себя (автора)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
                             <label class="form-label">Выберите от 1 до 5 категорий</label>
                             <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
                             <div class="form-text text-danger" id="categoryError" style="display:none;">
@@ -85,7 +78,6 @@
 
                 document.getElementById("title").value = post.title ?? "";
                 document.getElementById("content").value = post.content ?? "";
-                document.getElementById("communitySelect").value = post.communityId?.toString() || "0";
 
                 post.categoriesIds?.forEach(id => selectedCategories.add(id));
                 await loadCategories(currentCategoryPage);
@@ -142,21 +134,6 @@
                 categoryError.innerText = "Не удалось загрузить категории.";
                 console.error(err);
             }
-        }
-
-        async function loadUserCommunities() {
-            const res = await fetch(`/created-communities/?userId=@userId&curPage=1`);
-            if (!res.ok) return;
-
-            const communities = await res.json();
-            const select = document.getElementById("communitySelect");
-
-            communities.forEach(comm => {
-                const option = document.createElement("option");
-                option.value = comm.id;
-                option.text = comm.communityName;
-                select.appendChild(option);
-            });
         }
 
         function renderImages() {
@@ -258,9 +235,13 @@
             const formData = new FormData();
             formData.append("Title", document.getElementById("title").value);
             formData.append("Content", document.getElementById("content").value);
-            formData.append("CommunityId", document.getElementById("communitySelect").value);
-            formData.append("Categories", JSON.stringify(Array.from(selectedCategories)));
-            formData.append("ImagesToRemove", JSON.stringify(imagesToRemove));
+            Array.from(selectedCategories).forEach(catId => {
+              formData.append("Categories", catId);
+            });
+            imagesToRemove.forEach(id => {
+                formData.append("ImagesToRemove", id);
+            });
+            formData.append("ImagesToRemove", -1);
             newImages.forEach(file => formData.append("NewImages", file));
 
             try {
@@ -279,7 +260,6 @@
         };
 
         (async () => {
-            await loadUserCommunities();
             await loadPostData();
         })();
     </script>
