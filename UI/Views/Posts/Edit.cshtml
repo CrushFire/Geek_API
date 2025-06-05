@@ -64,42 +64,40 @@
     <script>
         const urlParts = window.location.pathname.split('/');
         const postId = urlParts[urlParts.length - 1];
+
         const selectedCategories = new Set();
+        let existingImages = [];
+        let imagesToRemove = [];
+        let newImages = [];
+        let newImageUrls = [];
+
         const categoryError = document.getElementById("categoryError");
         const imageError = document.getElementById("imageError");
         const existingImagesContainer = document.getElementById("existingImages");
 
-        let existingImages = [];
-        let imagesToRemove = [];
-
-        let newImages = [];
-        let newImageUrls = [];
-
         let currentCategoryPage = 1;
 
-        // Загрузка данных поста
         async function loadPostData() {
-            const res = await fetch(`/get-post?postId=${postId}`);
-            if (!res.ok) {
+            try {
+                const res = await fetch(`/get-post?postId=${postId}`);
+                if (!res.ok) throw new Error("Ошибка загрузки поста");
+                const post = await res.json();
+
+                document.getElementById("title").value = post.title ?? "";
+                document.getElementById("content").value = post.content ?? "";
+                document.getElementById("communitySelect").value = post.communityId?.toString() || "0";
+
+                post.categoriesIds?.forEach(id => selectedCategories.add(id));
+                await loadCategories(currentCategoryPage);
+
+                existingImages = post.postImages ?? [];
+                renderImages();
+            } catch (err) {
                 alert("Не удалось загрузить данные поста.");
-                return;
+                console.error(err);
             }
-            const post = await res.json();
-
-            document.getElementById("title").value = post.title ?? "";
-            document.getElementById("content").value = post.content ?? "";
-
-            const communitySelect = document.getElementById("communitySelect");
-            communitySelect.value = post.communityId?.toString() || "0";
-
-            post.categoriesIds?.forEach(id => selectedCategories.add(id));
-            await loadCategories(currentCategoryPage);
-
-            existingImages = post.postImages ?? [];
-            renderImages();
         }
 
-        // Загрузка категорий с пагинацией и отображение с выбором
         async function loadCategories(page = 1) {
             try {
                 const res = await fetch(`/Category?curPage=${page}`);
@@ -109,7 +107,6 @@
                 if (categories.length === 0 && page > currentCategoryPage) return;
 
                 currentCategoryPage = page;
-
                 const container = document.getElementById("categoryList");
                 container.innerHTML = "";
 
@@ -132,7 +129,7 @@
                             span.classList.remove("bg-secondary");
                             span.classList.add("bg-primary");
                         }
-                        categoryError.style.display = (selectedCategories.size === 0 || selectedCategories.size > 5) ? "block" : "none";
+                        categoryError.style.display = (selectedCategories.size < 1 || selectedCategories.size > 5) ? "block" : "none";
                     };
 
                     container.appendChild(span);
@@ -140,27 +137,17 @@
 
                 document.getElementById("prevPage").disabled = currentCategoryPage === 1;
                 document.getElementById("nextPage").disabled = categories.length === 0;
-            } catch (error) {
-                console.error("Ошибка загрузки категорий:", error);
+            } catch (err) {
                 categoryError.style.display = "block";
                 categoryError.innerText = "Не удалось загрузить категории.";
+                console.error(err);
             }
         }
 
-        document.getElementById("prevPage").addEventListener("click", () => {
-            if (currentCategoryPage > 1) {
-                loadCategories(currentCategoryPage - 1);
-            }
-        });
-
-        document.getElementById("nextPage").addEventListener("click", () => {
-            loadCategories(currentCategoryPage + 1);
-        });
-
-        // Загрузка сообществ пользователя
         async function loadUserCommunities() {
             const res = await fetch(`/created-communities/?userId=@userId&curPage=1`);
             if (!res.ok) return;
+
             const communities = await res.json();
             const select = document.getElementById("communitySelect");
 
@@ -172,11 +159,9 @@
             });
         }
 
-        // Отрисовка изображений (старых и новых)
         function renderImages() {
             existingImagesContainer.innerHTML = "";
 
-            // Старые изображения
             existingImages.forEach(img => {
                 const wrapper = document.createElement("div");
                 wrapper.className = "position-relative";
@@ -202,7 +187,6 @@
                 existingImagesContainer.appendChild(wrapper);
             });
 
-            // Новые изображения
             newImageUrls.forEach((url, index) => {
                 const wrapper = document.createElement("div");
                 wrapper.className = "position-relative";
@@ -229,72 +213,71 @@
             });
         }
 
-        // Добавление новых изображений в массив и показ превью
         document.getElementById("uploadImageBtn").onclick = () => {
             const input = document.getElementById("newImageInput");
             const file = input.files[0];
             if (!file) return alert("Выберите изображение");
 
-            const total = existingImages.length + newImages.length;
-            if (total >= 5) {
+            if (existingImages.length + newImages.length >= 5) {
                 imageError.style.display = "block";
                 return alert("Максимум 5 изображений");
             }
-            imageError.style.display = "none";
 
+            imageError.style.display = "none";
             const url = URL.createObjectURL(file);
             newImages.push(file);
             newImageUrls.push(url);
             renderImages();
 
-            input.value = ""; // Очистить input
+            input.value = "";
         };
 
-        // Валидация и отправка формы
-document.getElementById("postForm").onsubmit = async (e) => {
-    e.preventDefault();
-
-    if (selectedCategories.size < 1 || selectedCategories.size > 5) {
-        categoryError.style.display = "block";
-        return alert("Выберите от 1 до 5 категорий");
-    } else {
-        categoryError.style.display = "none";
-    }
-
-    if (existingImages.length + newImages.length > 5) {
-        imageError.style.display = "block";
-        return alert("Максимум 5 изображений");
-    } else {
-        imageError.style.display = "none";
-    }
-
-    const formData = new FormData();
-    formData.append("Title", document.getElementById("title").value);
-    formData.append("Content", document.getElementById("content").value);
-    formData.append("CommunityId", document.getElementById("communitySelect").value);
-    formData.append("Categories", JSON.stringify(Array.from(selectedCategories))); // <-- здесь
-
-    formData.append("ImagesToRemove", JSON.stringify(imagesToRemove)); // <-- здесь
-
-    newImages.forEach(file => formData.append("NewImages", file)); // <-- здесь
-
-    try {
-        const response = await fetch("/edit-post?id=${postId}", {
-            method: "POST",
-            body: formData,
+        document.getElementById("prevPage").addEventListener("click", () => {
+            if (currentCategoryPage > 1) {
+                loadCategories(currentCategoryPage - 1);
+            }
         });
 
-        if (!response.ok) throw new Error("Ошибка при сохранении");
+        document.getElementById("nextPage").addEventListener("click", () => {
+            loadCategories(currentCategoryPage + 1);
+        });
 
-        alert("Пост успешно обновлён");
-        window.location.href = `/post/${postId}`;
-    } catch (error) {
-        alert("Ошибка при сохранении поста: " + error.message);
-    }
-};
+        document.getElementById("postForm").onsubmit = async (e) => {
+            e.preventDefault();
 
+            if (selectedCategories.size < 1 || selectedCategories.size > 5) {
+                categoryError.style.display = "block";
+                return alert("Выберите от 1 до 5 категорий");
+            }
 
-        // Загрузка данных по загрузке страницы
+            if (existingImages.length + newImages.length > 5) {
+                imageError.style.display = "block";
+                return alert("Максимум 5 изображений");
+            }
+
+            const formData = new FormData();
+            formData.append("Title", document.getElementById("title").value);
+            formData.append("Content", document.getElementById("content").value);
+            formData.append("CommunityId", document.getElementById("communitySelect").value);
+            formData.append("Categories", JSON.stringify(Array.from(selectedCategories)));
+            formData.append("ImagesToRemove", JSON.stringify(imagesToRemove));
+            newImages.forEach(file => formData.append("NewImages", file));
+
+            try {
+                const response = await fetch(`/edit-post?id=${postId}`, {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error("Ошибка при сохранении");
+
+                alert("Пост успешно обновлён");
+                window.location.href = `/post/${postId}`;
+            } catch (error) {
+                alert("Ошибка при сохранении поста: " + error.message);
+            }
+        };
+
         (async () => {
             await loadUserCommunities();
             await loadPostData();

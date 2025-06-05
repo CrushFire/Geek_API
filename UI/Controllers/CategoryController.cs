@@ -58,7 +58,7 @@ public class CategoryController : CustomControllerBase
 
     [HttpPut]
 
-    public async Task<IActionResult> UpdateCategoryAsync([FromBody] CategoryRequest categoryRequest, [FromRoute] int id)
+    public async Task<IActionResult> UpdateCategoryAsync([FromBody] CategoryRequest categoryRequest, [FromQuery] int id)
     {
         var result = await _categoryService.UpdateCategoryAsync(categoryRequest, id);
         return result.IsSuccess

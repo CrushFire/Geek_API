@@ -371,11 +371,11 @@ public class PostService : IPostService
 
         post.Title = request.Title;
         post.Content = request.Content;
-        if(request.ImagesToRemove != null)
+        if(request.ImagesToRemove != null && request.NewImages.Any())
         {
             await _imageService.RemoveImagesFromServer(request.ImagesToRemove);
         }
-        if(request.NewImages != null)
+        if (request.NewImages != null && request.NewImages.Any())
         {
             await _imageService.AddUploadedImagesAsync("Post", post.Id, "image", request.NewImages);
         }
