@@ -371,10 +371,17 @@ public class PostService : IPostService
 
         post.Title = request.Title;
         post.Content = request.Content;
+        if(request.ImagesToRemove != null)
+        {
+            await _imageService.RemoveImagesFromServer(request.ImagesToRemove);
+        }
+        if(request.NewImages != null)
+        {
+            await _imageService.AddUploadedImagesAsync("Post", post.Id, "image", request.NewImages);
+        }
 
-        //TODO
-        //Удалить старые создать новые
-        //Отслеживать ли как-то существующие???
+        //var postCategories = await _context.PostCategories.Where()
+        _context.PostCategories.RemoveRange();
 
         _context.Posts.Update(post);
         await _context.SaveChangesAsync();

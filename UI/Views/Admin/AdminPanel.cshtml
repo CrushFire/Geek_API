@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Панель администратора";
+}
+
+@section Head {
+    <style>
+        .admin-card-hover:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15) !important;
+            transform: translateY(-4px) scale(1.03);
+            transition: all 0.2s;
+        }
+    </style>
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="container py-5">
+                <div class="row justify-content-center mb-4">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="fw-bold mb-2">Панель администратора</h2>
+                        <p class="text-muted">Управляйте основными сущностями сайта через быстрые ссылки ниже</p>
+                    </div>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <a href="/Admin/Posts" class="text-decoration-none">
+                            <div class="card shadow-sm h-100 border-0 admin-card-hover">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="bi bi-file-earmark-text fs-1 text-primary"></i>
+                                    </div>
+                                    <h5 class="card-title mb-1">Посты</h5>
+                                    <p class="card-text text-muted small">Управление публикациями и контентом</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <a href="/Admin/Categories" class="text-decoration-none">
+                            <div class="card shadow-sm h-100 border-0 admin-card-hover">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="bi bi-tags fs-1 text-success"></i>
+                                    </div>
+                                    <h5 class="card-title mb-1">Категории</h5>
+                                    <p class="card-text text-muted small">Редактирование и добавление категорий</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <a href="/Admin/Users" class="text-decoration-none">
+                            <div class="card shadow-sm h-100 border-0 admin-card-hover">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="bi bi-people fs-1 text-warning"></i>
+                                    </div>
+                                    <h5 class="card-title mb-1">Пользователи</h5>
+                                    <p class="card-text text-muted small">Модерация и управление пользователями</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <a href="/Admin/Comments" class="text-decoration-none">
+                            <div class="card shadow-sm h-100 border-0 admin-card-hover">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="bi bi-chat-dots fs-1 text-danger"></i>
+                                    </div>
+                                    <h5 class="card-title mb-1">Комментарии</h5>
+                                    <p class="card-text text-muted small">Просмотр и удаление комментариев</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <a href="/Admin/Communities" class="text-decoration-none">
+                            <div class="card shadow-sm h-100 border-0 admin-card-hover">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="bi bi-people-fill fs-1 text-info"></i>
+                                    </div>
+                                    <h5 class="card-title mb-1">Сообщества</h5>
+                                    <p class="card-text text-muted small">Управление сообществами сайта</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Script {
+    <!-- Здесь можно добавить JS для админ-панели при необходимости -->
+}

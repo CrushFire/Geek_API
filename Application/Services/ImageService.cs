@@ -184,4 +184,26 @@ public class ImageService : IImageService
 
         return true;
     }
+
+    public async Task<bool> RemoveImagesFromServer(List<long> imageIds)
+    {
+        var images = await _context.Images
+            .Where(im => imageIds.Contains(im.Id))
+            .ToListAsync();
+
+        foreach (var image in images)
+        {
+            var imageUrl = image.ImageUrl;
+            var startIndex = imageUrl.IndexOf("images/") + "images/".Length;
+            var fileName = imageUrl.Substring(startIndex);
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+            if (File.Exists(filePath)) File.Delete(filePath);
+        }
+
+        _context.Images.RemoveRange(images);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
 }

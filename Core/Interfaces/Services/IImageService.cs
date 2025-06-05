@@ -16,4 +16,5 @@ public interface IImageService
     Task<bool> RemoveImages(List<long> imageIds);
     Task<bool> RemoveImage(long imageId);
     Task<bool> RemoveImageFromServer(long imageId);
+    Task<bool> RemoveImagesFromServer(List<long> imageIds);
 }

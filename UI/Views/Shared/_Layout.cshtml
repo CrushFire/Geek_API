@@ -64,6 +64,11 @@
                             <button type="button" class="btn btn-sm @(ViewBag.Language == "ru" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('ru')">ru</button>
                             <button type="button" class="btn btn-sm @(ViewBag.Language == "eng" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('eng')">eng</button>
                         </div>
+
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="logout()">Выйти</button>
+                        }
                     </div>
                 </div>
             </div>
@@ -92,7 +97,6 @@
 
             <h6>RESOURCES</h6>
             <a href="#" class="nav-link">About</a>
-            <a href="#" class="nav-link">Advertise</a>
             <a href="#" class="nav-link">Help</a>
 
             <hr>
@@ -100,6 +104,11 @@
             <h6>THE BESTS</h6>
             <a href="#" class="nav-link">Communities</a>
             <a href="#" class="nav-link">Fires</a>
+
+            @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <a href="/Admin/Panel" class="btn btn-warning ms-2">Админ-панель</a>
+            }
         </div>
     }
         @RenderSection("Body", required: false)
@@ -114,9 +123,20 @@
             currentUrl.searchParams.set("lang", language);
             window.location.href = currentUrl.toString();
         }
+
+        function logout() {
+            fetch('/Auth/logout', {
+                method: 'POST',
+                credentials: 'include'
+            })
+                .then(() => {
+                    window.location.href = '/Auth/Login';
+                });
+        }
     </script>
 </body>
 <footer>
 
 </footer>
 </html>
+.

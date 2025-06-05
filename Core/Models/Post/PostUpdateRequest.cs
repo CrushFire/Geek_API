@@ -7,7 +7,8 @@ public class PostUpdateRequest
     public string Title { get; set; } = string.Empty;
 
     public string Content { get; set; } = string.Empty;
-    public string Categories { get; set; }
-
-    public List<IFormFile> Images { get; set; } = new();
+    public int CommunityId { get; set; }
+    public List<int> Categories { get; set; } = new();
+    public List<long> ImagesToRemove { get; set; } = new();
+    public List<IFormFile> NewImages { get; set; } = new();
 }

@@ -175,4 +175,12 @@ public class AuthController : CustomControllerBase
 
         return Redirect("Home");//страница на которую перейти
     }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("jwt_token");
+        return Redirect("/Auth/Login");
+    }
 }

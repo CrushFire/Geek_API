@@ -3,16 +3,12 @@
     var userId = ViewBag.UserId ?? 0;
 }
 
-@section Head {
-    <!-- Можно подключить специфические стили -->
-}
-
 @section Body {
     <div class="app-wrapper">
         <div class="main-content">
-            <div class="container">
-                <div class="card p-4 shadow" style="border-radius: 1rem;">
-                    <h2 class="mb-4">Редактирование поста</h2>
+            <div class="container py-4">
+                <div class="card p-4 shadow rounded-4">
+                    <h2>Редактирование поста</h2>
 
                     <form id="postForm" enctype="multipart/form-data">
                         <div class="mb-3">
@@ -33,7 +29,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Выберите от 1 до 5 категорий</label>
+                            <label class="form-label">Категории (1–5)</label>
                             <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
                             <div class="form-text text-danger" id="categoryError" style="display:none;">
                                 Выберите от 1 до 5 категорий.
@@ -41,12 +37,12 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Существующие изображения</label>
+                            <label class="form-label">Изображения</label>
                             <div id="existingImages" class="d-flex flex-wrap gap-3 mb-2"></div>
 
                             <label for="newImageInput" class="form-label">Добавить изображение</label>
                             <input type="file" id="newImageInput" accept="image/*" class="form-control mb-2" />
-                            <button type="button" id="uploadImageBtn" class="btn btn-success">Загрузить</button>
+                            <button type="button" id="uploadImageBtn" class="btn btn-success">Добавить</button>
                         </div>
 
                         <button type="submit" class="btn btn-primary mt-3">Сохранить изменения</button>
@@ -61,80 +57,82 @@
     <script>
         const urlParts = window.location.pathname.split('/');
         const postId = urlParts[urlParts.length - 1];
-
         const selectedCategories = new Set();
         const categoryError = document.getElementById("categoryError");
-        let currentCategoryPage = 1;
+        const existingImagesContainer = document.getElementById("existingImages");
+
         let existingImages = [];
+        let imagesToRemove = [];
 
-        async function loadCategories(page = 1) {
-            try {
-                const response = await fetch(`/Category?curPage=${page}`);
-                if (!response.ok) throw new Error("Ошибка при загрузке категорий");
+        let newImages = [];
+        let newImageUrls = [];
 
-                const data = await response.json();
-                currentCategoryPage = page;
-                const container = document.getElementById("categoryList");
-                container.innerHTML = "";
+        async function loadPostData() {
+            const res = await fetch(`/get-post?postId=${postId}`);
+            const post = await res.json();
 
-                data.forEach(cat => {
-                    const catId = Number(cat.id);
-                    const isSelected = selectedCategories.has(catId);
+            document.getElementById("title").value = post.title ?? "";
+            document.getElementById("content").value = post.content ?? "";
 
-                    const span = document.createElement("span");
-                    span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
-                    span.style.cursor = "pointer";
-                    span.dataset.id = catId;
-                    span.innerText = cat.title;
+            const communitySelect = document.getElementById("communitySelect");
+            communitySelect.value = post.communityId?.toString() || "0";
 
-                    span.onclick = () => {
-                        if (selectedCategories.has(catId)) {
-                            selectedCategories.delete(catId);
-                            span.classList.remove("bg-primary");
-                            span.classList.add("bg-secondary");
-                        } else if (selectedCategories.size < 5) {
-                            selectedCategories.add(catId);
-                            span.classList.remove("bg-secondary");
-                            span.classList.add("bg-primary");
-                        }
-                        categoryError.style.display = (selectedCategories.size === 0 || selectedCategories.size > 5) ? "block" : "none";
-                    };
+            post.categoriesIds?.forEach(id => selectedCategories.add(id));
+            await loadCategories();
 
-                    container.appendChild(span);
-                });
-            } catch (error) {
-                console.error("Ошибка загрузки категорий:", error);
-                categoryError.style.display = "block";
-                categoryError.innerText = "Не удалось загрузить категории.";
-            }
+            existingImages = post.postImages ?? [];
+            renderImages();
+        }
+
+        async function loadCategories() {
+            const res = await fetch(`/Category`);
+            const categories = await res.json();
+            const container = document.getElementById("categoryList");
+            container.innerHTML = "";
+
+            categories.forEach(cat => {
+                const catId = +cat.id;
+                const isSelected = selectedCategories.has(catId);
+
+                const span = document.createElement("span");
+                span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
+                span.innerText = cat.title;
+                span.style.cursor = "pointer";
+
+                span.onclick = () => {
+                    if (selectedCategories.has(catId)) {
+                        selectedCategories.delete(catId);
+                        span.classList.remove("bg-primary");
+                        span.classList.add("bg-secondary");
+                    } else if (selectedCategories.size < 5) {
+                        selectedCategories.add(catId);
+                        span.classList.remove("bg-secondary");
+                        span.classList.add("bg-primary");
+                    }
+                    categoryError.style.display = (selectedCategories.size === 0 || selectedCategories.size > 5) ? "block" : "none";
+                };
+
+                container.appendChild(span);
+            });
         }
 
         async function loadUserCommunities() {
-            try {
-                const response = await fetch(`/created-communities/?userId=@userId&curPage=1`);
-                if (!response.ok) throw new Error("Ошибка при загрузке сообществ");
+            const res = await fetch(`/created-communities/?userId=@userId&curPage=1`);
+            const communities = await res.json();
+            const select = document.getElementById("communitySelect");
 
-                const data = await response.json();
-                const select = document.getElementById("communitySelect");
-                while (select.options.length > 1) {
-                    select.remove(1);
-                }
-
-                data.forEach(comm => {
-                    const option = document.createElement("option");
-                    option.value = comm.id;
-                    option.text = comm.communityName;
-                    select.appendChild(option);
-                });
-            } catch (error) {
-                console.error("Ошибка загрузки сообществ:", error);
-            }
+            communities.forEach(comm => {
+                const option = document.createElement("option");
+                option.value = comm.id;
+                option.text = comm.communityName;
+                select.appendChild(option);
+            });
         }
 
         function renderImages() {
-            const container = document.getElementById("existingImages");
-            container.innerHTML = "";
+            existingImagesContainer.innerHTML = "";
 
+            // старые
             existingImages.forEach(img => {
                 const wrapper = document.createElement("div");
                 wrapper.className = "position-relative";
@@ -146,133 +144,93 @@
 
                 const btn = document.createElement("button");
                 btn.innerText = "✕";
-                btn.className = "position-absolute top-0 end-0";
+                btn.className = "position-absolute top-0 end-0 btn btn-sm btn-light";
                 btn.style.transform = "translate(50%, -50%)";
-                btn.style.background = "transparent";
-                btn.style.border = "none";
-                btn.style.color = "#6c757d";
-                btn.style.fontSize = "1rem";
-                btn.style.cursor = "pointer";
-                btn.onclick = async () => {
-                    try {
-                        const res = await fetch(`/remove-post-image?imgId=${img.id}`, { method: "DELETE" });
-                        if (res.ok) {
-                            existingImages = existingImages.filter(i => i.id !== img.id);
-                            renderImages();
-                        } else {
-                            console.error("Ошибка при удалении изображения");
-                        }
-                    } catch (error) {
-                        console.error("Ошибка при удалении изображения", error);
-                    }
+
+                btn.onclick = () => {
+                    imagesToRemove.push(img.id);
+                    existingImages = existingImages.filter(i => i.id !== img.id);
+                    renderImages();
                 };
 
                 wrapper.appendChild(image);
                 wrapper.appendChild(btn);
-                container.appendChild(wrapper);
+                existingImagesContainer.appendChild(wrapper);
+            });
+
+            // новые
+            newImageUrls.forEach((url, index) => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "position-relative";
+
+                const image = document.createElement("img");
+                image.src = url;
+                image.style.maxWidth = "150px";
+                image.style.borderRadius = "8px";
+
+                const btn = document.createElement("button");
+                btn.innerText = "✕";
+                btn.className = "position-absolute top-0 end-0 btn btn-sm btn-light";
+                btn.style.transform = "translate(50%, -50%)";
+
+                btn.onclick = () => {
+                    newImages.splice(index, 1);
+                    newImageUrls.splice(index, 1);
+                    renderImages();
+                };
+
+                wrapper.appendChild(image);
+                wrapper.appendChild(btn);
+                existingImagesContainer.appendChild(wrapper);
             });
         }
 
-        async function loadPostData() {
-            try {
-                const response = await fetch(`/get-post?postId=${postId}`);
-                if (!response.ok) throw new Error("Ошибка при загрузке поста");
-
-                const post = await response.json();
-
-                document.getElementById("title").value = post.title ?? "";
-                document.getElementById("content").value = post.content ?? "";
-
-                const communitySelect = document.getElementById("communitySelect");
-                communitySelect.value = post.communityId ? post.communityId.toString() : "0";
-
-                if (Array.isArray(post.categoriesIds)) {
-                    post.categoriesIds.forEach(id => selectedCategories.add(id));
-                }
-
-                if (Array.isArray(post.postImages)) {
-                    existingImages = post.postImages;
-                    renderImages();
-                }
-
-                await loadCategories(currentCategoryPage);
-            } catch (error) {
-                console.error("Ошибка загрузки поста:", error);
-                alert("Не удалось загрузить данные поста.");
-            }
-        }
-
-        document.getElementById("uploadImageBtn").addEventListener("click", async () => {
+        document.getElementById("uploadImageBtn").onclick = () => {
             const input = document.getElementById("newImageInput");
             const file = input.files[0];
-            if (!file) {
-                alert("Выберите изображение");
-                return;
-            }
+            if (!file) return alert("Выберите изображение");
 
-            if (existingImages.length >= 5) {
-                alert("Нельзя загрузить больше 5 изображений");
-                return;
-            }
+            const total = existingImages.length + newImages.length;
+            if (total >= 5) return alert("Максимум 5 изображений");
 
-            const formData = new FormData();
-            formData.append("image", file);
-            formData.append("postId", postId);
-
-            const res = await fetch("/add-post-image", {
-                method: "POST",
-                body: formData
-            });
-
-            if (res.ok) {
-                const json = await res.json();
-                existingImages.push({ id: json.id, url: json.url });
-                renderImages();
-                input.value = "";
-            } else {
-                alert("Ошибка при загрузке изображения");
-            }
-        });
+            const url = URL.createObjectURL(file);
+            newImages.push(file);
+            newImageUrls.push(url);
+            renderImages();
+            input.value = "";
+        };
 
         document.getElementById("postForm").addEventListener("submit", async (e) => {
             e.preventDefault();
-
-            categoryError.style.display = "none";
 
             if (selectedCategories.size === 0 || selectedCategories.size > 5) {
                 categoryError.style.display = "block";
                 return;
             }
 
-            const form = e.target;
-            const formData = new FormData(form);
-            selectedCategories.forEach(id => formData.append("CategoriesIds", id));
+            const formData = new FormData(e.target);
+            selectedCategories.forEach(id => formData.append("Categories", id));
+            imagesToRemove.forEach(id => formData.append("ImagesToRemove", id));
+            newImages.forEach(file => formData.append("NewImages", file));
 
             if (!formData.has("CommunityId")) {
                 formData.append("CommunityId", "0");
             }
 
-            try {
-                const response = await fetch(`/edit-post/${postId}`, {
-                    method: 'POST',
-                    body: formData
-                });
+            const res = await fetch(`/edit-post?id=${postId}`, {
+                method: "POST",
+                body: formData
+            });
 
-                const result = await response.json();
-
-                if (response.ok) {
-                    alert("Пост успешно обновлён!");
-                    window.location.href = `/Post/${postId}`;
-                } else {
-                    alert("Ошибка: " + (result.errorMessage || "Неизвестная ошибка"));
-                }
-            } catch (error) {
-                console.error("Ошибка отправки:", error);
-                alert("Произошла ошибка при обновлении поста.");
+            if (res.ok) {
+                alert("Пост обновлён!");
+                window.location.href = `/Post/${postId}`;
+            } else {
+                const json = await res.json();
+                alert("Ошибка: " + (json.errorMessage ?? "Неизвестная"));
             }
         });
 
-        // Инициализация
         loadUserCommunities();
         loadPostData();
     </script>
