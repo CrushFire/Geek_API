@@ -29,10 +29,14 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Категории (1–5)</label>
+                            <label class="form-label">Выберите от 1 до 5 категорий</label>
                             <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
                             <div class="form-text text-danger" id="categoryError" style="display:none;">
                                 Выберите от 1 до 5 категорий.
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
+                                <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
+                                <button id="nextPage" type="button" class="btn btn-outline-secondary">Вперёд &rarr;</button>
                             </div>
                         </div>
 
@@ -43,6 +47,9 @@
                             <label for="newImageInput" class="form-label">Добавить изображение</label>
                             <input type="file" id="newImageInput" accept="image/*" class="form-control mb-2" />
                             <button type="button" id="uploadImageBtn" class="btn btn-success">Добавить</button>
+                            <div class="form-text text-danger" id="imageError" style="display:none;">
+                                Можно загрузить максимум 5 изображений.
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary mt-3">Сохранить изменения</button>
@@ -59,6 +66,7 @@
         const postId = urlParts[urlParts.length - 1];
         const selectedCategories = new Set();
         const categoryError = document.getElementById("categoryError");
+        const imageError = document.getElementById("imageError");
         const existingImagesContainer = document.getElementById("existingImages");
 
         let existingImages = [];
@@ -67,8 +75,15 @@
         let newImages = [];
         let newImageUrls = [];
 
+        let currentCategoryPage = 1;
+
+        // Загрузка данных поста
         async function loadPostData() {
             const res = await fetch(`/get-post?postId=${postId}`);
+            if (!res.ok) {
+                alert("Не удалось загрузить данные поста.");
+                return;
+            }
             const post = await res.json();
 
             document.getElementById("title").value = post.title ?? "";
@@ -78,46 +93,74 @@
             communitySelect.value = post.communityId?.toString() || "0";
 
             post.categoriesIds?.forEach(id => selectedCategories.add(id));
-            await loadCategories();
+            await loadCategories(currentCategoryPage);
 
             existingImages = post.postImages ?? [];
             renderImages();
         }
 
-        async function loadCategories() {
-            const res = await fetch(`/Category`);
-            const categories = await res.json();
-            const container = document.getElementById("categoryList");
-            container.innerHTML = "";
+        // Загрузка категорий с пагинацией и отображение с выбором
+        async function loadCategories(page = 1) {
+            try {
+                const res = await fetch(`/Category?curPage=${page}`);
+                if (!res.ok) throw new Error("Ошибка при загрузке категорий");
 
-            categories.forEach(cat => {
-                const catId = +cat.id;
-                const isSelected = selectedCategories.has(catId);
+                const categories = await res.json();
+                if (categories.length === 0 && page > currentCategoryPage) return;
 
-                const span = document.createElement("span");
-                span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
-                span.innerText = cat.title;
-                span.style.cursor = "pointer";
+                currentCategoryPage = page;
 
-                span.onclick = () => {
-                    if (selectedCategories.has(catId)) {
-                        selectedCategories.delete(catId);
-                        span.classList.remove("bg-primary");
-                        span.classList.add("bg-secondary");
-                    } else if (selectedCategories.size < 5) {
-                        selectedCategories.add(catId);
-                        span.classList.remove("bg-secondary");
-                        span.classList.add("bg-primary");
-                    }
-                    categoryError.style.display = (selectedCategories.size === 0 || selectedCategories.size > 5) ? "block" : "none";
-                };
+                const container = document.getElementById("categoryList");
+                container.innerHTML = "";
 
-                container.appendChild(span);
-            });
+                categories.forEach(cat => {
+                    const catId = +cat.id;
+                    const isSelected = selectedCategories.has(catId);
+
+                    const span = document.createElement("span");
+                    span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
+                    span.innerText = cat.title;
+                    span.style.cursor = "pointer";
+
+                    span.onclick = () => {
+                        if (selectedCategories.has(catId)) {
+                            selectedCategories.delete(catId);
+                            span.classList.remove("bg-primary");
+                            span.classList.add("bg-secondary");
+                        } else if (selectedCategories.size < 5) {
+                            selectedCategories.add(catId);
+                            span.classList.remove("bg-secondary");
+                            span.classList.add("bg-primary");
+                        }
+                        categoryError.style.display = (selectedCategories.size === 0 || selectedCategories.size > 5) ? "block" : "none";
+                    };
+
+                    container.appendChild(span);
+                });
+
+                document.getElementById("prevPage").disabled = currentCategoryPage === 1;
+                document.getElementById("nextPage").disabled = categories.length === 0;
+            } catch (error) {
+                console.error("Ошибка загрузки категорий:", error);
+                categoryError.style.display = "block";
+                categoryError.innerText = "Не удалось загрузить категории.";
+            }
         }
 
+        document.getElementById("prevPage").addEventListener("click", () => {
+            if (currentCategoryPage > 1) {
+                loadCategories(currentCategoryPage - 1);
+            }
+        });
+
+        document.getElementById("nextPage").addEventListener("click", () => {
+            loadCategories(currentCategoryPage + 1);
+        });
+
+        // Загрузка сообществ пользователя
         async function loadUserCommunities() {
             const res = await fetch(`/created-communities/?userId=@userId&curPage=1`);
+            if (!res.ok) return;
             const communities = await res.json();
             const select = document.getElementById("communitySelect");
 
@@ -129,10 +172,11 @@
             });
         }
 
+        // Отрисовка изображений (старых и новых)
         function renderImages() {
             existingImagesContainer.innerHTML = "";
 
-            // старые
+            // Старые изображения
             existingImages.forEach(img => {
                 const wrapper = document.createElement("div");
                 wrapper.className = "position-relative";
@@ -158,7 +202,7 @@
                 existingImagesContainer.appendChild(wrapper);
             });
 
-            // новые
+            // Новые изображения
             newImageUrls.forEach((url, index) => {
                 const wrapper = document.createElement("div");
                 wrapper.className = "position-relative";
@@ -185,53 +229,75 @@
             });
         }
 
+        // Добавление новых изображений в массив и показ превью
         document.getElementById("uploadImageBtn").onclick = () => {
             const input = document.getElementById("newImageInput");
             const file = input.files[0];
             if (!file) return alert("Выберите изображение");
 
             const total = existingImages.length + newImages.length;
-            if (total >= 5) return alert("Максимум 5 изображений");
+            if (total >= 5) {
+                imageError.style.display = "block";
+                return alert("Максимум 5 изображений");
+            }
+            imageError.style.display = "none";
 
             const url = URL.createObjectURL(file);
             newImages.push(file);
             newImageUrls.push(url);
             renderImages();
-            input.value = "";
+
+            input.value = ""; // Очистить input
         };
 
-        document.getElementById("postForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
+        // Валидация и отправка формы
+document.getElementById("postForm").onsubmit = async (e) => {
+    e.preventDefault();
 
-            if (selectedCategories.size === 0 || selectedCategories.size > 5) {
-                categoryError.style.display = "block";
-                return;
-            }
+    if (selectedCategories.size < 1 || selectedCategories.size > 5) {
+        categoryError.style.display = "block";
+        return alert("Выберите от 1 до 5 категорий");
+    } else {
+        categoryError.style.display = "none";
+    }
 
-            const formData = new FormData(e.target);
-            selectedCategories.forEach(id => formData.append("Categories", id));
-            imagesToRemove.forEach(id => formData.append("ImagesToRemove", id));
-            newImages.forEach(file => formData.append("NewImages", file));
+    if (existingImages.length + newImages.length > 5) {
+        imageError.style.display = "block";
+        return alert("Максимум 5 изображений");
+    } else {
+        imageError.style.display = "none";
+    }
 
-            if (!formData.has("CommunityId")) {
-                formData.append("CommunityId", "0");
-            }
+    const formData = new FormData();
+    formData.append("Title", document.getElementById("title").value);
+    formData.append("Content", document.getElementById("content").value);
+    formData.append("CommunityId", document.getElementById("communitySelect").value);
+    formData.append("Categories", JSON.stringify(Array.from(selectedCategories))); // <-- здесь
 
-            const res = await fetch(`/edit-post?id=${postId}`, {
-                method: "POST",
-                body: formData
-            });
+    formData.append("ImagesToRemove", JSON.stringify(imagesToRemove)); // <-- здесь
 
-            if (res.ok) {
-                alert("Пост обновлён!");
-                window.location.href = `/Post/${postId}`;
-            } else {
-                const json = await res.json();
-                alert("Ошибка: " + (json.errorMessage ?? "Неизвестная"));
-            }
+    newImages.forEach(file => formData.append("NewImages", file)); // <-- здесь
+
+    try {
+        const response = await fetch("/edit-post?id=${postId}", {
+            method: "POST",
+            body: formData,
         });
 
-        loadUserCommunities();
-        loadPostData();
+        if (!response.ok) throw new Error("Ошибка при сохранении");
+
+        alert("Пост успешно обновлён");
+        window.location.href = `/post/${postId}`;
+    } catch (error) {
+        alert("Ошибка при сохранении поста: " + error.message);
+    }
+};
+
+
+        // Загрузка данных по загрузке страницы
+        (async () => {
+            await loadUserCommunities();
+            await loadPostData();
+        })();
     </script>
 }

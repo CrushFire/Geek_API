@@ -380,8 +380,18 @@ public class PostService : IPostService
             await _imageService.AddUploadedImagesAsync("Post", post.Id, "image", request.NewImages);
         }
 
-        //var postCategories = await _context.PostCategories.Where()
-        _context.PostCategories.RemoveRange();
+        var postCategories = await _context.PostCategories.Where(pc => pc.PostId == post.Id).ToListAsync();
+        _context.PostCategories.RemoveRange(postCategories);
+
+        var newPostCategories = request.Categories
+                .Select(catId => new PostCategory
+                {
+                    PostId = post.Id,
+                    CategoryId = catId
+                })
+                .ToList();
+
+        _context.PostCategories.AddRange(newPostCategories);
 
         _context.Posts.Update(post);
         await _context.SaveChangesAsync();
