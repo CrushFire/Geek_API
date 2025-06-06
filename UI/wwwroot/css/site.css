@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  height: 100vh;
   margin-top: 40px;
 }
 
@@ -416,6 +416,22 @@ body {
     .medal.bronze {
         background: linear-gradient(135deg, #cd7f32, #b87333);
     }
+
+.main-content-admin {
+    margin-left: 240px; /* сдвиг под сайдбар */
+    padding: 2rem;
+    display: flex;
+    justify-content: center; /* горизонтальный центр */
+    align-items: center; /* вертикальный центр */
+    min-height: calc(100vh - 100px - 4rem); /* мин. высота с учётом padding */
+    box-sizing: border-box;
+}
+
+.app-wrapper-admin {
+    width: 100%;
+    height: 100%; /* высота viewport минус margin top+bottom у body */
+    background-color: #f8fbff;
+}
 
 
 
