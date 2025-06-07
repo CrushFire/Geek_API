@@ -6,6 +6,8 @@ using Core.Models;
 using Core.Models.Category;
 using Core.Models.Comment;
 using Core.Models.Community;
+using Core.Models.Image;
+using Core.Models.Post;
 using Core.Results;
 using DataAccess;
 using FluentNHibernate.Conventions;
@@ -120,6 +122,33 @@ namespace Application.Services
             return ServiceResult<List<CommunityResponse>>.Success(communitiesResponse.ToList());
         }
 
+        public async Task<ServiceResult<CommunityWithCategoriesResponse>> GetByIdWithCategoriesAsync(long id)
+        {
+            var p = await _context.Communities
+                .Include(p => p.CommunityCategories)
+                    .ThenInclude(pc => pc.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            var communityImage = await _context.Images
+                .FirstOrDefaultAsync(i => i.EntityTarget == "Community" && i.EntityId == id && i.ImageType == "avatar");
+
+                var communityImageResponse = new ImageIdResponse
+                {
+                    Id = communityImage.Id,
+                    Url = communityImage.ImageUrl
+                };
+
+            var response = new CommunityWithCategoriesResponse
+            {
+                Title = p.Name,
+                Description = p.Description,
+                CategoriesIds = p.CommunityCategories.Select(pc => pc.CategoryId).ToList(),
+                CommunityImage = communityImageResponse
+            };
+
+            return ServiceResult<CommunityWithCategoriesResponse>.Success(response);
+        }
+
         public async Task<ServiceResult<List<CommunityResponse>>> GetCommunitiesCreatedUser(PaginationRequest paginationRequest, long userId)
         {
             var subscribedCommunities = await _context.Communities
@@ -216,7 +245,7 @@ namespace Application.Services
             {
                 return ServiceResult<bool>.Failure("Юзер не существует");
             }
-            var communityExists = await _context.Users.FirstOrDefaultAsync(x => x.Id == communityId);
+            var communityExists = await _context.Communities.FirstOrDefaultAsync(x => x.Id == communityId);
             if (communityExists == null)
             {
                 return ServiceResult<bool>.Failure("Сообщество не найдено");
@@ -248,15 +277,38 @@ namespace Application.Services
 
         }
 
-        public async Task<ServiceResult<bool>> UpdateCommunityAsync(CommunityAddRequest communityAddRequest, long id)
+        public async Task<ServiceResult<bool>> UpdateCommunityAsync(CommunityUpdateRequest request, long id)
         {
             var community = await _context.Communities.FirstOrDefaultAsync(x => x.Id == id);
+
             if (community == null)
             {
                 return ServiceResult<bool>.Failure("Такого сообщества не существует");
             }
-            community.Name = communityAddRequest.Name;
-            community.Description = communityAddRequest.Description;
+            if (request.ImageToRemove != null)
+            {
+                await _imageService.RemoveImageFromServer(request.ImageToRemove);
+            }
+            if (request.NewImage != null)
+            {
+                await _imageService.AddUploadedImageAsync("Community", community.Id, "avatar", request.NewImage);
+            }
+
+            var communityCategories = await _context.CommunityCategories.Where(pc => pc.CommunityId == community.Id).ToListAsync();
+            _context.CommunityCategories.RemoveRange(communityCategories);
+
+            var newCommunityCategories = request.Categories
+                    .Select(catId => new CommunityCategory
+                    {
+                        CommunityId = community.Id,
+                        CategoryId = catId
+                    })
+                    .ToList();
+
+            _context.CommunityCategories.AddRange(newCommunityCategories);
+
+            community.Name = request.Title;
+            community.Description = request.Description;
 
             _context.Communities.Update(community);
             await _context.SaveChangesAsync();

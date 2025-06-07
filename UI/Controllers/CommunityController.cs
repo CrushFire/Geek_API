@@ -4,6 +4,7 @@ using Core.Interfaces.Services;
 using Core.Models;
 using Core.Models.Community;
 using Core.Models.Filter;
+using Core.Models.Post;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -176,15 +177,33 @@ public class CommunityController : CustomControllerBase
         return Json(result.Data);
     }
 
-    [HttpPut]
-
-    public async Task<IActionResult> UpdateCommunityAsync([FromBody] CommunityAddRequest communityAddRequest, [FromRoute] long id)
+    [HttpGet("Edit/{id}")]
+    public async Task<IActionResult> Edit(long id)
     {
-        var result = await _communityService.UpdateCommunityAsync(communityAddRequest, id);
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.UserId = UserId.Value;
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+        return View();
+    }
+
+    [HttpPost("/edit-community/")]
+    public async Task<IActionResult> Edit([FromQuery] long id, [FromForm] CommunityUpdateRequest request)
+    {
+        if (UserId == null)
+            return StatusCode(400, ApiResponse.CreateFailure("Ошибка токена"));
+
+        var result = await _communityService.UpdateCommunityAsync(request, id);
+
+        return Json(result.Data);
+    }
+
+    [HttpGet("/get-community/")]
+    public async Task<IActionResult> GetPost([FromQuery] long communityId)
+    {
+        ViewBag.userTokenId = UserId.Value;
+        var result = await _communityService.GetByIdWithCategoriesAsync(communityId);
+
+        return Json(result.Data);
     }
 
     [HttpDelete("Delete")]

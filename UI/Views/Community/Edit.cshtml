@@ -1,0 +1,220 @@
+﻿@{
+    ViewData["Title"] = "Редактирование сообщества";
+    var userId = ViewBag.UserId ?? 0;
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="container py-4">
+                <div class="card p-4 shadow rounded-4">
+                    <h2>Редактирование сообщества</h2>
+
+                    <form id="communityForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Название</label>
+                            <input type="text" id="title" name="Title" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Описание</label>
+                            <textarea id="description" name="Description" class="form-control" rows="4" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Выберите от 1 до 3 категорий</label>
+                            <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
+                            <div class="form-text text-danger" id="categoryError" style="display:none;">
+                                Выберите от 1 до 3 категорий.
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
+                                <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
+                                <button id="nextPage" type="button" class="btn btn-outline-secondary">Вперёд &rarr;</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Аватар сообщества</label>
+                            <div id="existingAvatar" class="mb-2"></div>
+                            <input type="file" id="newImageInput" name="NewImage" accept="image/*" class="form-control mb-2" />
+                            <div class="form-text text-danger" id="imageError" style="display:none;">
+                                Необходимо выбрать изображение.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3">Сохранить изменения</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Script {
+    <script>
+        const communityId = window.location.pathname.split('/').pop();
+
+        const selectedCategories = new Set();
+        let currentCategoryPage = 1;
+        let existingImage = null;
+        let imageToRemove = null;
+
+        const categoryError = document.getElementById("categoryError");
+        const imageError = document.getElementById("imageError");
+        const existingAvatar = document.getElementById("existingAvatar");
+
+        async function loadCommunityData() {
+            try {
+                const res = await fetch(`/get-community?communityId=${communityId}`);
+                if (!res.ok) throw new Error("Ошибка загрузки сообщества");
+                const data = await res.json();
+
+                document.getElementById("title").value = data.title;
+                document.getElementById("description").value = data.description;
+
+                data.categoriesIds?.forEach(id => selectedCategories.add(id));
+                existingImage = data.communityImage;
+                renderAvatar();
+
+                await loadCategories(currentCategoryPage);
+            } catch (err) {
+                alert("Не удалось загрузить данные сообщества.");
+                console.error(err);
+            }
+        }
+
+        function renderAvatar() {
+            existingAvatar.innerHTML = "";
+            if (existingImage) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "position-relative d-inline-block";
+
+                const image = document.createElement("img");
+                image.src = existingImage.url;
+                image.style.maxWidth = "150px";
+                image.style.borderRadius = "8px";
+
+                const removeBtn = document.createElement("button");
+                removeBtn.innerText = "✕";
+                removeBtn.className = "position-absolute top-0 end-0 btn btn-sm btn-light";
+                removeBtn.style.transform = "translate(50%, -50%)";
+
+                removeBtn.onclick = () => {
+                    imageToRemove = existingImage.id;
+                    existingImage = null;
+                    renderAvatar();
+                };
+
+                wrapper.appendChild(image);
+                wrapper.appendChild(removeBtn);
+                existingAvatar.appendChild(wrapper);
+            }
+        }
+
+        // Автоматическое удаление существующего аватара при выборе нового файла
+        document.getElementById("newImageInput").addEventListener("change", (e) => {
+            if (existingImage && e.target.files.length > 0) {
+                imageToRemove = existingImage.id;
+                existingImage = null;
+                renderAvatar();
+            }
+        });
+
+        async function loadCategories(page = 1) {
+            try {
+                const res = await fetch(`/Category?curPage=${page}`);
+                if (!res.ok) throw new Error("Ошибка загрузки категорий");
+
+                const categories = await res.json();
+                if (categories.length === 0 && page > 1) return;
+
+                currentCategoryPage = page;
+                const container = document.getElementById("categoryList");
+                container.innerHTML = "";
+
+                categories.forEach(cat => {
+                    const catId = +cat.id;
+                    const isSelected = selectedCategories.has(catId);
+
+                    const span = document.createElement("span");
+                    span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
+                    span.innerText = cat.title;
+                    span.style.cursor = "pointer";
+
+                    span.onclick = () => {
+                        if (selectedCategories.has(catId)) {
+                            selectedCategories.delete(catId);
+                            span.classList.remove("bg-primary");
+                            span.classList.add("bg-secondary");
+                        } else if (selectedCategories.size < 3) {
+                            selectedCategories.add(catId);
+                            span.classList.remove("bg-secondary");
+                            span.classList.add("bg-primary");
+                        }
+                        categoryError.style.display = (selectedCategories.size < 1 || selectedCategories.size > 3) ? "block" : "none";
+                    };
+
+                    container.appendChild(span);
+                });
+
+                document.getElementById("prevPage").disabled = currentCategoryPage === 1;
+                document.getElementById("nextPage").disabled = categories.length === 0;
+            } catch (err) {
+                categoryError.innerText = "Не удалось загрузить категории.";
+                categoryError.style.display = "block";
+                console.error(err);
+            }
+        }
+
+        document.getElementById("prevPage").onclick = () => {
+            if (currentCategoryPage > 1) {
+                loadCategories(currentCategoryPage - 1);
+            }
+        };
+
+        document.getElementById("nextPage").onclick = () => {
+            loadCategories(currentCategoryPage + 1);
+        };
+
+        document.getElementById("communityForm").onsubmit = async (e) => {
+            e.preventDefault();
+
+            const newImage = document.getElementById("newImageInput").files[0];
+
+            if (!existingImage && !newImage) {
+                imageError.style.display = "block";
+                return;
+            } else {
+                imageError.style.display = "none";
+            }
+
+            if (selectedCategories.size < 1 || selectedCategories.size > 3) {
+                categoryError.style.display = "block";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("Title", document.getElementById("title").value);
+            formData.append("Description", document.getElementById("description").value);
+            selectedCategories.forEach(id => formData.append("Categories", id));
+            formData.append("ImageToRemove", imageToRemove ?? -1);
+            if (newImage) formData.append("NewImage", newImage);
+
+            try {
+                const res = await fetch(`/edit-community?id=${communityId}`, {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!res.ok) throw new Error("Ошибка при обновлении");
+
+                alert("Сообщество успешно обновлено");
+                window.location.href = `/community/${communityId}`;
+            } catch (err) {
+                alert("Ошибка при обновлении сообщества: " + err.message);
+            }
+        };
+
+        loadCommunityData();
+    </script>
+}

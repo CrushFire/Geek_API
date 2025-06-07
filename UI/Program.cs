@@ -131,7 +131,7 @@ app.Use(async (context, next) =>
 {
     // Пропускаем запросы к /auth/login и статическим файлам
     var path = context.Request.Path.Value?.ToLower();
-    if (path != null && (path.StartsWith("/auth/login") || path.StartsWith("/css") || path.StartsWith("/js") || path.StartsWith("/images")))
+    if (path != null && (path.StartsWith("/auth/login") || path.StartsWith("/css") || path.StartsWith("/js") || path.StartsWith("/images") || path.StartsWith("/auth/registration")))
     {
         await next();
         return;

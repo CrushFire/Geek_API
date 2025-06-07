@@ -25,17 +25,17 @@ public class AuthService : IAuthService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<ServiceResult<string>> RegisterAsync(RegisterRequest userRequest)
+    public async Task<ServiceResult<(string token, long id)>> RegisterAsync(RegisterRequest userRequest)
     {
         var userExist = await _context.Users.AnyAsync(u => u.UserName == userRequest.UserName);
 
         if (userExist)
-            return ServiceResult<string>.Failure("Пользователь с таким ником уже существует", 409);
+            return ServiceResult<(string token, long id)>.Failure("Пользователь с таким ником уже существует", 409);
 
         userExist = await _context.Users.AnyAsync(u => u.UserEmail == userRequest.UserEmail);
 
         if (userExist)
-            return ServiceResult<string>.Failure("Данная почта уже используется", 409);
+            return ServiceResult<(string token, long id)>.Failure("Данная почта уже используется", 409);
 
         var newUser = new User { UserName = userRequest.UserName, UserEmail = userRequest.UserEmail, Role = "User" };
         newUser.PasswordHash = _passwordHasher.HashPassword(userRequest.Password);
@@ -44,7 +44,7 @@ public class AuthService : IAuthService
         await _context.SaveChangesAsync();
 
         var token = _jwtGenerator.GenerateToken(newUser.Id.ToString(), newUser.UserName, newUser.UserEmail, newUser.Role);
-        return ServiceResult<string>.Success(token);
+        return ServiceResult<(string, long)>.Success((token, newUser.Id));
     }
 
     public async Task<ServiceResult<(string token, long id)>> AuthenticateAsync(LoginRequest userData)

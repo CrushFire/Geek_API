@@ -433,6 +433,214 @@ body {
     background-color: #f8fbff;
 }
 
+.sidebar {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.95rem;
+    max-width: 260px;
+}
+
+    .sidebar .nav-link {
+        padding: 6px 8px;
+        border-radius: 6px;
+        transition: all 0.2s ease-in-out;
+        font-weight: 400;
+    }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: darkblue;
+            text-decoration: none;
+        }
+
+.sidebar-section-title {
+    color: #4a74b9;
+    font-size: 1rem;
+    margin: 10px 0 6px 4px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.sidebar-icon {
+    color: #3c5aa6;
+    font-size: 1.5rem;
+    transition: color 0.1s;
+}
+
+.sidebar .nav-link:hover .sidebar-icon {
+    color: #5e7fd1;
+}
+
+.admin-btn-custom {
+    border: 1px solid #4a74b9;
+    color: #4a74b9;
+    background-color: transparent;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+    .admin-btn-custom i {
+        color: #4a74b9;
+    }
+
+    .admin-btn-custom:hover {
+        background-color: #4a74b9;
+        color: white;
+    }
+
+        .admin-btn-custom:hover i {
+            color: white;
+        }
+
+/*        Тут лютое переопределения праймери кея ибо так красивее смотрится*/
+
+.btn-primary {
+    background-color: #4a74b9 !important;
+    border-color: #4a74b9 !important;
+    color: #fff !important;
+}
+
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active,
+    .btn-primary.active,
+    .show > .btn-primary.dropdown-toggle {
+        background-color: #3c5aa6 !important;
+        border-color: #3c5aa6 !important;
+        color: #fff !important;
+    }
+
+    .btn-primary:disabled,
+    .btn-primary.disabled {
+        background-color: #4a74b9 !important;
+        border-color: #4a74b9 !important;
+    }
+
+.admin-nav-top {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.08);
+    padding: 1rem 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+    .admin-nav-top .nav-link {
+        font-size: 1rem;
+        color: #333;
+        font-weight: 500;
+        border-radius: 6px;
+        margin: 0 0.1rem;
+        transition: background 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+        .admin-nav-top .nav-link.active, .admin-nav-top .nav-link:hover {
+            background: #f3f7fa;
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+.admin-panel-title {
+    font-weight: bold;
+    margin-right: 1rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.filter-panel {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.08);
+    padding: 1rem 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.categories-table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.table-header {
+    background-color: #f8f9fa;
+}
+
+.action-buttons .btn {
+    padding: 0.18rem 0.35rem;
+    font-size: 0.82rem;
+}
+
+.add-category-form {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    margin-bottom: 18px;
+}
+
+.edit-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1040;
+}
+
+.table-editing {
+    position: relative;
+    z-index: 1050;
+}
+
+    .table-editing input {
+        min-width: 100px;
+    }
+
+    .table-editing .btn {
+        min-width: 70px;
+    }
+
+.table-editing-row {
+    background: #f3f7fa !important;
+}
+
+    .table-editing-row td {
+        vertical-align: middle;
+    }
+
+.pagination-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    margin-top: 1rem;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    min-width: 700px;
+    width: 100%;
+}
+
+    .table td, .table th {
+        padding: 0.4rem 0.3rem;
+        font-size: 0.95rem;
+        word-break: break-word;
+    }
+
 
 
 

@@ -135,7 +135,7 @@ public class AuthController : CustomControllerBase
             return View(registerRequest);
         }
 
-        Response.Cookies.Append("jwt_token", result.Data, new CookieOptions
+        Response.Cookies.Append("jwt_token", result.Data.token, new CookieOptions
         {
             HttpOnly = true,
             Secure = true, // включи только если HTTPS
@@ -143,7 +143,7 @@ public class AuthController : CustomControllerBase
             Expires = DateTimeOffset.UtcNow.AddHours(1)
         });
 
-        return Redirect($"/Popular/{UserId}");
+        return Redirect($"/Popular/{result.Data.id}");
     }
 
     [Authorize]

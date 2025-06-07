@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace UI.Views.TheBest
+namespace UI.Views.Community
 {
-    public class TheBestLikersModel : PageModel
+    public class EditModel : PageModel
     {
         public void OnGet()
         {

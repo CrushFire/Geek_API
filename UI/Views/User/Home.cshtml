@@ -501,49 +501,35 @@
             }
         }
 
-        document.addEventListener("click", async function (event) {
-            if (event.target.classList.contains("join-btn")) {
-                const button = event.target;
-                const communityId = parseInt(button.dataset.communityId);
-                const isJoined = button.classList.contains("btn-primary");
+        document.addEventListener("click", async (e) => {
+            if (!e.target.classList.contains("join-btn")) return;
 
-                const url = isJoined ? "/sub" : "/unsub";
-                const method = isJoined ? "POST" : "DELETE";
+            const btn = e.target;
+            const communityId = btn.dataset.communityId;
+            const isJoined = btn.classList.contains("btn-light");
 
-                try {
-                    const res = await fetch(url, {
-                        method: method,
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(communityId) // передаём только ID сообщества
-                    });
+            try {
+                const url = isJoined ? "/unsub" : "/sub";
+                const method = isJoined ? "DELETE" : "POST";
 
-                    const success = await res.json();
+                const res = await fetch(`${url}?userId=${userId}`, {
+                    method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(communityId)
+                });
 
-                    if (success === true) {
-                        if (isJoined) {
-                            // Отписался
-                            button.classList.remove("btn-primary");
-                            button.classList.add("btn-light");
-                            button.textContent = "Unjoin";
-                            button.style.color = "#888";
-                            button.style.borderColor = "#ccc";
-                        } else {
-                            // Подписался
-                            button.classList.remove("btn-light");
-                            button.classList.add("btn-primary");
-                            button.textContent = "Joined";
-                            button.style.color = "white";
-                            button.style.borderColor = "";
-                        }
-                    } else {
-                        alert(language === "ru" ? "Ошибка подписки." : "Subscription failed.");
-                    }
-                } catch (error) {
-                    console.error("Ошибка при подписке:", error);
-                    alert(language === "ru" ? "Ошибка сети." : "Network error.");
+                const success = await res.json();
+
+                if (success) {
+                    btn.classList.toggle("btn-light");
+                    btn.classList.toggle("btn-primary");
+                    btn.textContent = isJoined ? "Join" : "Unjoin";
+                } else {
+                    alert("Ошибка при выполнении действия");
                 }
+            } catch (error) {
+                alert("Произошла ошибка при выполнении действия");
+                console.error(error);
             }
         });
 

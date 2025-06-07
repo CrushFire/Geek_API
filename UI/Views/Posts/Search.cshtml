@@ -15,13 +15,11 @@
         <div class="main-content">
             <div class="container">
                 <div class="card p-4">
-            <div class="d-flex flex-wrap gap-2 mb-3">
-                   <a class="btn btn-lg text-white rounded-pill ms-auto" style="background-color: #003366;" href="/Post/Search?name=@HttpUtility.UrlEncode(query)">Posts</a>
-               <a class="btn btn-lg btn-primary text-white rounded-pill" href="/Community/Search?name=@HttpUtility.UrlEncode(query)">Communities</a>
-               <a class="btn btn-lg btn-primary text-white rounded-pill" href="/User/Search?name=@HttpUtility.UrlEncode(query)">Users</a>
-                <button id="post-filter" class="btn btn-lg btn-secondary ms-auto">Фильтр</button>
-            </div>
-
+                    <div class="d-flex justify-content-center gap-2 mb-3">
+                        <a class="btn btn-lg text-white rounded-pill me-2" style="background-color: #003366;" href="/Post/Search?name=@HttpUtility.UrlEncode(query)">Posts</a>
+                        <a class="btn btn-lg btn-primary text-white rounded-pill me-2" href="/Community/Search?name=@HttpUtility.UrlEncode(query)">Communities</a>
+                        <a class="btn btn-lg btn-primary text-white rounded-pill me-2" href="/User/Search?name=@HttpUtility.UrlEncode(query)">Users</a>
+                    </div>
             <div id="post"></div>
             <div class="post" id="posts">
             </div>

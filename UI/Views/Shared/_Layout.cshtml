@@ -10,7 +10,7 @@
     <title>@ViewData["Title"]</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="..." crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="@Url.Content("~/css/site.css")" rel="stylesheet">
     @if(ViewBag.Language == "ru")
     {
@@ -64,12 +64,16 @@
                         <div class="ms-auto d-flex align-items-center gap-2">
                             <button type="button" class="btn btn-sm @(ViewBag.Language == "ru" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('ru')">ru</button>
                             <button type="button" class="btn btn-sm @(ViewBag.Language == "eng" ? "btn-primary" : "btn-outline-primary")" onclick="setLanguage('eng')">eng</button>
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-primary d-flex align-items-center"
+                                        style="--bs-btn-color: #3c5aa6; --bs-btn-border-color: #3c5aa6; --bs-btn-hover-bg: #3c5aa6; --bs-btn-hover-border-color: #3c5aa6; --bs-btn-hover-color: #fff;"
+                                        onclick="logout()">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Выйти
+                                </button>
+                            }
                         </div>
-
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="logout()">Выйти</button>
-                        }
                     </div>
                 </div>
             </div>
@@ -78,37 +82,51 @@
         }
     @if (!ViewBag.isAuthPage)
     {
-        <div class="sidebar">
-            <a href="/Home/@ViewBag.userIdToken" class="nav-link">Home</a>
-            <a href="/Popular/@ViewBag.userIdToken" class="nav-link">Popular</a>
-            <a href="/Community/Explore" class="nav-link">Explore</a>
-            <a href="/New/@ViewBag.userIdToken" class="nav-link">New</a>
+        <div class="sidebar p-3">
+            <hr class="my-2">
+            <h6 class="sidebar-section-title">MAIN</h6>
 
-            <hr>
+            <a href="/Home/@ViewBag.userIdToken" class="nav-link d-flex align-items-center mb-2">
+                <i class="bi bi-house-door me-2 sidebar-icon"></i> Home
+            </a>
+            <a href="/Popular/@ViewBag.userIdToken" class="nav-link d-flex align-items-center mb-2">
+                <i class="bi bi-fire me-2 sidebar-icon"></i> Popular
+            </a>
+            <a href="/Community/Explore" class="nav-link d-flex align-items-center mb-2">
+                <i class="bi bi-compass me-2 sidebar-icon"></i> Explore
+            </a>
+            <a href="/New/@ViewBag.userIdToken" class="nav-link d-flex align-items-center mb-3">
+                <i class="bi bi-stars me-2 sidebar-icon"></i> New
+            </a>
 
-            <h6>TO LIGHT FIRE</h6>
-            <a href="/Post/Create" class="nav-link">- Create a custom post</a>
+            <hr class="my-2">
 
-            <hr>
+            <h6 class="sidebar-section-title">TO LIGHT FIRE</h6>
+            <a href="/Post/Create" class="nav-link d-flex align-items-center mb-2">
+                <i class="bi bi-pencil-square me-2 sidebar-icon"></i> Create a custom post
+            </a>
 
-            <h6>CREATE CAMPFIRE</h6>
-            <a href="/Community/Create" class="nav-link">- Create a community</a>
+            <hr class="my-2">
 
-            <hr>
+            <h6 class="sidebar-section-title">CREATE CAMPFIRE</h6>
+            <a href="/Community/Create" class="nav-link d-flex align-items-center mb-2">
+                <i class="bi bi-people me-2 sidebar-icon"></i> Create a community
+            </a>
 
-            <h6>RESOURCES</h6>
-            <a href="#" class="nav-link">About</a>
-            <a href="#" class="nav-link">Help</a>
+            <hr class="my-2">
 
-            <hr>
+            <h6 class="sidebar-section-title">RESOURCES</h6>
+            <a href="#" class="nav-link d-flex align-items-center mb-2">
+                <i class="bi bi-info-circle me-2 sidebar-icon"></i> About
+            </a>
 
-            <h6>THE BESTS</h6>
-            <a href="#" class="nav-link">Communities</a>
-            <a href="#" class="nav-link">Fires</a>
+            <hr class="my-2">
 
             @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
             {
-                <a href="/Admin/Panel" class="btn btn-warning ms-2">Админ-панель</a>
+                <a href="/Admin/Panel" class="btn btn-sm mt-3 w-100 d-flex align-items-center justify-content-center admin-btn-custom">
+                    <i class="bi bi-shield-lock me-2"></i> Admin Panel
+                </a>
             }
         </div>
     }

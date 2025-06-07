@@ -28,13 +28,12 @@ public class UserService : IUserService
     public async Task<ServiceResult<UserResponse>> GetUserByIdAsync(long id)
     {
         var user = await _context.Users
-            .Where(x => x.Id == id)
             .Include(u => u.Comments)
             .Include(u => u.Posts)
-            .Include(u => u.Reactions).Where(p => p.Reactions.Any(r => r.UserId == id && r.IsLike == true))
+            .Include(u => u.Reactions)
             .Include(u => u.UserCommunities)
             .Include(u => u.Images)//тут был экстендид ну щас вроде ок...
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var userResponse = _mapper.Map<UserResponse>(user);
 
