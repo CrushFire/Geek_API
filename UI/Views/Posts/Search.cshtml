@@ -9,7 +9,7 @@
     var community = ViewBag.pageData.From("Community");
     var post = ViewBag.pageData.From("Post");
     var user = ViewBag.pageData.From("User");
-    var communityNotFound = ViewBag.pageData.From("CommunityNotFound");
+    var postNotFound = ViewBag.pageData.From("PostNotFound");
     var comment = ViewBag.cardData.From("Comment");
 }
 
@@ -91,7 +91,7 @@
 
                 if (!posts || posts.length === 0) {
                     if(curPage == 1){
-                       document.getElementById("post").innerHTML = `<p class="text-center text-muted">@communityNotFound</p>`;
+                       document.getElementById("post").innerHTML = `<p class="text-center text-muted">@postNotFound</p>`;
                     }
                     reachedEnd = true;
                     return;

@@ -3,6 +3,20 @@
 
 @{
     var language = ViewBag.Language;
+
+    var member = ViewBag.pageData.From("Member");
+    var postNotFound = ViewBag.pageData.From("PostNotFound");
+    var creatorCommunity = ViewBag.pageData.From("CreatorCommunity");
+    var deleteCommunity = ViewBag.pageData.From("DeleteCommunity");
+    var editCommunity = ViewBag.pageData.From("EditCommunity");
+    var confDelete = ViewBag.pageData.From("ConfDelete");
+    var confMessage = ViewBag.pageData.From("ConfMessage");
+    var cancel = ViewBag.pageData.From("Cancel");
+    var yesDel = ViewBag.pageData.From("YesDel");
+    var comment = ViewBag.cardData.From("Comment");
+
+    var userId = Model.Author.Id;
+    var userIdToken = ViewBag.userIdToken;
 }
 
 @section Head {
@@ -34,7 +48,7 @@
                     <div>
                         <h2 class="mb-1">@Model.CommunityName</h2>
                         <p class="text-muted mb-0">
-                            Создано: @Model.CreateAt.ToString("dd.MM.yyyy HH:mm") • 👥 @Model.NumberOfMember участников
+                            Создано: @Model.CreateAt.ToString("dd.MM.yyyy HH:mm") • 👥 @Model.NumberOfMember @member
                         </p>
                     </div>
                 </div>
@@ -51,18 +65,21 @@
                         <span class="badge bg-primary me-2">#@cat</span>
                     }
                 </div>
-                <div id="dotsWrapper" class="position-relative d-inline-block" style="user-select:none;">
-                    <div id="dotsButton" title="@((language == "ru") ? "Меню" : "Menu")"
+                    <div id="dotsWrapper" class="position-relative d-inline-block" style="user-select:none;">
+                     @if (userId == userIdToken)
+                    {
+                        <div id="dotsButton" title="@((language == "ru") ? "Меню" : "Menu")"
                          style="position: absolute; right: 0; bottom: 0; cursor: pointer; font-size: 1.5rem; color: #444; user-select:none;">
                         &#8230; <!-- три точки -->
                     </div>
+                    }
                     <div id="dotsMenu" class="bg-white border rounded shadow-sm"
                          style="display:none; position: absolute; right: 0; bottom: 24px; width: 100px; z-index: 1000; font-size: 0.9rem;">
                         <div id="deleteCommunity" style="padding: 8px 12px; cursor: pointer; color: #666; border-bottom: 1px solid #eee;">
-                            @(language == "ru" ? "Удалить" : "Delete")
+                            @deleteCommunity
                         </div>
                         <div id="editCommunity" style="padding: 8px 12px; cursor: pointer; color: #666;">
-                            @(language == "ru" ? "Изменить" : "Edit")
+                            @editCommunity
                         </div>
                     </div>
                 </div>
@@ -82,15 +99,15 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="confirmDeleteLabel">@((language == "ru") ? "Подтверждение удаления" : "Delete Confirmation")</h5>
+                                <h5 class="modal-title" id="confirmDeleteLabel">@confDelete</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body" id="confirmDeleteText">
-                                @((language == "ru") ? "Вы уверены, что хотите удалить сообщество?" : "Are you sure you want to delete the community?")
+                                @confMessage
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@((language == "ru") ? "Отмена" : "Cancel")</button>
-                                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">@((language == "ru") ? "Да, удалить" : "Yes, delete")</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@cancel</button>
+                                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">@yesDel</button>
                             </div>
                         </div>
                     </div>
@@ -105,7 +122,7 @@
 <script>
     const communityId = @Model.Id; // id сообщества
     const userId = "@ViewBag.userIdToken";
-    const language = "@(ViewBag.Language ?? "ru")";
+    const language = "@language";
 
     let userReactions = [];
 
@@ -168,7 +185,7 @@
                     /
                     <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>  👀${post.views}
                     <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
-                        ${post.comments} 💬 Комментарии
+                        ${post.comments} 💬 @comment
                     </a>
                 </p>
             </div>
@@ -198,7 +215,7 @@
 
             if (posts.length === 0) {
                 reachedEnd = true;
-                if (page === 1) postSection.innerHTML = "<p>Постов нет.</p>";
+                if (page === 1) postSection.innerHTML = "<p>@postNotFound</p>";
                 return;
             }
 
@@ -312,7 +329,7 @@
             const dotsWrapper = document.getElementById("dotsWrapper");
             if (role === "creator") {
                     dotsWrapper.style.display = "inline-block";
-                    container.innerHTML = `<p>${language === "ru" ? "Вы создатель сообщества" : "You are the community creator"}</p>`;
+                    container.innerHTML = `<p>@creatorCommunity</p>`;
                     return;
             } else {
                     dotsWrapper.style.display = "none";

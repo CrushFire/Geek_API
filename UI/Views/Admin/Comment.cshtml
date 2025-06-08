@@ -1,9 +1,89 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     ViewData["Title"] = "Управление комментариями";
+    var language = ViewBag.Language;
+
+    var filter = ViewBag.pageData.From("Filter");
+    var postName = ViewBag.pageData.From("PostName");
+    var communityName = ViewBag.pageData.From("CommunityName");
+    var content = ViewBag.pageData.From("Content");
+    var contentComment = ViewBag.pageData.From("ContentComment");
+    var prev = ViewBag.pageData.From("Prev");
+    var next = ViewBag.pageData.From("Next");
+    var nameRu = ViewBag.pageData.From("NameRu");
+    var nameEng = ViewBag.pageData.From("NameEng");
+    var add = ViewBag.pageData.From("Add");
+    var save = ViewBag.pageData.From("Save");
+    var cancel = ViewBag.pageData.From("Cancel");
+    var confDelete = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfDelete")));
+    var confMessage = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfMessage")));
+    var conf = ViewBag.pageData.From("Conf");
+    var user = ViewBag.pageData.From("User");
+    var post = ViewBag.pageData.From("Post");
+    var community = ViewBag.pageData.From("Community");
+    var category = ViewBag.pageData.From("Category");
+    var comment = ViewBag.pageData.From("Comment");
+    var titleUser = ViewBag.pageData.From("TitleUser");
+    var titlePost = ViewBag.pageData.From("TitlePost");
+    var titleCommunity = ViewBag.pageData.From("TitleCommunity");
+    var titleCategory = ViewBag.pageData.From("TitleCategory");
+    var titleComment = ViewBag.pageData.From("TitleComment");
+    var userName = ViewBag.pageData.From("UserName");
+    var addCategory = ViewBag.pageData.From("AddCategory");
 }
 
 @section Head {
-    
+    <style>
+        .modal-confirm-comment {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-backdrop-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1040;
+        }
+
+        .modal-confirm-role {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .modal-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 }
 
 @section Body {
@@ -14,7 +94,7 @@
                 @await Html.PartialAsync("_AdminNav")
                 <div class="row mb-4">
                     <div class="col">
-                        <h2 class="fw-bold">Управление комментариями</h2>
+                        <h2 class="fw-bold">@titleComment</h2>
                     </div>
                 </div>
 
@@ -22,15 +102,15 @@
                 <div class="filter-panel mb-4">
                     <form id="commentFilterForm" class="row g-2 align-items-end">
                         <div class="col-md-4">
-                            <label class="form-label mb-1">Контент</label>
-                            <input type="text" class="form-control" id="filterContent" placeholder="Текст комментария">
+                            <label class="form-label mb-1">@content</label>
+                            <input type="text" class="form-control" id="filterContent" placeholder="@contentComment">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label mb-1">Имя пользователя</label>
-                            <input type="text" class="form-control" id="filterUserName" placeholder="Имя пользователя">
+                            <label class="form-label mb-1">@userName</label>
+                            <input type="text" class="form-control" id="filterUserName" placeholder="@userName">
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Фильтровать</button>
+                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> @filter</button>
                         </div>
                     </form>
                 </div>
@@ -41,12 +121,13 @@
                         <table class="table table-hover mb-0" id="commentsTable">
                             <thead class="table-header">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>PostID</th>
-                                    <th>Пользователь</th>
-                                    <th>Контент</th>
-                                    <th>Дата</th>
-                                    <th>Действия</th>
+                                        <th>ID</th>
+                                        <th>@(language == "ru" ? "ID поста" : "PostID")</th>
+                                        <th>@(language == "ru" ? "Пользователь" : "User")</th>
+                                        <th>@(language == "ru" ? "Контент" : "Content")</th>
+                                        <th>@(language == "ru" ? "Дата" : "Date")</th>
+                                        <th>@(language == "ru" ? "Действия" : "Actions")</th>
+
                                 </tr>
                             </thead>
                             <tbody id="commentsTableBody">
@@ -55,20 +136,20 @@
                         </table>
                     </div>
                     <div class="pagination-controls">
-                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
+                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; @prev</button>
                         <span id="pageInfo" class="align-self-center"></span>
-                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
+                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">@next &rarr;</button>
                     </div>
                 </div>
 
                 <!-- Модальное окно подтверждения удаления -->
                 <div id="commentModalBackdrop" class="modal-backdrop-custom" style="display:none;"></div>
                 <div id="commentModal" class="modal-confirm-comment" style="display:none;">
-                    <div class="modal-title" id="commentModalTitle">Подтвердите удаление</div>
+                    <div class="modal-title" id="commentModalTitle">@confDelete</div>
                     <div id="commentModalText" class="mb-3"></div>
                     <div class="modal-footer">
-                        <button id="commentModalCancel" class="btn btn-secondary">Отмена</button>
-                        <button id="commentModalConfirm" class="btn btn-danger">Удалить</button>
+                        <button id="commentModalCancel" class="btn btn-secondary">@cancel</button>
+                        <button id="commentModalConfirm" class="btn btn-danger">@conf</button>
                     </div>
                 </div>
                 </div>
@@ -142,8 +223,8 @@
         // Модальное окно подтверждения удаления
         function showDeleteModal(commentId, rowElem) {
             pendingDelete = { commentId, rowElem };
-            document.getElementById('commentModalTitle').innerText = "Подтвердите удаление";
-            document.getElementById('commentModalText').innerText = `Вы уверены, что хотите удалить комментарий #${commentId}?`;
+            document.getElementById('commentModalTitle').innerText = @confDelete;
+            document.getElementById('commentModalText').innerText = @confMessage;
             document.getElementById('commentModalBackdrop').style.display = 'block';
             document.getElementById('commentModal').style.display = 'block';
         }

@@ -96,12 +96,42 @@ public class UserService : IUserService
         if (user == null)
             return ServiceResult<bool>.Failure("Пользователь не найден");
 
-        var imageIds = await _context.Images
+        var userImageIds = await _context.Images
             .Where(i => i.EntityId == id && i.EntityTarget == nameof(User))
             .Select(i => i.Id)
             .ToListAsync();
 
-        await _imageService.RemoveImages(imageIds);
+        // 2. Удалить изображения постов пользователя
+        var postIds = await _context.Posts
+            .Where(p => p.AuthorId == id)
+            .Select(p => p.Id)
+            .ToListAsync();
+
+        var postImageIds = await _context.Images
+            .Where(i => postIds.Contains(i.EntityId) && i.EntityTarget == nameof(Post))
+            .Select(i => i.Id)
+            .ToListAsync();
+
+        // 3. Найти сообщества, где пользователь creator
+        var userCommunities = await _context.UsersCommunities
+            .Where(uc => uc.UserId == id && uc.UserRole == "creator")
+            .ToListAsync();
+
+        var userCommunityIds = userCommunities.Select(uc => uc.Id).ToList();
+
+        var userCommunityImageIds = await _context.Images
+            .Where(i => userCommunityIds.Contains(i.EntityId) && i.EntityTarget == nameof(Community))
+            .Select(i => i.Id)
+            .ToListAsync();
+
+        // Собираем все изображения
+        var allImageIds = userImageIds
+            .Concat(postImageIds)
+            .Concat(userCommunityImageIds)
+            .ToList();
+
+        // Удаляем изображения
+        await _imageService.RemoveImages(allImageIds);
 
         _context.Users.Remove(user);
         await _context.SaveChangesAsync();

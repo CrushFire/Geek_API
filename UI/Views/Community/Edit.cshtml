@@ -1,6 +1,29 @@
-﻿@{
+﻿@using System.Text.Json﻿
+@{
     ViewData["Title"] = "Редактирование сообщества";
     var userId = ViewBag.UserId ?? 0;
+    var language = ViewBag.Language;
+
+    var title = ViewBag.pageData.From("Title");
+    var name = ViewBag.pageData.From("Name");
+    var description = ViewBag.pageData.From("Description");
+    var avatar = ViewBag.pageData.From("Avatar");
+    var selectFile = ViewBag.pageData.From("SelectFile");
+    var notFile = ViewBag.pageData.From("NotFile");
+    var prev = ViewBag.pageData.From("Prev");
+    var next = ViewBag.pageData.From("Next");
+    var saveChange = ViewBag.pageData.From("SaveChange");
+    var takeCategory = ViewBag.pageData.From("TakeCategory");
+    var successEdit = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("SuccesEdit")));
+    var imageOpt = ViewBag.pageData.From("ImageOpt");
+}
+
+@section Head{
+    <style>
+        .hidden-file-input {
+            display: none;
+        }
+    </style>
 }
 
 @section Body {
@@ -8,24 +31,24 @@
         <div class="main-content">
             <div class="container py-4">
                 <div class="card p-4 shadow rounded-4">
-                    <h2>Редактирование сообщества</h2>
+                    <h2>@title</h2>
 
                     <form id="communityForm" enctype="multipart/form-data">
                         <div class="mb-3">
-                            <label for="title" class="form-label">Название</label>
+                            <label for="title" class="form-label">@name</label>
                             <input type="text" id="title" name="Title" class="form-control" required />
                         </div>
 
                         <div class="mb-3">
-                            <label for="description" class="form-label">Описание</label>
+                            <label for="description" class="form-label">@description</label>
                             <textarea id="description" name="Description" class="form-control" rows="4" required></textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Выберите от 1 до 3 категорий</label>
+                            <label class="form-label">@takeCategory</label>
                             <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
                             <div class="form-text text-danger" id="categoryError" style="display:none;">
-                                Выберите от 1 до 3 категорий.
+                                @takeCategory
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
                                 <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
@@ -34,15 +57,24 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Аватар сообщества</label>
-                            <div id="existingAvatar" class="mb-2"></div>
-                            <input type="file" id="newImageInput" name="NewImage" accept="image/*" class="form-control mb-2" />
+                            <label class="form-label">@avatar</label>
+                            <div id="existingAvatar" class="mb-2">
+                            </div>
+
+                            <div class="input-group mb-2">
+                                <input type="file" id="newImageInput" name="newImage" accept="image/*" style="display:none;" onchange="updateAvatarFileName()" />
+                                <button type="button" class="btn btn-success" onclick="document.getElementById('newImageInput').click()">
+                                    @selectFile
+                                </button>
+                                <span class="form-control" id="newImageFileLabel">@notFile</span>
+                            </div>
+
                             <div class="form-text text-danger" id="imageError" style="display:none;">
-                                Необходимо выбрать изображение.
+                                @imageOpt
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary mt-3">Сохранить изменения</button>
+                        <button type="submit" class="btn btn-primary mt-3">@saveChange</button>
                     </form>
                 </div>
             </div>
@@ -62,6 +94,18 @@
         const categoryError = document.getElementById("categoryError");
         const imageError = document.getElementById("imageError");
         const existingAvatar = document.getElementById("existingAvatar");
+        const language = "@language";
+
+        function updateNewImageLabel() {
+            const input = document.getElementById('newImageInput');
+            const label = document.getElementById('newImageFileLabel');
+
+            if (input.files.length > 0) {
+                label.textContent = input.files[0].name;
+            } else {
+                label.textContent = "@notFile";  // Эта строка подставляется с сервера
+            }
+        }
 
         async function loadCommunityData() {
             try {
@@ -138,7 +182,7 @@
 
                     const span = document.createElement("span");
                     span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
-                    span.innerText = cat.title;
+                    span.innerText = language === "ru" ? cat.title : cat.engTitle;
                     span.style.cursor = "pointer";
 
                     span.onclick = () => {
@@ -208,7 +252,7 @@
 
                 if (!res.ok) throw new Error("Ошибка при обновлении");
 
-                alert("Сообщество успешно обновлено");
+                alert(@successEdit);
                 window.location.href = `/community/${communityId}`;
             } catch (err) {
                 alert("Ошибка при обновлении сообщества: " + err.message);

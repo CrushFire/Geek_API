@@ -216,7 +216,7 @@ namespace Application.Services
                 CategoriesRu = s.CategoriesRu,
                 CategoriesEng = s.CategoriesEng,
                 NumberOfMember = s.Community.UserCommunities.Count() - 1,
-                Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == s.Author.Id)),
+                Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == s.Author.UserId)),
                 CreateAt = s.Community.CreateAt
             });
 

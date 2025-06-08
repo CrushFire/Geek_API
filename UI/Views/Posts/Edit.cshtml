@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Редактирование поста";
     var userId = ViewBag.UserId ?? 0;
+    var language = ViewBag.Language;
 
     var title = ViewBag.pageData.From("Title");
     var name = ViewBag.pageData.From("Name");
@@ -104,6 +105,7 @@
         const categoryError = document.getElementById("categoryError");
         const imageError = document.getElementById("imageError");
         const existingImagesContainer = document.getElementById("existingImages");
+        const language = "@language";
 
         let currentCategoryPage = 1;
 
@@ -169,7 +171,7 @@
 
                     const span = document.createElement("span");
                     span.className = "badge rounded-pill category-pill " + (isSelected ? "bg-primary" : "bg-secondary");
-                    span.innerText = cat.title;
+                    span.innerText = language === "ru" ? cat.title : cat.engTitle;
                     span.style.cursor = "pointer";
 
                     span.onclick = () => {

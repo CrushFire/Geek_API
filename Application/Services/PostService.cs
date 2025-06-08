@@ -336,6 +336,7 @@ public class PostService : IPostService
 
         var post = _mapper.Map<Post>(request);
         post.AuthorId = userId;
+        post.CommunityId = request.CommunityId;
 
         await _context.Posts.AddAsync(post);
         await _context.SaveChangesAsync();

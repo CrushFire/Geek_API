@@ -63,7 +63,7 @@ namespace Application.Services
                 CategoriesRu = c.CategoriesRu,
                 CategoriesEng = c.CategoriesEng,
                 NumberOfMember = c.Community.UserCommunities.Count() - 1,
-                Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == c.Author.Id)),
+                Author = _mapper.Map<UserResponse>(_context.Users.FirstOrDefault(u => u.Id == c.Author.UserId)),
                 CreateAt = c.Community.CreateAt
             };
 
@@ -285,7 +285,7 @@ namespace Application.Services
             {
                 return ServiceResult<bool>.Failure("Такого сообщества не существует");
             }
-            if (request.ImageToRemove != null)
+            if (request.ImageToRemove != null && request.ImageToRemove != -1)
             {
                 await _imageService.RemoveImageFromServer(request.ImageToRemove);
             }
@@ -318,23 +318,41 @@ namespace Application.Services
 
         public async Task<ServiceResult<bool>> DeleteCommunityAsync(long id)
         {
-            var community = await _context.Communities.FirstOrDefaultAsync(x => x.Id == id);
-            if (community == null)
-            {
-                return ServiceResult<bool>.Failure("Такого сообщества не существует");
-            }
+                var community = await _context.Communities.FirstOrDefaultAsync(x => x.Id == id);
+                if (community == null)
+                {
+                    return ServiceResult<bool>.Failure("Такого сообщества не существует");
+                }
 
-            var imageIds = await _context.Images
-            .Where(im => im.EntityId == community.Id && im.EntityTarget == nameof(Community))
-            .Select(im => im.Id)
-            .ToListAsync();
+                var communityPostIds = await _context.Posts
+                    .Where(p => p.CommunityId == id)
+                    .Select(p => p.Id)
+                    .ToListAsync();
 
-            await _imageService.RemoveImages(imageIds);
+                var postImageIds = await _context.Images
+                    .Where(im => communityPostIds.Contains(im.EntityId) && im.EntityTarget == nameof(Post))
+                    .Select(im => im.Id)
+                    .ToListAsync();
 
-            _context.Communities.Remove(community);
-            await _context.SaveChangesAsync();
+                await _imageService.RemoveImages(postImageIds);
 
-            return ServiceResult<bool>.Success(true);
+                var communityImageIds = await _context.Images
+                    .Where(im => im.EntityId == id && im.EntityTarget == nameof(Community))
+                    .Select(im => im.Id)
+                    .ToListAsync();
+
+                await _imageService.RemoveImages(communityImageIds);
+
+                var communityPosts = await _context.Posts
+                    .Where(p => p.CommunityId == id)
+                    .ToListAsync();
+                _context.Posts.RemoveRange(communityPosts);
+
+                _context.Communities.Remove(community);
+
+                await _context.SaveChangesAsync();
+
+                return ServiceResult<bool>.Success(true);
         }
 
         public async Task<ServiceResult<List<CommunityExploreResponse>>> CommunityExplore(long categoryId, PaginationRequest pagination)

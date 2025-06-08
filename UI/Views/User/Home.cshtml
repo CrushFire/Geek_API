@@ -24,6 +24,7 @@
     var joined = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("Joined")));
     var saveChange = ViewBag.pageData.From("SaveChange");
     var profileUpdate = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ProfileUpdate")));
+    var sub = ViewBag.pageData.From("Sub");
 }
 
 @section Head {
@@ -523,7 +524,7 @@
                     <p>${comm.description || ''}</p>
                     <span class="badge bg-primary me-1">${categoriesStr}</span>
                     <p class="text-muted mb-0">
-                        <small>👥 Подписчиков: ${comm.numberOfMember}</small>
+                        <small>👥 @sub: ${comm.numberOfMember}</small>
                     </p>
                 </div>
             `;
@@ -624,7 +625,7 @@
                             <p>${comm.description || ''}</p>
                             <span class="badge bg-primary me-1">${categoriesStr}</span>
                             <p class="text-muted mb-0">
-                            <small>👥 Подписчиков: ${comm.numberOfMember}</small>
+                            <small>👥 @sub: ${comm.numberOfMember}</small>
                             </p>
                         </div>
                     `;

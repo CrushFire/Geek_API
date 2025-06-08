@@ -1,9 +1,75 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     ViewData["Title"] = "Управление категориями";
+    var language = ViewBag.Language;
+
+    var filter = ViewBag.pageData.From("Filter");
+    var postName = ViewBag.pageData.From("PostName");
+    var communityName = ViewBag.pageData.From("CommunityName");
+    var content = ViewBag.pageData.From("Content");
+    var contentComment = ViewBag.pageData.From("ContentComment");
+    var prev = ViewBag.pageData.From("Prev");
+    var next = ViewBag.pageData.From("Next");
+    var nameRu = ViewBag.pageData.From("NameRu");
+    var nameEng = ViewBag.pageData.From("NameEng");
+    var add = ViewBag.pageData.From("Add");
+    var save = ViewBag.pageData.From("Save");
+    var cancel = ViewBag.pageData.From("Cancel");
+    var confDelete = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfDelete")));
+    var confMessage = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfMessage")));
+    var conf = ViewBag.pageData.From("Conf");
+    var user = ViewBag.pageData.From("User");
+    var post = ViewBag.pageData.From("Post");
+    var community = ViewBag.pageData.From("Community");
+    var category = ViewBag.pageData.From("Category");
+    var comment = ViewBag.pageData.From("Comment");
+    var titleUser = ViewBag.pageData.From("TitleUser");
+    var titlePost = ViewBag.pageData.From("TitlePost");
+    var titleCommunity = ViewBag.pageData.From("TitleCommunity");
+    var titleCategory = ViewBag.pageData.From("TitleCategory");
+    var titleComment = ViewBag.pageData.From("TitleComment");
+    var userName = ViewBag.pageData.From("UserName");
+    var addCategory = ViewBag.pageData.From("AddCategory");
 }
 
 @section Head {
-    
+    <style>
+        .modal-backdrop-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1040;
+        }
+
+        .modal-confirm-role {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .modal-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 }
 
 @section Body {
@@ -14,22 +80,22 @@
                 @await Html.PartialAsync("_AdminNav")
                 <div class="row mb-4">
                     <div class="col">
-                        <h2 class="fw-bold">Управление категориями</h2>
+                        <h2 class="fw-bold">@titleCategory</h2>
                     </div>
                 </div>
 
                 <!-- Форма добавления категории -->
                 <div class="add-category-form mb-4">
-                    <h4 class="mb-3">Добавить новую категорию</h4>
+                    <h4 class="mb-3">@addCategory</h4>
                     <form id="addCategoryForm" class="row g-3">
                         <div class="col-md-5">
-                            <input type="text" class="form-control" id="ruTitle" placeholder="Название на русском" required>
+                            <input type="text" class="form-control" id="ruTitle" placeholder="@nameRu" required>
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" id="engTitle" placeholder="Название на английском" required>
+                            <input type="text" class="form-control" id="engTitle" placeholder="@nameEng" required>
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary w-100">Добавить</button>
+                            <button type="submit" class="btn btn-primary w-100">@add</button>
                         </div>
                     </form>
                 </div>
@@ -41,9 +107,9 @@
                             <thead class="table-header">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Русское название</th>
-                                    <th>Английское название</th>
-                                    <th>Действия</th>
+                                    <th>@(language == "ru" ? "Русское название" : "Russian Name")</th>
+                                    <th>@(language == "ru" ? "Английское название" : "English Name")</th>
+                                    <th>@(language == "ru" ? "Действия" : "Actions")</th>
                                 </tr>
                             </thead>
                             <tbody id="categoriesTableBody">
@@ -52,9 +118,9 @@
                         </table>
                     </div>
                     <div class="pagination-controls">
-                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
+                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; @prev</button>
                         <span id="pageInfo" class="align-self-center"></span>
-                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
+                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">@next &rarr;</button>
                     </div>
                     <div id="editBackdrop" class="edit-backdrop" style="display:none;"></div>
                 </div>
@@ -95,8 +161,8 @@
                                     <input type="text" class="form-control" id="editEngTitle" value="${escapeHtml(category.engTitle)}" />
                                 </td>
                                 <td class="action-buttons">
-                                    <button class="btn btn-success btn-sm me-2" onclick="saveEditCategory(${catId})">Сохранить</button>
-                                    <button class="btn btn-secondary btn-sm" onclick="cancelEditCategory()">Отмена</button>
+                                    <button class="btn btn-success btn-sm me-2" onclick="saveEditCategory(${catId})">@save</button>
+                                    <button class="btn btn-secondary btn-sm" onclick="cancelEditCategory()">@cancel</button>
                                 </td>
                             </tr>
                         `;

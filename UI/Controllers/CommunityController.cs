@@ -10,6 +10,8 @@ using Core.Models.Post;
 using Core.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Hosting;
+using System.Runtime.ConstrainedExecution;
 
 namespace UI.Controllers;
 
@@ -53,9 +55,14 @@ public class CommunityController : CustomControllerBase
 
     [HttpGet("Search")]
 
-    public IActionResult Search()
+    public async Task<IActionResult> Search()
     {
+        var search = await _dataService.GetByPageAsync("Search");
+        var community = await _dataService.GetByPageAsync("Community");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(search, ViewBag.Language);
+        ViewBag.communityData = new SelectData(community, ViewBag.Language);
         ViewBag.UserId = UserId.Value;
 
         return View();
@@ -88,6 +95,12 @@ public class CommunityController : CustomControllerBase
 
     public async Task<IActionResult> GetByIdAsync(long id)
     {
+        var community = await _dataService.GetByPageAsync("Community");
+        var post = await _dataService.GetByPageAsync("PostCard");
+
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(community, ViewBag.Language);
+        ViewBag.cardData = new SelectData(post, ViewBag.Language);
         var result = await _communityService.GetByIdAsync(id);
 
         ViewBag.userIdToken = UserId.Value;
@@ -128,7 +141,12 @@ public class CommunityController : CustomControllerBase
     [HttpGet("Explore")]
     public async Task<IActionResult> Explore([FromQuery] int categoryId)
     {
+        var exp = await _dataService.GetByPageAsync("ExploreCommunity");
+        var community = await _dataService.GetByPageAsync("Community");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(exp, ViewBag.Language);
+        ViewBag.communityData = new SelectData(community, ViewBag.Language);
         ViewBag.UserId = UserId.Value;
 
         return View();
@@ -187,7 +205,10 @@ public class CommunityController : CustomControllerBase
     [HttpGet("Edit/{id}")]
     public async Task<IActionResult> Edit(long id)
     {
+        var edit = await _dataService.GetByPageAsync("EditCommunity");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(edit, ViewBag.Language);
         ViewBag.UserId = UserId.Value;
 
         return View();

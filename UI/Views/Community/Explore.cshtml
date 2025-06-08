@@ -1,7 +1,15 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     ViewData["Title"] = "Explore Communities";
     var userId = ViewBag.UserId ?? "null";
-    var language = ViewBag.Language ?? "ru";
+    var language = ViewBag.Language;
+
+    var title = ViewBag.pageData.From("Title");
+    var prev = ViewBag.pageData.From("Prev");
+    var next = ViewBag.pageData.From("Next");
+    var member = ViewBag.communityData.From("Member");
+    var join = Html.Raw(JsonSerializer.Serialize(ViewBag.communityData.From("Join")));
+    var joined = Html.Raw(JsonSerializer.Serialize(ViewBag.communityData.From("Joined")));
 }
 
 @section Head {
@@ -13,12 +21,12 @@
         <div class="main-content">
             <div class="container">
                 <div class="card p-4 shadow" style="border-radius: 1rem;">
-            <h2 class="mb-4">Explore Communities</h2>
+            <h2 class="mb-4">@title</h2>
                     <div id="categoryList" class="d-flex flex-wrap mb-2"></div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">← Назад</button>
-                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд →</button>
+                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">← @prev</button>
+                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">@next →</button>
                     </div>
 
                     <div id="communityContainer"></div>
@@ -107,9 +115,9 @@
 
                     let buttonHtml = "";
                     if (!isCreator) {
-                        buttonHtml = `<button class="btn ${isJoined ? 'btn-light' : 'btn-primary'} join-btn" data-community-id="${comm.id}">
-                                    ${isJoined ? 'Unjoin' : 'Join'}
-                                </button>`;
+                        buttonHtml = `<button class="btn ${isJoined ? 'btn-light' : 'btn-primary'} join-btn" style="font-size: 12px;" data-community-id="${comm.id}">
+                        ${isJoined ? @joined : @join}
+                    </button>`;
                     }
 
                     card.innerHTML = `
@@ -118,7 +126,7 @@
             </a>
             <div>
                 <h5 class="mb-1">${comm.name || 'No Name'}</h5>
-                <p class="mb-0 text-muted">${comm.numberOfMember} members</p>
+                <p class="mb-0 text-muted">${comm.numberOfMember} @member</p>
                 <small class="text-muted">${comm.description || ''}</small>
             </div>
             ${buttonHtml}
@@ -164,7 +172,7 @@
                 if (success) {
                     btn.classList.toggle("btn-light");
                     btn.classList.toggle("btn-primary");
-                    btn.textContent = isJoined ? "Join" : "Unjoin";
+                    btn.textContent = isJoined ? @join : @joined;
                 } else {
                     alert("Ошибка при выполнении действия");
                 }

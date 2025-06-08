@@ -1,9 +1,76 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     ViewData["Title"] = "Управление пользователями";
+    var language = ViewBag.Language;
+
+    var filter = ViewBag.pageData.From("Filter");
+    var postName = ViewBag.pageData.From("PostName");
+    var communityName = ViewBag.pageData.From("CommunityName");
+    var content = ViewBag.pageData.From("Content");
+    var contentComment = ViewBag.pageData.From("ContentComment");
+    var prev = ViewBag.pageData.From("Prev");
+    var next = ViewBag.pageData.From("Next");
+    var nameRu = ViewBag.pageData.From("NameRu");
+    var nameEng = ViewBag.pageData.From("NameEng");
+    var add = ViewBag.pageData.From("Add");
+    var save = ViewBag.pageData.From("Save");
+    var cancel = ViewBag.pageData.From("Cancel");
+    var confDelete = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfDelete")));
+    var confMessage = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfMessage")));
+    var confEdit = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfEdit")));
+    var confMessageEdit = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfMessageEdit")));
+    var conf = ViewBag.pageData.From("Conf");
+    var user = ViewBag.pageData.From("User");
+    var post = ViewBag.pageData.From("Post");
+    var community = ViewBag.pageData.From("Community");
+    var category = ViewBag.pageData.From("Category");
+    var comment = ViewBag.pageData.From("Comment");
+    var titleUser = ViewBag.pageData.From("TitleUser");
+    var titlePost = ViewBag.pageData.From("TitlePost");
+    var titleCommunity = ViewBag.pageData.From("TitleCommunity");
+    var titleCategory = ViewBag.pageData.From("TitleCategory");
+    var titleComment = ViewBag.pageData.From("TitleComment");
+    var userName = ViewBag.pageData.From("UserName");
 }
 
 @section Head {
-    
+    <style>
+        .modal-backdrop-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1040;
+        }
+
+        .modal-confirm-role {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .modal-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 }
 
 @section Body {
@@ -14,7 +81,7 @@
                 @await Html.PartialAsync("_AdminNav")
                 <div class="row mb-4">
                     <div class="col">
-                        <h2 class="fw-bold">Управление пользователями</h2>
+                        <h2 class="fw-bold">@titleUser</h2>
                     </div>
                 </div>
 
@@ -22,11 +89,11 @@
                 <div class="filter-panel mb-4">
                     <form id="userFilterForm" class="row g-2 align-items-end">
                         <div class="col-md-4">
-                            <label class="form-label mb-1">Имя пользователя</label>
-                            <input type="text" class="form-control" id="filterName" placeholder="Имя пользователя">
+                            <label class="form-label mb-1">@userName</label>
+                            <input type="text" class="form-control" id="filterName" placeholder="@userName">
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Фильтровать</button>
+                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> @filter</button>
                         </div>
                     </form>
                 </div>
@@ -37,11 +104,11 @@
                         <table class="table table-hover mb-0" id="usersTable">
                             <thead class="table-header">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Имя</th>
-                                    <th>Email</th>
-                                    <th>Роль</th>
-                                    <th>Действия</th>
+                                        <th>ID</th>
+                                        <th>@(language == "ru" ? "Имя" : "Name")</th>
+                                        <th>Email</th>
+                                        <th>@(language == "ru" ? "Роль" : "Role")</th>
+                                        <th>@(language == "ru" ? "Действия" : "Actions")</th>
                                 </tr>
                             </thead>
                             <tbody id="usersTableBody">
@@ -59,11 +126,11 @@
                 <!-- Модальное окно подтверждения смены роли/удаления -->
                 <div id="roleModalBackdrop" class="modal-backdrop-custom" style="display:none;"></div>
                 <div id="roleModal" class="modal-confirm-role" style="display:none;">
-                    <div class="modal-title" id="roleModalTitle">Подтвердите действие</div>
+                    <div class="modal-title" id="roleModalTitle">@confDelete</div>
                     <div id="roleModalText" class="mb-3"></div>
                     <div class="modal-footer">
-                        <button id="roleModalCancel" class="btn btn-secondary">Отмена</button>
-                        <button id="roleModalConfirm" class="btn btn-primary">Подтвердить</button>
+                        <button id="roleModalCancel" class="btn btn-secondary">@cancel</button>
+                        <button id="roleModalConfirm" class="btn btn-primary">@conf</button>
                     </div>
                 </div>
                 </div>
@@ -162,8 +229,8 @@
         function showRoleModal(userId, newRole, selectElem, oldRole) {
             pendingRoleChange = { userId, newRole, selectElem, oldRole };
             pendingDelete = { userId: null, rowElem: null };
-            document.getElementById('roleModalTitle').innerText = "Подтвердите смену роли";
-            document.getElementById('roleModalText').innerText = `Вы уверены, что хотите сменить роль пользователя #${userId} с "${oldRole}" на "${newRole}"?`;
+            document.getElementById('roleModalTitle').innerText = @confEdit;
+            document.getElementById('roleModalText').innerText = @confMessageEdit;
             document.getElementById('roleModalBackdrop').style.display = 'block';
             document.getElementById('roleModal').style.display = 'block';
         }
@@ -172,8 +239,8 @@
         function showDeleteModal(userId, rowElem) {
             pendingDelete = { userId, rowElem };
             pendingRoleChange = { userId: null, newRole: null, selectElem: null, oldRole: null };
-            document.getElementById('roleModalTitle').innerText = "Подтвердите удаление";
-            document.getElementById('roleModalText').innerText = `Вы уверены, что хотите удалить пользователя #${userId}?`;
+            document.getElementById('roleModalTitle').innerText = @confDelete;
+            document.getElementById('roleModalText').innerText = @confMessage;
             document.getElementById('roleModalBackdrop').style.display = 'block';
             document.getElementById('roleModal').style.display = 'block';
         }

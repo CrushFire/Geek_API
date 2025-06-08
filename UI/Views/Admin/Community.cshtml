@@ -1,9 +1,88 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     ViewData["Title"] = "Управление сообществами";
+    var language = ViewBag.Language;
+
+    var filter = ViewBag.pageData.From("Filter");
+    var postName = ViewBag.pageData.From("PostName");
+    var communityName = ViewBag.pageData.From("CommunityName");
+    var content = ViewBag.pageData.From("Content");
+    var contentComment = ViewBag.pageData.From("ContentComment");
+    var prev = ViewBag.pageData.From("Prev");
+    var next = ViewBag.pageData.From("Next");
+    var nameRu = ViewBag.pageData.From("NameRu");
+    var nameEng = ViewBag.pageData.From("NameEng");
+    var add = ViewBag.pageData.From("Add");
+    var save = ViewBag.pageData.From("Save");
+    var cancel = ViewBag.pageData.From("Cancel");
+    var confDelete = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfDelete")));
+    var confMessage = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("ConfMessage")));
+    var conf = ViewBag.pageData.From("Conf");
+    var user = ViewBag.pageData.From("User");
+    var post = ViewBag.pageData.From("Post");
+    var community = ViewBag.pageData.From("Community");
+    var category = ViewBag.pageData.From("Category");
+    var comment = ViewBag.pageData.From("Comment");
+    var titleUser = ViewBag.pageData.From("TitleUser");
+    var titlePost = ViewBag.pageData.From("TitlePost");
+    var titleCommunity = ViewBag.pageData.From("TitleCommunity");
+    var titleCategory = ViewBag.pageData.From("TitleCategory");
+    var titleComment = ViewBag.pageData.From("TitleComment");
+    var userName = ViewBag.pageData.From("UserName");
 }
 
 @section Head {
-    
+    <style>
+        .modal-confirm-community {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-backdrop-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1040;
+        }
+
+        .modal-confirm-role {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .modal-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 }
 
 @section Body {
@@ -14,7 +93,7 @@
                 @await Html.PartialAsync("_AdminNav")
                 <div class="row mb-4">
                     <div class="col">
-                        <h2 class="fw-bold">Управление сообществами</h2>
+                        <h2 class="fw-bold">@titleCommunity</h2>
                     </div>
                 </div>
 
@@ -22,11 +101,11 @@
                 <div class="filter-panel mb-4">
                     <form id="communityFilterForm" class="row g-2 align-items-end">
                         <div class="col-md-4">
-                            <label class="form-label mb-1">Название сообщества</label>
-                            <input type="text" class="form-control" id="filterName" placeholder="Название сообщества">
+                            <label class="form-label mb-1">@communityName</label>
+                            <input type="text" class="form-control" id="filterName" placeholder="@communityName">
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Фильтровать</button>
+                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> @filter</button>
                         </div>
                     </form>
                 </div>
@@ -37,11 +116,11 @@
                         <table class="table table-hover mb-0" id="communitiesTable">
                             <thead class="table-header">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Название</th>
-                                    <th>Автор</th>
-                                    <th>Дата</th>
-                                    <th>Действия</th>
+                                        <th>ID</th>
+                                        <th>@(language == "ru" ? "Заголовок" : "Title")</th>
+                                        <th>@(language == "ru" ? "Автор" : "Author")</th>
+                                        <th>@(language == "ru" ? "Дата" : "Date")</th>
+                                        <th>@(language == "ru" ? "Действия" : "Actions")</th>
                                 </tr>
                             </thead>
                             <tbody id="communitiesTableBody">
@@ -50,20 +129,20 @@
                         </table>
                     </div>
                     <div class="pagination-controls">
-                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; Назад</button>
+                        <button id="prevPageBtn" class="btn btn-outline-secondary btn-sm">&larr; @prev</button>
                         <span id="pageInfo" class="align-self-center"></span>
-                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">Вперёд &rarr;</button>
+                        <button id="nextPageBtn" class="btn btn-outline-secondary btn-sm">@next &rarr;</button>
                     </div>
                 </div>
 
                 <!-- Модальное окно подтверждения удаления -->
                 <div id="communityModalBackdrop" class="modal-backdrop-custom" style="display:none;"></div>
                 <div id="communityModal" class="modal-confirm-community" style="display:none;">
-                    <div class="modal-title" id="communityModalTitle">Подтвердите удаление</div>
+                    <div class="modal-title" id="communityModalTitle">@confDelete</div>
                     <div id="communityModalText" class="mb-3"></div>
                     <div class="modal-footer">
-                        <button id="communityModalCancel" class="btn btn-secondary">Отмена</button>
-                        <button id="communityModalConfirm" class="btn btn-danger">Удалить</button>
+                        <button id="communityModalCancel" class="btn btn-secondary">@cancel</button>
+                        <button id="communityModalConfirm" class="btn btn-danger">@conf</button>
                     </div>
                 </div>
                 </div>
@@ -134,8 +213,8 @@
         // Модальное окно подтверждения удаления
         function showDeleteModal(communityId, rowElem) {
             pendingDelete = { communityId, rowElem };
-            document.getElementById('communityModalTitle').innerText = "Подтвердите удаление";
-            document.getElementById('communityModalText').innerText = `Вы уверены, что хотите удалить сообщество #${communityId}?`;
+            document.getElementById('communityModalTitle').innerText = @confDelete;
+            document.getElementById('communityModalText').innerText = @confMessage;
             document.getElementById('communityModalBackdrop').style.display = 'block';
             document.getElementById('communityModal').style.display = 'block';
         }
