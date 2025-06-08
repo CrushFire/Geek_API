@@ -1,4 +1,5 @@
 ﻿@using Core.Models
+@using System.Text.Json
 @using System.Security.Claims
 @model UserResponse
 
@@ -6,6 +7,18 @@
     var language = ViewBag.Language;
     var avatarImage = Model.Images?.FirstOrDefault(i => i.ImageType == "avatar" && i.Id == Model.Id && i.EntityTarget == "User");
     var userIdToken = ViewBag.userIdToken;
+
+    var username = ViewBag.pageData.From("Username");
+    var description = ViewBag.pageData.From("Description");
+    var like = ViewBag.pageData.From("Like");
+    var comment = ViewBag.pageData.From("Comment");
+    var subscribe = ViewBag.pageData.From("Subscribe");
+    var likePost = ViewBag.pageData.From("LikePost");
+    var userPost = ViewBag.pageData.From("UserPost");
+    var userSubscribe = ViewBag.pageData.From("UserSubscribe");
+    var userCommunity = ViewBag.pageData.From("UserCommunity");
+    var join = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("Join")));
+    var joined = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("Joined")));
 }
 
 @section Head {
@@ -37,19 +50,19 @@
                             <div class="d-flex justify-content-around text-center">
                                 <div>
                                     <h5>@Model.NumberOfLikes</h5>
-                                    <p>Likes 💙</p>
+                                    <p>@like 💙</p>
                                 </div>
                                 <div>
                                     <h5>@Model.NumberOfPosts</h5>
-                                    <p>Posts 📚</p>
+                                    <p>@userPost 📚</p>
                                 </div>
                                 <div>
                                     <h5>@Model.NumberOfComments</h5>
-                                    <p>Comments 💬</p>
+                                    <p>@comment 💬</p>
                                 </div>
                                 <div>
                                     <h5>@Model.NumberOfCommunities</h5>
-                                    <p>Subscribes 👥</p>
+                                    <p>@subscribe 👥</p>
                                 </div>
                             </div>
                         </div>
@@ -84,12 +97,12 @@
 
                     <div class="col-md-8 profile-info">
                         <div class="mb-4">
-                            <label>Username</label>
+                            <label>@username</label>
                             <div class="value">@Model.UserName</div>
                         </div>
 
                         <div class="mb-4">
-                            <label>Description</label>
+                            <label>@description</label>
                             <div class="value" style="min-height: 150px;">@Model.Description</div>
                         </div>
                     </div>
@@ -99,10 +112,10 @@
                 <hr class="my-4" />
 
                 <div class="d-flex justify-content-around mb-4">
-                    <button class="btn btn-outline-secondary" onclick="loadLikedPosts()">User Liked Posts</button>
-                    <button class="btn btn-outline-secondary" onclick="loadPublishedPosts()">User Posts</button>
-                    <button class="btn btn-outline-secondary" onclick="loadSubscribedCommunities()">User Subscriptions</button>
-                    <button class="btn btn-outline-secondary" onclick="loadOwnedCommunities()">User Communities</button>
+                    <button class="btn btn-outline-secondary" onclick="loadLikedPosts()">@likePost</button>
+                    <button class="btn btn-outline-secondary" onclick="loadPublishedPosts()">@userPost</button>
+                    <button class="btn btn-outline-secondary" onclick="loadSubscribedCommunities()">@userSubscribe</button>
+                    <button class="btn btn-outline-secondary" onclick="loadOwnedCommunities()">@userCommunity</button>
                 </div>
 
                 <div class="post" id="posts">
@@ -250,7 +263,7 @@
                     likedReachedEnd = true;
                     const endMsg = document.createElement("p");
                     endMsg.className = "text-center text-muted";
-                    endMsg.innerText = language === "ru" ? "Понравившиеся посты закончились." : "No more liked posts.";
+                    endMsg.innerText = language === "ru" ? "Посты юзера закончились." : "No more liked posts.";
                     container.appendChild(endMsg);
                     return;
                 }
@@ -453,8 +466,8 @@
                     if (!isCreator) {
                         buttonHtml = `
                 <button class="btn ${isJoined ? 'btn-light' : 'btn-primary'} join-btn" data-community-id="${comm.id}"
-                    style="position: absolute; top: 28px; right: 40px; width: 90px; ${isJoined ? 'color: #888; border-color: #ccc;' : 'color: white;'}">
-                    ${isJoined ? 'Unjoin' : 'Join'}
+                    style="position: absolute; top: 28px; right: 40px; width: 125px; ${isJoined ? 'color: #888; border-color: #ccc;' : 'color: white;'}">
+                    ${isJoined ? @joined : @join}
                 </button>`;
                     }
 
@@ -520,14 +533,14 @@
                             // Был подписан → теперь отписался
                             button.classList.remove("btn-light");
                             button.classList.add("btn-primary");
-                            button.textContent = "Join";
+                            button.textContent = @join;
                             button.style.color = "white";
                             button.style.borderColor = "";
                         } else {
                             // Был не подписан → теперь подписался
                             button.classList.remove("btn-primary");
                             button.classList.add("btn-light");
-                            button.textContent = "Unjoin";
+                            button.textContent = @joined;
                             button.style.color = "#888";
                             button.style.borderColor = "#ccc";
                         }
@@ -590,8 +603,8 @@
                     if (!isCreator) {
                         buttonHtml = `
                             <button class="btn ${isJoined ? 'btn-light' : 'btn-primary'} join-btn" data-community-id="${comm.id}"
-                                style="position: absolute; top: 28px; right: 40px; width: 90px; ${isJoined ? 'color: #888; border-color: #ccc;' : 'color: white;'}">
-                                ${isJoined ? 'Unjoin' : 'Join'}
+                                style="position: absolute; top: 28px; right: 40px; width: 125px; ${isJoined ? 'color: #888; border-color: #ccc;' : 'color: white;'}">
+                                ${isJoined ? @joined : @join}
                             </button>`;
                     }
 

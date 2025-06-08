@@ -18,12 +18,14 @@ public class UserController : CustomControllerBase
     private readonly IUserService _userService;
     private readonly IErrorMessages _errorMessages;
     private readonly IFilterService _filterService;
+    private readonly IDataPageService _dataService;
 
-    public UserController(IUserService userService, IErrorMessages errorMessages, IFilterService filterService)
+    public UserController(IUserService userService, IErrorMessages errorMessages, IFilterService filterService, IDataPageService dataService)
     {
         _userService = userService;
         _errorMessages = errorMessages;
         _filterService = filterService;
+        _dataService = dataService;
     }
 
     [HttpGet("/Popular/{UserId}")]
@@ -31,12 +33,12 @@ public class UserController : CustomControllerBase
     {
         if (UserId != base.UserId)
             return RedirectToAction("Login", "Auth");
-        // Проверка авторизации
-        //var auth = await _dataPage.GetByPageAsync("Authorization");
 
-        //Штука для смены языка, как раз таки мой мидлвеар
+        var pop = await _dataService.GetByPageAsync("PostCard");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
-        //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
+        ViewBag.pageData = new SelectData(pop, ViewBag.Language);
+
         var result = await _userService.GetUserByIdAsync(UserId);
 
         return View("Popular", result.Data);
@@ -47,11 +49,11 @@ public class UserController : CustomControllerBase
     {
         if (UserId != base.UserId)
             return RedirectToAction("Login", "Auth");
-        // Проверка авторизации
-        //var auth = await _dataPage.GetByPageAsync("Authorization");
 
-        //Штука для смены языка, как раз таки мой мидлвеар
+        var pop = await _dataService.GetByPageAsync("PostCard");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(pop, ViewBag.Language);
         //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
         var result = await _userService.GetUserByIdAsync(UserId);
 
@@ -63,11 +65,14 @@ public class UserController : CustomControllerBase
     {
         if (UserId != base.UserId)
             return RedirectToAction("Login", "Auth");
+
+        var home = await _dataService.GetByPageAsync("Home");
         // Проверка авторизации
         //var auth = await _dataPage.GetByPageAsync("Authorization");
 
         //Штука для смены языка, как раз таки мой мидлвеар
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(home, ViewBag.Language);
         //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
         var result = await _userService.GetUserByIdAsync(UserId);
 
@@ -82,8 +87,11 @@ public class UserController : CustomControllerBase
             return Redirect($"/Home/{userId}");
         }
         Console.WriteLine(UserId + "+" + userId);
+
+        var userPage = await _dataService.GetByPageAsync("UserPage");
         //Штука для смены языка, как раз таки мой мидлвеар
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(userPage, ViewBag.Language);
         ViewBag.userIdToken = UserId.Value;
         //ViewBag.pageData = new SelectData(auth, ViewBag.Language);
         var result = await _userService.GetUserByIdAsync(userId);
@@ -140,9 +148,12 @@ public class UserController : CustomControllerBase
 
     [HttpGet("Search")]
 
-    public IActionResult Search()
+    public async Task<IActionResult> Search()
     {
+        var search = await _dataService.GetByPageAsync("Search");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(search, ViewBag.Language);
 
         return View();
     }

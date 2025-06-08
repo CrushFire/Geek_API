@@ -9,6 +9,7 @@ using Core.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.ConstrainedExecution;
 using System.Text.Json;
 
 namespace UI.Controllers;
@@ -20,17 +21,23 @@ public class PostsController : CustomControllerBase
     private readonly IPostService _postService;
     private readonly IFilterService _filterService;
     private readonly IImageService _imageService;
+    private readonly IDataPageService _dataService;
 
-    public PostsController(IPostService postService, IFilterService filterService, IImageService imageService)
+    public PostsController(IPostService postService, IFilterService filterService, IImageService imageService, IDataPageService dataService)
     {
         _filterService = filterService;
         _postService = postService;
         _imageService = imageService;
+        _dataService = dataService;
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(long id)
     {
+        var post = await _dataService.GetByPageAsync("Post");
+
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(post, ViewBag.Language);
         ViewBag.userTokenId = UserId.Value;
         var result = await _postService.GetByIdAsync(id);
 
@@ -165,18 +172,26 @@ public class PostsController : CustomControllerBase
 
     [HttpGet("Create")]
 
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        var cre = await _dataService.GetByPageAsync("CreatePost");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(cre, ViewBag.Language);
         ViewBag.UserId = UserId.Value;
 
         return View();
     }
 
     [HttpGet("Search")]
-    public IActionResult Search()
+    public async Task<IActionResult> Search()
     {
+        var search = await _dataService.GetByPageAsync("Search");
+        var card = await _dataService.GetByPageAsync("PostCard");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(search, ViewBag.Language);
+        ViewBag.cardData = new SelectData(card, ViewBag.Language);
         ViewBag.UserId = UserId.Value;
 
         return View();
@@ -241,7 +256,10 @@ public class PostsController : CustomControllerBase
     [HttpGet("Edit/{id}")]
     public async Task<IActionResult> Edit(long id)
     {
+        var edit = await _dataService.GetByPageAsync("EditPost");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(edit, ViewBag.Language);
         ViewBag.UserId = UserId.Value;
         
         return View();

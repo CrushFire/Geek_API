@@ -1,11 +1,27 @@
-﻿@{
+﻿@using System.Text.Json﻿
+@{
     ViewData["Title"] = "Создание сообщества";
-    var language = ViewBag.Language as string ?? "ru";
-    Layout = "_Layout"; // Убедись, что у тебя есть layout
+    var language = ViewBag.Language;
+    
+    var title = ViewBag.pageData.From("Title");
+    var name = ViewBag.pageData.From("Name");
+    var description = ViewBag.pageData.From("Description");
+    var avatar = ViewBag.pageData.From("Avatar");
+    var selectFile = ViewBag.pageData.From("SelectFile");
+    var notFile = ViewBag.pageData.From("NotFile");
+    var prev = ViewBag.pageData.From("Prev");
+    var next = ViewBag.pageData.From("Next");
+    var create = ViewBag.pageData.From("Create");
+    var takeCategory = ViewBag.pageData.From("TakeCategory");
+    var successCreate = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("SuccessCreate")));
 }
 
 @section Head{
-
+    <style>
+        .hidden-file-input {
+            display: none;
+        }
+    </style>
 }
 
 @section Body{
@@ -13,37 +29,44 @@
         <div class="main-content">
 <div class="container">
     <div class="card p-4 shadow" style="border-radius: 1rem;">
-        <h2 class="mb-4">Создание сообщества</h2>
+        <h2 class="mb-4">@title</h2>
 
         <form id="communityForm" enctype="multipart/form-data">
             <div class="mb-3">
-                <label for="name" class="form-label">Название сообщества</label>
+                <label for="name" class="form-label">@name</label>
                 <input type="text" class="form-control" id="name" name="Name" required />
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">Описание</label>
+                <label for="description" class="form-label">@description</label>
                 <textarea class="form-control" id="description" name="Description" rows="4"></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="avatar" class="form-label">Аватар (обязателен)</label>
-                <input type="file" class="form-control" id="avatar" name="Avatar" accept="image/*" required />
+                <label for="avatar" class="form-label">@avatar</label>
+                            <div class="input-group">
+                                <input type="file" id="avatar" name="Avatar" accept="image/*" required style="display:none;" onchange="updateAvatarFileName()" />
+                                <button type="button" class="btn btn-success" onclick="document.getElementById('avatar').click()">
+                                    @selectFile
+                                </button>
+                                <span class="form-control" id="avatarFileLabel">@notFile</span>
+                            </div>
+
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Выберите от 1 до 3 категорий</label>
+                <label class="form-label">@takeCategory</label>
                 <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
-                <div class="form-text text-danger" id="categoryError" style="display: none;">Выберите от 1 до 3 категорий.</div>
+                <div class="form-text text-danger" id="categoryError" style="display: none;">@takeCategory</div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-3">
-                <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
-                <button id="nextPage" type="button" class="btn btn-outline-secondary">Вперёд &rarr;</button>
+                <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; @prev</button>
+                <button id="nextPage" type="button" class="btn btn-outline-secondary">@next &rarr;</button>
             </div>
 
 
-            <button type="submit" class="btn btn-primary mt-3">Создать</button>
+            <button type="submit" class="btn btn-primary mt-3">@create</button>
         </form>
     </div>
 </div>
@@ -60,6 +83,17 @@
         let currentPage = 1;
         const prevBtn = document.getElementById("prevPage");
         const nextBtn = document.getElementById("nextPage");
+
+        function updateAvatarFileName() {
+            const input = document.getElementById("avatar");
+            const label = document.getElementById("avatarFileLabel");
+
+            if (!input.files || input.files.length === 0) {
+                label.textContent = "@notFile";
+            } else {
+                label.textContent = input.files[0].name;
+            }
+        }
 
         async function loadCategories(page = 1) {
             try {
@@ -144,7 +178,7 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert("Сообщество успешно создано!");
+                    alert(@successCreate);
                     window.location.href = `/Community/${result.id}`;
                 } else {
                     alert("Ошибка: " + (result.errorMessage || "Неизвестная ошибка"));

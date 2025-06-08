@@ -1,8 +1,9 @@
 ﻿@using Core.Models.Post
+@using System.Text.Json﻿
 @model PostResponse
 
 @{
-    var language = ViewBag.Language as string ?? "ru";
+    var language = ViewBag.Language;
     var isCommunityPost = Model.CommunityId > 0;
     var name = isCommunityPost ? Model.CommunityName : Model.Author.UserName;
     var avatarUrl = isCommunityPost ? Model.CommunityAvatar : Model.UserAvatar;
@@ -13,6 +14,18 @@
 
     var categories = language == "ru" ? Model.CategoriesRu : Model.CategoriesEng;
     var categoriesStr = string.Join(" ", categories.Select(c => $"#{c}"));
+
+    var comment = ViewBag.pageData.From("Comment");
+    var editPost = ViewBag.pageData.From("Edit");
+    var deletePost = ViewBag.pageData.From("Delete");
+    var confDelete = ViewBag.pageData.From("ConfDelete");
+    var confMessage = ViewBag.pageData.From("ConfMessage");
+    var cancel = ViewBag.pageData.From("Cancel");
+    var yesDel = ViewBag.pageData.From("YesDel");
+    var send = ViewBag.pageData.From("Send");
+    var writeComment = ViewBag.pageData.From("WriteComment");
+    var confMessageComment = ViewBag.pageData.From("ConfMessageComment");
+    var save = ViewBag.pageData.From("Save");
 }
 
 @section Head {
@@ -78,10 +91,10 @@
                     <div id="dotsMenu" class="bg-white border rounded shadow-sm"
                          style="display:none; position: absolute; right: 0; bottom: 24px; width: 100px; z-index: 1000; font-size: 0.9rem;">
                         <div id="deleteCommunity" style="padding: 8px 12px; cursor: pointer; color: #666; border-bottom: 1px solid #eee;">
-                            @(language == "ru" ? "Удалить" : "Delete")
+                            @deletePost
                         </div>
                         <div id="editCommunity" style="padding: 8px 12px; cursor: pointer; color: #666;">
-                            @(language == "ru" ? "Изменить" : "Edit")
+                            @editPost
                         </div>
                     </div>
                 </div>
@@ -91,15 +104,15 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="confirmDeleteLabel">@((language == "ru") ? "Подтверждение удаления" : "Delete Confirmation")</h5>
+                                <h5 class="modal-title" id="confirmDeleteLabel">@confDelete</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body" id="confirmDeleteText">
-                                @((language == "ru") ? "Вы уверены, что хотите удалить сообщество?" : "Are you sure you want to delete the community?")
+                                @confMessage
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@((language == "ru") ? "Отмена" : "Cancel")</button>
-                                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">@((language == "ru") ? "Да, удалить" : "Yes, delete")</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@cancel</button>
+                                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">@yesDel</button>
                             </div>
                         </div>
                     </div>
@@ -116,7 +129,7 @@
                 👀 @Model.Views
 
                 <a href="/Post/@postId" class="ms-4 text-muted text-decoration-none">
-                    💬 @Model.Comments комментариев
+                    💬 @Model.Comments @comment
                 </a>
             </div>
 
@@ -129,8 +142,8 @@
                     <textarea id="commentInput"
                               class="form-control mb-2 comment-input"
                               rows="2"
-                              placeholder="Напишите комментарий..."></textarea>
-                    <button id="sendCommentBtn" class="btn btn-primary comment-submit-btn">Отправить</button>
+                              placeholder="@writeComment"></textarea>
+                    <button id="sendCommentBtn" class="btn btn-primary comment-submit-btn">@send</button>
                 </div>
 
         </div>
@@ -308,8 +321,8 @@
             menu.className = 'position-absolute bg-white shadow rounded';
             menu.style.cssText = 'top: 35px; right: 8px; display: none; z-index: 1000; min-width: 100px;';
             menu.innerHTML = `
-    <div class="px-3 py-2 comment-edit-btn" style="cursor:pointer; border-bottom: 1px solid #eee;">Изменить</div>
-    <div class="px-3 py-2 comment-delete-btn" style="cursor:pointer;">Удалить</div>
+    <div class="px-3 py-2 comment-edit-btn" style="cursor:pointer; border-bottom: 1px solid #eee;">@editPost</div>
+    <div class="px-3 py-2 comment-delete-btn" style="cursor:pointer;">@deletePost</div>
             `;
             div.appendChild(menu);
 
@@ -342,8 +355,8 @@
 
                 form.innerHTML = `
     <textarea class="form-control mb-2" rows="3">${oldContent}</textarea>
-    <button type="submit" class="btn btn-sm btn-primary me-2">Сохранить</button>
-    <button type="button" class="btn btn-sm btn-secondary comment-edit-cancel-btn">Отмена</button>
+    <button type="submit" class="btn btn-sm btn-primary me-2">@save</button>
+    <button type="button" class="btn btn-sm btn-secondary comment-edit-cancel-btn">@cancel</button>
                 `;
 
                 div.querySelector('.card-body').appendChild(form);
@@ -406,15 +419,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteCommentModalLabel">Подтверждение удаления</h5>
+                <h5 class="modal-title" id="confirmDeleteCommentModalLabel">@confDelete</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
             <div class="modal-body">
-                Вы уверены, что хотите удалить комментарий?
+                @confMessageComment
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteCommentBtn">Удалить</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteCommentBtn">@deletePost</button>
             </div>
         </div>
     </div>

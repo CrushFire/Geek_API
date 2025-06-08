@@ -1,6 +1,12 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     var language = ViewBag.Language ?? "ru";
     var query = Context.Request.Query["name"].ToString();
+
+    var community = ViewBag.pageData.From("Community");
+    var post = ViewBag.pageData.From("Post");
+    var user = ViewBag.pageData.From("User");
+    var userNotFound = ViewBag.pageData.From("UserNotFound");
 }
 
 @section Head {
@@ -20,9 +26,9 @@
             <div class="container">
                 <div class="card p-4">
                     <div class="d-flex justify-content-center gap-2 mb-3">
-                        <a class="btn btn-lg btn-primary text-white rounded-pill me-2" href="/Post/Search?name=@System.Net.WebUtility.UrlEncode(query)">Posts</a>
-                        <a class="btn btn-lg btn-primary text-white rounded-pill me-2" style="background-color: #003366;" href="/Community/Search?name=@System.Net.WebUtility.UrlEncode(query)">Communities</a>
-                        <a class="btn btn-lg text-white rounded-pill me-2" style="background-color: #003366;" href="/User/Search?name=@System.Net.WebUtility.UrlEncode(query)">Users</a>
+                        <a class="btn btn-lg btn-primary text-white rounded-pill me-2" href="/Post/Search?name=@System.Net.WebUtility.UrlEncode(query)">@post</a>
+                        <a class="btn btn-lg btn-primary text-white rounded-pill me-2" style="background-color: #003366;" href="/Community/Search?name=@System.Net.WebUtility.UrlEncode(query)">@community</a>
+                        <a class="btn btn-lg text-white rounded-pill me-2" style="background-color: #003366;" href="/User/Search?name=@System.Net.WebUtility.UrlEncode(query)">@user</a>
                     </div>
 
                     <div id="users"></div>
@@ -59,6 +65,8 @@
         let usersReachedEnd = false;
         const renderedUserIds = new Set();
 
+        var userNotFound = "@userNotFound";
+
         async function loadUsers() {
             if (usersLoading || usersReachedEnd) return;
             usersLoading = true;
@@ -75,7 +83,7 @@
 
                 if (!users || users.length === 0) {
                     if (userPage === 1) {
-                        document.getElementById("users").innerHTML = `<p class="text-center text-muted">${language === "ru" ? "Пользователи не найдены." : "Users not found."}</p>`;
+                        document.getElementById("users").innerHTML = `<p class="text-center text-muted">${userNotFound}</p>`;
                     }
                     usersReachedEnd = true;
                     return;

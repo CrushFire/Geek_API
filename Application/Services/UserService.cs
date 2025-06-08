@@ -31,7 +31,7 @@ public class UserService : IUserService
             .Include(u => u.Comments)
             .Include(u => u.Posts)
             .Include(u => u.Reactions)
-            .Include(u => u.UserCommunities)
+            .Include(u => u.UserCommunities.Where(uc => uc.UserRole != "creator"))
             .Include(u => u.Images)//тут был экстендид ну щас вроде ок...
             .FirstOrDefaultAsync(x => x.Id == id);
 

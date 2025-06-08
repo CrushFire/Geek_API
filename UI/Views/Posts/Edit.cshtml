@@ -1,6 +1,30 @@
-﻿@{
+﻿@using System.Text.Json﻿
+@{
     ViewData["Title"] = "Редактирование поста";
     var userId = ViewBag.UserId ?? 0;
+
+    var title = ViewBag.pageData.From("Title");
+    var name = ViewBag.pageData.From("Name");
+    var takeCategory = ViewBag.pageData.From("TakeCategory");
+    var content = ViewBag.pageData.From("Content");
+    var prev = ViewBag.pageData.From("Prev");
+    var next = ViewBag.pageData.From("Next");
+    var uploadImage = ViewBag.pageData.From("Image");
+    var addImage = ViewBag.pageData.From("AddImage");
+    var selectFile = ViewBag.pageData.From("SelectFile");
+    var notFile = ViewBag.pageData.From("NotFile");
+    var add = ViewBag.pageData.From("Add");
+    var saveChange = ViewBag.pageData.From("SaveChange");
+    var maxImage = ViewBag.pageData.From("MaxImage");
+    var successEdit = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("SuccessEdit")));
+}
+
+@section Head{
+    <style>
+        .hidden-file-input {
+            display: none;
+        }
+    </style>
 }
 
 @section Body {
@@ -8,42 +32,55 @@
         <div class="main-content">
             <div class="container py-4">
                 <div class="card p-4 shadow rounded-4">
-                    <h2>Редактирование поста</h2>
+                    <h2>@title</h2>
 
                     <form id="postForm" enctype="multipart/form-data">
                         <div class="mb-3">
-                            <label for="title" class="form-label">Заголовок</label>
+                            <label for="title" class="form-label">@name</label>
                             <input type="text" id="title" name="Title" class="form-control" required />
                         </div>
 
                         <div class="mb-3">
-                            <label for="content" class="form-label">Содержание</label>
+                            <label for="content" class="form-label">@content</label>
                             <textarea id="content" name="Content" class="form-control" rows="5" required></textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Выберите от 1 до 5 категорий</label>
+                            <label class="form-label">@takeCategory</label>
                             <div id="categoryList" class="d-flex flex-wrap gap-2"></div>
                             <div class="form-text text-danger" id="categoryError" style="display:none;">
-                                Выберите от 1 до 5 категорий.
+                                @takeCategory
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
-                                <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; Назад</button>
-                                <button id="nextPage" type="button" class="btn btn-outline-secondary">Вперёд &rarr;</button>
+                                <button id="prevPage" type="button" class="btn btn-outline-secondary">&larr; @prev</button>
+                                <button id="nextPage" type="button" class="btn btn-outline-secondary">@next &rarr;</button>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Изображения</label>
-                            <div id="existingImages" class="d-flex flex-wrap gap-3 mb-2"></div>
+                            <label class="form-label">@uploadImage</label>
+                                <!-- Просмотр существующих изображений -->
+                            <div id="existingImages" class="d-flex flex-wrap gap-3 mb-3"></div>
 
-                            <label for="newImageInput" class="form-label">Добавить изображение</label>
-                            <input type="file" id="newImageInput" accept="image/*" class="form-control mb-2" />
-                            <button type="button" id="uploadImageBtn" class="btn btn-success">Добавить</button>
-                            <div class="form-text text-danger" id="imageError" style="display:none;">
-                                Можно загрузить максимум 5 изображений.
+                            <!-- Кастомная кнопка и скрытый input для загрузки изображения -->
+                            <div class="input-group">
+                                <input type="file" id="newImageInput" accept="image/*" class="hidden-file-input" />
+
+                                <button type="button" class="btn btn-success" onclick="document.getElementById('newImageInput').click()">
+                                    @selectFile
+                                </button>
+
+                                <span class="form-control" id="newFileLabel">@notFile</span>
+
+                                <button type="button" id="uploadImageBtn" class="btn btn-success">
+                                    @add
+                                </button>
                             </div>
-                        </div>
+
+                            <!-- Сообщение об ошибке -->
+                            <div class="form-text text-danger" id="imageError" style="display:none;">
+                                @maxImage
+                            </div>
 
                         <button type="submit" class="btn btn-primary mt-3">Сохранить изменения</button>
                     </form>
@@ -69,6 +106,30 @@
         const existingImagesContainer = document.getElementById("existingImages");
 
         let currentCategoryPage = 1;
+
+        const newNotFile = "@notFile";
+
+        document.getElementById("newImageInput").addEventListener("change", function () {
+            const label = document.getElementById("newFileLabel");
+            if (!this.files.length) {
+                label.textContent = newNotFile;
+            } else {
+                const fileNames = Array.from(this.files).map(file => file.name).join(', ');
+                label.textContent = fileNames;
+            }
+        });
+
+        function updateFileName() {
+            const input = document.getElementById("images");
+            const label = document.getElementById("fileLabel");
+
+            if (!input.files.length) {
+                label.textContent = notFile;
+            } else {
+                const fileNames = Array.from(input.files).map(file => file.name).join(', ');
+                label.textContent = fileNames;
+            }
+        }
 
         async function loadPostData() {
             try {
@@ -252,7 +313,7 @@
 
                 if (!response.ok) throw new Error("Ошибка при сохранении");
 
-                alert("Пост успешно обновлён");
+                alert(@successEdit);
                 window.location.href = `/post/${postId}`;
             } catch (error) {
                 alert("Ошибка при сохранении поста: " + error.message);

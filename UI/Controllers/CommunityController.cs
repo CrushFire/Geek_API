@@ -1,4 +1,6 @@
 ﻿using Application.Services;
+using Application.Utils;
+using Core.Entities;
 using Core.Enums;
 using Core.Interfaces.Services;
 using Core.Models;
@@ -17,11 +19,13 @@ public class CommunityController : CustomControllerBase
 {
     private readonly ICommunityService _communityService;
     private readonly IFilterService _filterService;
+    private readonly IDataPageService _dataService;
 
-    public CommunityController(ICommunityService communityService, IFilterService filterService)
+    public CommunityController(ICommunityService communityService, IFilterService filterService, IDataPageService dataService)
     {
         _communityService = communityService;
         _filterService = filterService;
+        _dataService = dataService;
     }
 
     [HttpGet]
@@ -37,9 +41,12 @@ public class CommunityController : CustomControllerBase
 
     [HttpGet("Create")]
 
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        var cre = await _dataService.GetByPageAsync("CreateCommunity");
+
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(cre, ViewBag.Language);
 
         return View();
     }

@@ -4,6 +4,9 @@
 
 @{
     var language = ViewBag.Language;
+
+    var comment = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("Comment")));
+    var endPosts = Html.Raw(JsonSerializer.Serialize(ViewBag.pageData.From("EndPosts")));
 }
 
 @section Head {
@@ -41,6 +44,8 @@
         const language = "@language";
         const userId = @Model.Id;
         let userReactions = [];
+        const comment = @comment;
+        const endPosts = @endPosts;
 
         async function loadUserReactions() {
             try {
@@ -63,7 +68,7 @@
                     reachedEnd = true;
                     const endMsg = document.createElement("p");
                     endMsg.className = "text-center text-muted";
-                    endMsg.innerText = "Все посты загружены.";
+                    endMsg.innerText = endPosts;
                     document.getElementById("posts").appendChild(endMsg);
                     return;
                 }
@@ -125,7 +130,7 @@
                             /
                             <button onclick="handleReaction(${post.id}, false)" class="btn btn-sm text-decoration-none ${isUserDisliked ? 'user-disliked' : ''}" id="dislike-${post.id}">💧 <span>${post.dislikes}</span></button>  👀${post.views}
                             <a href="/Post/${post.id}" class="ms-4 text-muted text-decoration-none">
-                            ${post.comments} 💬 Комментарии
+                            ${post.comments} 💬 ${comment}
                             </a>
                             </p>
                         </div>
