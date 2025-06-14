@@ -1,0 +1,360 @@
+﻿@model Core.Models.AboutImages
+
+@{
+    ViewData["Title"] = "Редактирование 'О нас'";
+    var language = ViewBag.Language as string ?? "ru";
+
+    // Данные для карточек
+    var card1 = ViewBag.pageData.From("Card1");
+    var cardTitle1 = ViewBag.pageData.From("CardTitle1");
+    var card2 = ViewBag.pageData.From("Card2");
+    var cardTitle2 = ViewBag.pageData.From("CardTitle2");
+    var card3 = ViewBag.pageData.From("Card3");
+    var cardTitle3 = ViewBag.pageData.From("CardTitle3");
+    var leadTitle = ViewBag.pageData.From("LeadTitle");
+    var leadText = ViewBag.pageData.From("LeadText");
+    var titleAbout = ViewBag.pageDataAdmin.From("TitleAbout");
+    var save = ViewBag.pageDataAdmin.From("Save");
+    var text = ViewBag.pageDataAdmin.From("Text");
+    var title = ViewBag.pageDataAdmin.From("Title");
+        var description = ViewBag.pageDataAdmin.From("Description");
+    var image = ViewBag.pageDataAdmin.From("ImageWord");
+    var noImage = ViewBag.pageDataAdmin.From("NoImage");
+}
+
+@section Head {
+    <style>
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .about-header label {
+            font-weight: 700;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: white;
+        }
+
+        .about-header input,
+        .about-header textarea {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border: 2px solid #66a3ff;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            color: #003366;
+            background: #e6f0ff;
+            transition: border-color 0.3s ease;
+        }
+
+            .about-header input:focus,
+            .about-header textarea:focus {
+                border-color: #0059b3;
+                outline: none;
+                background: #d0e2ff;
+            }
+
+        /* Карусель */
+        #featureCarousel {
+            max-width: 700px;
+            margin: 0 auto;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(0, 51, 102, 0.2);
+            background: #cce0ff;
+        }
+
+        .carousel-image-frame {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            overflow: hidden;
+            border-radius: 18px 18px 0 0;
+            border-bottom: 5px solid #004080;
+            background: #b3d1ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #004080;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 18px 18px 0 0;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .carousel-caption {
+            position: absolute; /* чтобы позиционировать поверх картинки */
+            bottom: 0px; /* отступ от низа картинки */
+            left: 10px; /* небольшой отступ слева */
+            right: auto; /* чтобы не растягивалась на всю ширину */
+            width: 250px; /* фиксированная ширина для компактности */
+            padding: 0.5rem 1rem;
+            background: rgba(0, 64, 128, 0.7); /* полупрозрачный фон */
+            color: white;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            user-select: auto; /* чтобы можно было работать с полями */
+        }
+
+            /* Немного уменьшим поля ввода */
+            .carousel-caption input[type="text"],
+            .carousel-caption textarea,
+            .carousel-caption input[type="file"] {
+                font-size: 0.85rem;
+                padding: 0.3rem 0.5rem;
+                border-radius: 8px;
+            }
+
+        /* Уменьшим кнопку */
+        .btn-save-slide {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
+            align-self: flex-start;
+            margin-top: 0.4rem;
+        }
+
+            .btn-save-slide:hover {
+                background-color: #254e99;
+            }
+
+        /* Кнопки карусели */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: invert(1);
+        }
+
+        /* Карточки в одну строку */
+        .features-grid {
+            display: flex;
+            gap: 2rem;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+
+        .feature-card {
+            background: #cce6ff;
+            padding: 2rem 1.6rem;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 51, 102, 0.2);
+            flex: 1 1 30%;
+            display: flex;
+            flex-direction: column;
+            color: #003366;
+            transition: box-shadow 0.3s ease;
+        }
+
+            .feature-card:hover {
+                box-shadow: 0 8px 30px rgba(0, 51, 102, 0.35);
+            }
+
+            .feature-card i {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+                color: #0059b3;
+                align-self: center;
+            }
+
+            .feature-card label {
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+                font-size: 1.1rem;
+                color: #003366;
+            }
+
+            .feature-card input,
+            .feature-card textarea {
+                padding: 0.6rem 0.85rem;
+                border: 2px solid #66a3ff;
+                border-radius: 12px;
+                font-size: 1rem;
+                resize: vertical;
+                color: #003366;
+                background: #e6f0ff;
+                transition: border-color 0.3s ease;
+            }
+
+                .feature-card input:focus,
+                .feature-card textarea:focus {
+                    border-color: #0059b3;
+                    outline: none;
+                    background: #d0e2ff;
+                }
+    </style>
+}
+
+@section Body {
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="about-container">
+                <div class="card p-4 shadow" style="border-radius: 1rem;">
+                    @await Html.PartialAsync("_AdminNav")
+                    <div class="row mb-4">
+                        <div class="col">
+                            <h2 class="fw-bold">@titleAbout</h2>
+                        </div>
+                    </div>
+                <div class="about-header">
+
+            <!-- Заголовок и текст -->
+            <div class="about-header text-center mb-4">
+                <label for="LeadTitle" style="color: #003366">@title</label>
+                <input type="text" id="LeadTitle" value="@leadTitle" />
+                        <label for="LeadText" style="color: #003366">@text</label>
+                <textarea id="LeadText" rows="3">@leadText</textarea>
+            </div>
+
+            <!-- Карусель -->
+            <div id="featureCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="8000">
+                <div class="carousel-inner">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        var active = i == 0 ? "active" : "";
+                        // Если есть данные в модели для слайда i, берем, иначе null
+                        var img = (Model.Images != null && Model.Images.Count > i) ? Model.Images[i] : null;
+
+                        // entityId: если есть, берем из модели, иначе 0 или уникальное значение
+                        var entityId = img?.EntityId ?? 0;
+
+                        <div class="carousel-item @active">
+                            <div class="carousel-image-frame"
+                                 style="@(string.IsNullOrEmpty(img?.ImageUrl)
+                            ? "background-color: #b3d1ff; display:flex; align-items:center; justify-content:center; color:#004080; font-weight:600; font-size:1.2rem;"
+                            : $"background-image: url('{img.ImageUrl}'); background-size: cover; background-position: center;")">
+                                @if (!string.IsNullOrEmpty(img?.ImageUrl))
+                                {
+                                    <img src="@img.ImageUrl" id="imagePreview@(i+1)" class="carousel-image" alt="Слайд @(i+1)" />
+                                }
+                                else
+                                {
+                                    <span>@noImage</span>
+                                }
+                            </div>
+                            <div class="carousel-caption">
+                                <label>@title @(i + 1)</label>
+                                <input type="text" id="ImageTitle@(i+1)" value="@ViewBag.pageData.From($"ImageTitle{i+1}")" />
+                                <label>@description @(i + 1)</label>
+                                <textarea id="ImageContent@(i+1)">@ViewBag.pageData.From($"ImageContent{i + 1}")</textarea>
+                                <label>@image</label>
+                                <input type="file" id="ImageFile@(i+1)" accept="image/*" onchange="previewImage(event, @(i+1))" />
+                                <input type="hidden" id="EntityId@(i+1)" value="@entityId" />
+                                <button type="button" class="btn-save-slide btn-primary" onclick="saveSlide(@(i+1))">@save @(i + 1)</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#featureCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#featureCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+
+
+
+            <!-- Карточки -->
+            <div class="features-grid">
+                @for (int i = 1; i <= 3; i++)
+                {
+                    var title = ViewBag.pageData.From($"CardTitle{i}");
+                    var text = ViewBag.pageData.From($"Card{i}");
+                    <div class="feature-card">
+                        <label>@title @(i)</label>
+                        <input type="text" id="CardTitle@(i)" value="@title" />
+                        <label>@text @(i)</label>
+                        <textarea id="Card@(i)">@text</textarea>
+                    </div>
+                }
+            </div>
+
+            <br/>
+            <button type="button" class="btn-primary" onclick="saveCards()">@save</button>
+            </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Script {
+    <script>
+        const language = '@language';
+
+        function previewImage(event, slideNumber) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.getElementById('imagePreview' + slideNumber);
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function saveSlide(num) {
+            const formData = new FormData();
+            formData.append("Title", document.getElementById("ImageTitle" + num).value);
+            formData.append("Content", document.getElementById("ImageContent" + num).value);
+            const file = document.getElementById("ImageFile" + num).files[0];
+            if (file) formData.append("Image", file);
+
+            try {
+                const response = await fetch(`/save-image?numImage=${num}&lang=${language}`, {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                alert("Слайд сохранён");
+            } catch (err) {
+                alert("Ошибка при сохранении изображения");
+            }
+        }
+
+            async function saveCards() {
+                const currentValues = {
+                    CardTitle1: document.getElementById("CardTitle1").value,
+                    Card1: document.getElementById("Card1").value,
+                    CardTitle2: document.getElementById("CardTitle2").value,
+                    Card2: document.getElementById("Card2").value,
+                    CardTitle3: document.getElementById("CardTitle3").value,
+                    Card3: document.getElementById("Card3").value,
+                    LeadTitle: document.getElementById("LeadTitle").value,
+                    LeadText: document.getElementById("LeadText").value
+                };
+
+                try {
+                    const response = await fetch(`/save-card?lang=${language}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentValues)
+                    });
+                    const data = await response.json();
+                    alert("Карточки сохранены");
+                } catch (err) {
+                    alert("Ошибка при сохранении карточек");
+                }
+            }
+    </script>
+}

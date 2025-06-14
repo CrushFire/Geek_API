@@ -1,5 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Панель администратора";
+    var language = ViewBag.Language;
+
+    var adminPanel = ViewBag.pageData.From("AdminPanel");
 }
 
 @section Head {
@@ -12,7 +15,7 @@
             <div class="card p-4 shadow" style="border-radius: 1rem; min-width: 320px; max-width: 600px; width: 100%;">
                 @await Html.PartialAsync("_AdminNav")
                 <div class="admin-content-placeholder text-center">
-                    Выберите раздел для управления.
+                    @adminPanel;
                 </div>
             </div>
         </div>

@@ -84,11 +84,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
-builder.Services.AddScoped<IDataPageService, DataPageService>();
-builder.Services.AddScoped<IFilterService, FilterService>();
 
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();

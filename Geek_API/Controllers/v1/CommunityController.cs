@@ -39,27 +39,27 @@ public class CommunityController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpGet("byUser")]
+    //[HttpGet("byUser")]
 
-    public async Task<IActionResult> GetByUserIdAsync([FromQuery] long userId)
-    {
-        var result = await _communityService.GetByUserIdAsync(userId);
+    //public async Task<IActionResult> GetByUserIdAsync([FromQuery] long userId)
+    //{
+    //    var result = await _communityService.GetByUserIdAsync(userId);
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
-    }
+    //    return result.IsSuccess
+    //        ? Ok(ApiResponse.CreateSuccess(result.Data))
+    //        : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    //}
 
-    [HttpPost]
+    //[HttpPost]
 
-    public async Task<IActionResult> AddCommunityAsync([FromBody] CommunityAddRequest communityAddRequest)
-    {
-        var result = await _communityService.AddCommunityAsync(communityAddRequest);
+    //public async Task<IActionResult> AddCommunityAsync([FromBody] CommunityAddRequest communityAddRequest)
+    //{
+    //    var result = await _communityService.AddCommunityAsync(communityAddRequest);
 
-        return result.IsSuccess
-                ? Ok(ApiResponse.CreateSuccess(result.Data))
-                : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
-    }
+    //    return result.IsSuccess
+    //            ? Ok(ApiResponse.CreateSuccess(result.Data))
+    //            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    //}
 
     [HttpPost("sub")]
 
@@ -83,16 +83,16 @@ public class CommunityController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpPut]
+    //[HttpPut]
 
-    public async Task<IActionResult> UpdateCommunityAsync([FromBody] CommunityAddRequest communityAddRequest, [FromRoute] long id)
-    {
-        var result = await _communityService.UpdateCommunityAsync(communityAddRequest, id);
+    //public async Task<IActionResult> UpdateCommunityAsync([FromBody] CommunityAddRequest communityAddRequest, [FromRoute] long id)
+    //{
+    //    var result = await _communityService.UpdateCommunityAsync(communityAddRequest, id);
 
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
-    }
+    //    return result.IsSuccess
+    //        ? Ok(ApiResponse.CreateSuccess(result.Data))
+    //        : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    //}
 
     [HttpDelete]
 

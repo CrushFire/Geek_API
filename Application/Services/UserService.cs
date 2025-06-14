@@ -181,8 +181,8 @@ public class UserService : IUserService
 
         if (userAvatar != null && userDto.Avatar != null)
         {
+            _imageService.RemoveImageFromServer(userAvatar.Id);
             var newImage = _imageService.AddUploadedImageAsync("User", id, "avatar", userDto.Avatar);
-            _imageService.RemoveImage(id);
             userAvatar.ImageUrl = newImage.Result.ImageUrl;
             _context.Images.Update(userAvatar);
         }

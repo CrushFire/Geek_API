@@ -1,6 +1,7 @@
 ﻿using Application.Utils;
 using Core.Entities;
 using Core.Interfaces.Services;
+using Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -86,11 +87,43 @@ public class AdminController : Controller
     [HttpGet("/Resourse/About")]
     public async Task<IActionResult> About()
     {
+        var about = await _dataService.GetByPageAsync("About");
+
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(about, ViewBag.Language);
+        var result = await _dataService.AboutEditViewsAsync();
+        // Здесь будет логика управления сообществами
+        return View("About", result.Data);
+    }
+
+    [HttpGet("AboutEdit")]
+    public async Task<IActionResult> AboutEdit()
+    {
+        var about = await _dataService.GetByPageAsync("About");
         var admin = await _dataService.GetByPageAsync("Admin");
 
         ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
-        ViewBag.pageData = new SelectData(admin, ViewBag.Language);
+        ViewBag.pageData = new SelectData(about, ViewBag.Language);
+        ViewBag.pageDataAdmin = new SelectData(admin, ViewBag.Language);
+        var result = await _dataService.AboutEditViewsAsync();
+
         // Здесь будет логика управления сообществами
-        return View("About");
+        return View("AboutEdit", result.Data);
+    }
+
+    [HttpPost("/save-card")]
+    public async Task<IActionResult> SaveCard([FromBody] AboutRequest request, string lang)
+    {
+       var result =  await _dataService.AboutUpdateAsync(request, lang);
+
+        return Json(result.Data);
+    }
+
+    [HttpPost("/save-image")]
+    public async Task<IActionResult> SaveImage([FromForm] AboutImageRequest request, int numImage, string lang)
+    {
+        var result = await _dataService.AboutImageAsync(request, numImage, lang);
+
+        return Json(result.Data);
     }
 }

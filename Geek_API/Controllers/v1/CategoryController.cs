@@ -26,15 +26,15 @@ public class CategoryController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
-    [HttpGet]
+    //[HttpGet]
 
-    public async Task<IActionResult> GetCategoryAsync([FromQuery] int page = 1, int pageSize = 10)
-    {
-        var result = await _categoryService.GetCategoryAsync(page, pageSize);
-        return result.IsSuccess
-        ? Ok(ApiResponse.CreateSuccess(result.Data))
-        : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
-    }
+    //public async Task<IActionResult> GetCategoryAsync([FromQuery] int page = 1, int pageSize = 10)
+    //{
+    //    var result = await _categoryService.GetCategoryAsync(page, pageSize);
+    //    return result.IsSuccess
+    //    ? Ok(ApiResponse.CreateSuccess(result.Data))
+    //    : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    //}
 
     [HttpPost]
 

@@ -26,18 +26,18 @@ public class PostsController : CustomControllerBase
 
     //TODO 
     //Объеденил бы в один общий с блекджеком и шлюхами
-    [HttpGet("byCommunity")]
-    public async Task<IActionResult> GetByCommunityIdAsync([FromQuery] long communityId, int page = 1,
-        int pageSize = 10)
-    {
-        if (page < 1 || pageSize < 1)
-            StatusCode(400, ApiResponse.CreateFailure("Ошибка параметров page или pageSize"));
+    //[HttpGet("byCommunity")]
+    //public async Task<IActionResult> GetByCommunityIdAsync([FromQuery] long communityId, int page = 1,
+    //    int pageSize = 10)
+    //{
+    //    if (page < 1 || pageSize < 1)
+    //        StatusCode(400, ApiResponse.CreateFailure("Ошибка параметров page или pageSize"));
 
-        var result = await _postService.GetByCommunityIdAsync(communityId, page, pageSize);
-        return result.IsSuccess
-            ? Ok(ApiResponse.CreateSuccess(result.Data))
-            : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
-    }
+    //    var result = await _postService.GetByCommunityIdAsync(communityId, page, pageSize);
+    //    return result.IsSuccess
+    //        ? Ok(ApiResponse.CreateSuccess(result.Data))
+    //        : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
+    //}
 
     [HttpGet("byUserId")]
     public async Task<IActionResult> GetByUserIdAsync([FromQuery] long userId, int page = 1, int pageSize = 10)

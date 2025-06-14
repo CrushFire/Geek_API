@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\v1\**" />
-    <Content Remove="Controllers\v1\**" />
-    <EmbeddedResource Remove="Controllers\v1\**" />
-    <None Remove="Controllers\v1\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.3.0" />

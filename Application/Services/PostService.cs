@@ -336,7 +336,11 @@ public class PostService : IPostService
 
         var post = _mapper.Map<Post>(request);
         post.AuthorId = userId;
-        post.CommunityId = request.CommunityId;
+
+        if (post.CommunityId == 0)
+        {
+            post.CommunityId = null;
+        }
 
         await _context.Posts.AddAsync(post);
         await _context.SaveChangesAsync();
@@ -417,7 +421,7 @@ public class PostService : IPostService
             .Select(im => im.Id)
             .ToListAsync();
 
-        await _imageService.RemoveImages(imageIds);
+        await _imageService.RemoveImagesFromServer(imageIds);
 
         _context.Posts.Remove(post);
         await _context.SaveChangesAsync();

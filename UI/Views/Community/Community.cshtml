@@ -240,13 +240,21 @@
     }
 
     // Автозагрузка при прокрутке страницы вниз
-    window.addEventListener('scroll', () => {
-        if (loading || reachedEnd) return;
+        window.addEventListener("DOMContentLoaded", async () => {
+            await loadUserReactions();
+            await loadSubscriptionButton();
+            await loadCommunityPosts(1); // Только один раз при загрузке!
+        });//Костыль
 
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
-            loadCommunityPosts(curPage);
-        }
-    });
+        window.addEventListener('scroll', () => {
+            // Не загружаем, если постов меньше 20 или уже идёт загрузка
+            if (totalLoadedPosts / 20 != 0 || isLoading) return;
+
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
+                loadCommunityPosts(curPage);
+            }
+        });
+
 
     function observeViews(postId, div) {
         const observer = new IntersectionObserver(entries => {
