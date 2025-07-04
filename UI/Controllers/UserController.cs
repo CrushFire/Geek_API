@@ -214,6 +214,18 @@ public class UserController : CustomControllerBase
             : StatusCode(result.Error.StatusCode, ApiResponse.CreateFailure(result.Error.ErrorMessage));
     }
 
+    [HttpGet("/Resourse/About")]
+    public async Task<IActionResult> About()
+    {
+        var about = await _dataService.GetByPageAsync("About");
+
+        ViewBag.Language = HttpContext.Items["Language"] as string ?? "eng";
+        ViewBag.pageData = new SelectData(about, ViewBag.Language);
+        var result = await _dataService.AboutEditViewsAsync();
+        // Здесь будет логика управления сообществами
+        return View("About", result.Data);
+    }
+
     [HttpPut("{id}/role")]
     public async Task<IActionResult> ChangeUserRole([FromRoute] long id, [FromBody] string newRole)
     {

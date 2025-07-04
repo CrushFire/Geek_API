@@ -5,7 +5,7 @@
 
 @{
     var language = ViewBag.Language;
-    var avatarImage = Model.Images?.FirstOrDefault(i => i.ImageType == "avatar" && i.Id == Model.Id && i.EntityTarget == "User");
+    var avatarImage = Model.Images?.FirstOrDefault(i => i.ImageType == "avatar" && i.EntityId == Model.Id && i.EntityTarget == "User");
     var userIdToken = ViewBag.userIdToken;
 
     var username = ViewBag.pageData.From("Username");

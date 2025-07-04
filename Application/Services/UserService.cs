@@ -189,6 +189,14 @@ public class UserService : IUserService
         else if (userAvatar == null && userDto.Avatar != null)
         {
             var newUploadImage = _imageService.AddUploadedImageAsync("User", id, "avatar", userDto.Avatar);
+            Image userImage = new Image
+            {
+                EntityId = user.Id,
+                EntityTarget = "User",
+                ImageType = "avatar",
+                ImageUrl = newUploadImage.Result.ImageUrl
+            };
+            await _context.Images.AddAsync(userImage);
         }
 
         _context.Users.Update(user);

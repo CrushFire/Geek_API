@@ -21,7 +21,7 @@ public class AutoMapper : Profile
             .ForMember(dest => dest.NumberOfComments,
                 opt => opt.MapFrom(src => src.Comments.Count))
             .ForMember(dest => dest.NumberOfLikes,
-                opt => opt.MapFrom(src => src.Reactions.Count))
+                opt => opt.MapFrom(src => src.Reactions.Where(r => r.IsLike == true).Count()))
             .ForMember(dest => dest.NumberOfCommunities,
                 opt => opt.MapFrom(src => src.UserCommunities.Count))
             .ForMember(dest => dest.Email,

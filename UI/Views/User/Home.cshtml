@@ -136,6 +136,12 @@
 
 @section Script {
     <script>
+        function updateFileName() {
+            const input = document.getElementById("Avatar");
+            const label = document.getElementById("fileLabel");
+            label.textContent = input.files.length > 0 ? input.files[0].name : "@notFile";
+        }
+
         const errorMessage = "@language" == "ru" ? "Пользователь с таким ником уже существует" : "User with name yet exists"
         document.getElementById("profileForm").addEventListener("submit", async function (e) {
             e.preventDefault();
@@ -144,13 +150,6 @@
             const formData = new FormData(form);
 
             var profileUpdate = @profileUpdate;
-
-
-                function updateFileName() {
-                    const input = document.getElementById("Avatar");
-                    const label = document.getElementById("fileLabel");
-                    label.textContent = input.files.length > 0 ? input.files[0].name : "@notFile";
-                }
 
             try {
                 const response = await fetch("/UpdateProfile", {

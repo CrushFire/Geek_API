@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace UI.Views.InformationPage
+namespace UI.Views.User
 {
     public class AboutModel : PageModel
     {
